@@ -15,7 +15,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
+import { useEffect } from 'react';
 import {
   Header,
   LearnMoreLinks,
@@ -23,6 +23,14 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+// import SplashScreen from "@ant-design/react-native"
+import SplashScreen from 'react-native-splash-screen'
+
+useEffect(() => {
+  SplashScreen.hide();
+});
+
 
 const App: () => React$Node = () => {
   return (

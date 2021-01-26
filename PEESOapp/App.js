@@ -27,11 +27,6 @@ import {
 // import SplashScreen from "@ant-design/react-native"
 import SplashScreen from 'react-native-splash-screen'
 
-useEffect(() => {
-  SplashScreen.hide();
-});
-
-
 const App: () => React$Node = () => {
   return (
     <>

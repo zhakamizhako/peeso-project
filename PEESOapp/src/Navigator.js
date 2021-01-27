@@ -16,7 +16,7 @@ const Stack = createStackNavigator();
 class Navigator extends React.Component {
   constructor(props) {
     super(props);
-    this.NavigationContainerRef = 
+    // this.NavigationContainerRef = this.NavigationContainerRef.bind;
   }
 
   componentDidMount() {}

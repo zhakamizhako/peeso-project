@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -8,9 +8,9 @@ import {
   Grid,
   Icon
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
-import {logout, checkMe} from '../stores/modules/auth';
+import { View, Text, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { logout, checkMe } from '../stores/modules/auth';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
 let ws = {};
@@ -18,12 +18,12 @@ let wsInstance = {};
 var intervalObject = null;
 
 const menuItems = [
-    {text: "Trabaho"},
-    {text: "Companies"},
-    {text: "Saved Jobs"},
-    {text: "Search Jobs"},
-    {text: "Easy Services"},
-    {text: "My Profile"},
+  { text: "Trabaho", type: 'trabaho' },
+  { text: "Companies" },
+  { text: "Saved Jobs" },
+  { text: "Search Jobs" },
+  { text: "Easy Services" },
+  { text: "My Profile" },
 ]
 
 class HomePage extends Component {
@@ -37,18 +37,18 @@ class HomePage extends Component {
     };
   }
 
-  render(){
-      return(<>
+  render() {
+    return (<View style={{ height: '100%' }}>
       <Text>A?</Text>
       <Icon name="alert"></Icon>
       <Grid
-          data={menuItems}
-          columnNum={3}
-          isCarousel
-          onPress={(_el, index) => alert(index)}
-          carouselMaxRow={3}
-        />
-      </>)
+        data={menuItems}
+        columnNum={2}
+        isCarousel
+        onPress={(data) => { if (data.type != null && this.props.navigation != null) { this.props.navigation.navigate(data.type) } }}
+        carouselMaxRow={3}
+      />
+    </View>)
   }
 
 }

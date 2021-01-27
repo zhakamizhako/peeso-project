@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   WhiteSpace,
   WingBlank,
@@ -7,12 +7,12 @@ import {
   Checkbox,
   Icon
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {login} from './stores/modules/auth';
-import {connect} from 'react-redux';
+import { View, Text, ScrollView } from 'react-native';
+import { login } from './stores/modules/auth';
+import { connect } from 'react-redux';
 
 class LoginScreen extends Component {
-  constructor(props) { 
+  constructor(props) {
     super(props);
     this.state = {
       username: '',
@@ -31,7 +31,7 @@ class LoginScreen extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let {auth} = props;
+    let { auth } = props;
     if (auth.connectionError) {
       this.setState({
         loginError: true,
@@ -50,21 +50,21 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{ height: '100%' }}>
         <WhiteSpace size="lg" />
         <WingBlank>
-          <Text style={{fontSize: 30, textAlign: 'center'}}>PEESO</Text>
+          <Text style={{ fontSize: 30, textAlign: 'center' }}>PEESO</Text>
           <InputItem
             clear
             error={this.state.loginError}
             onChange={e => {
               if (this.state.loginError) {
-                this.setState({loginError: false, loginErrorDetails: ''});
+                this.setState({ loginError: false, loginErrorDetails: '' });
               }
               this.setState(state => {
-                let {username} = state;
+                let { username } = state;
                 username = e;
-                return {username};
+                return { username };
               });
             }}
             placeholder="Username"
@@ -75,26 +75,26 @@ class LoginScreen extends Component {
             error={this.state.loginError}
             onChange={e => {
               if (this.state.loginError) {
-                this.setState({loginError: false, loginErrorDetails: ''});
+                this.setState({ loginError: false, loginErrorDetails: '' });
               }
               this.setState(state => {
-                let {password} = state;
+                let { password } = state;
                 password = e;
-                return {password};
+                return { password };
               });
             }}
             placeholder="Password"
           />
           <WhiteSpace />
-          <Text style={{alignSelf: 'center', color: 'red'}}>
+          <Text style={{ alignSelf: 'center', color: 'red' }}>
             {this.state.loginErrorDetails}
           </Text>
           <WhiteSpace />
           <Checkbox
-            style={{marginLeft: 12}}
+            style={{ marginLeft: 12 }}
             checked={this.state.showPassword}
             onChange={event => {
-              this.setState({showPassword: event.target.checked});
+              this.setState({ showPassword: event.target.checked });
             }}>
             Show Password
           </Checkbox>
@@ -107,15 +107,15 @@ class LoginScreen extends Component {
                 username: this.state.username,
                 password: this.state.password,
               };
-              this.setState({isLoggingIn: true});
+              this.setState({ isLoggingIn: true });
               this.props.login(loginData);
             }}>
             Login
           </Button>
-          <Text style={{alignSelf:'center'}}>--or--</Text>
+          <Text style={{ alignSelf: 'center' }}>--or--</Text>
           <Button><Icon type="GooglePlusOutlined"></Icon> Sign in with Google</Button>
           <WhiteSpace size="lg" />
-          <Button onPress={()=>this.props.navigation.navigate('homepage')}>(Debug) Skip</Button>
+          <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button>
         </WingBlank>
       </View>
     );

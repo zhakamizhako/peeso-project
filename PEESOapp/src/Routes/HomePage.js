@@ -39,8 +39,10 @@ class HomePage extends Component {
 
   render() {
     return (<View style={{ height: '100%' }}>
-      <Text>A?</Text>
-      <Icon name="alert"></Icon>
+      <WhiteSpace />
+      <View style={{ alignSelf: 'center' }}>
+        <Text>[PEESO LOGO HERE]</Text>
+      </View>
       <Grid
         data={menuItems}
         columnNum={2}

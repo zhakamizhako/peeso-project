@@ -45,12 +45,13 @@ class Navigator extends React.Component {
     // const routes = useNavigationState(state => state.routes)
 
     return (
-      <View>
-        <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}>
+      <>
+        <View style={{ flex: 1, marginBottom: 50 }}>
+          <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}>
 
-          <NavigationContainer ref={this.NavigationContainerRef}>
-            <Stack.Navigator initialRouteName="login">
-              {/* {this.props.auth.loginData && this.props.auth.loginData.role === 999 && (
+            <NavigationContainer ref={this.NavigationContainerRef}>
+              <Stack.Navigator initialRouteName="login">
+                {/* {this.props.auth.loginData && this.props.auth.loginData.role === 999 && (
             <>
               <Stack.Screen
                 name="admin"
@@ -62,50 +63,52 @@ class Navigator extends React.Component {
               />
             </>
           )} */}
-              {/* {this.props.auth.loginData && */}
-              {/* // this.props.auth.loginData.role === 1 && ( */}
-              <Stack.Screen
-                name="homepage"
-                component={HomePage}
-                options={{ title: 'Overview', headerShown: false }}
-              />
-              <Stack.Screen
-                name="trabaho"
-                component={Trabaho}
-                options={{ title: 'Trabaho Corner', headerShown: true }}
-              />
-              {/* <Stack.Screen
+                {/* {this.props.auth.loginData && */}
+                {/* // this.props.auth.loginData.role === 1 && ( */}
+                <Stack.Screen
+                  name="homepage"
+                  component={HomePage}
+                  options={{ title: 'Overview', headerShown: false }}
+                />
+                <Stack.Screen
+                  name="trabaho"
+                  component={Trabaho}
+                  options={{ title: 'Trabaho Corner', headerShown: true }}
+                />
+                {/* <Stack.Screen
                 name="viewtrabaho"
                 component={ViewTrabaho}
                 options={{ title: 'View Trabaho', headerShown: true }}
               /> */}
-              {/* // )} */}
-              {!this.props.auth.loginData && (
-                <Stack.Screen
-                  {...this.props}
-                  name="login"
-                  component={LoginScreen}
-                  options={{ title: 'Login Screen', headerShown: false }}
-                />
-              )}
-            </Stack.Navigator>
-            {console.log(this)}
-            {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
+                {/* // )} */}
+                {!this.props.auth.loginData && (
+                  <Stack.Screen
+                    {...this.props}
+                    name="login"
+                    component={LoginScreen}
+                    options={{ title: 'Login Screen', headerShown: false }}
+                  />
+                )}
+              </Stack.Navigator>
+              {console.log(this)}
+              {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
 
-            <View style={{ positon: 'absolute' }}>
-            </View>
+              <View style={{ positon: 'absolute' }}>
+              </View>
 
-            {/* )} */}
-          </NavigationContainer>
-        </Drawer>
-        <TabBar>
-          <TabBar.Item title="Menu" onPress={() => {
-            this.setState({ drawerOpen: !this.state.drawerOpen })
-          }}></TabBar.Item>
-          <TabBar.Item title="P{roceddural" selected={this.state.wtf}></TabBar.Item>
-        </TabBar>
-
-      </View >
+              {/* )} */}
+            </NavigationContainer>
+          </Drawer>
+        </View >
+        <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
+          <TabBar >
+            <TabBar.Item title="Menu" onPress={() => {
+              this.setState({ drawerOpen: !this.state.drawerOpen })
+            }}></TabBar.Item>
+            <TabBar.Item title="P{roceddural" selected={this.state.wtf}></TabBar.Item>
+          </TabBar>
+        </View>
+      </>
     );
   }
 }

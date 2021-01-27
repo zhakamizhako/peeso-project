@@ -38,7 +38,8 @@ class UserDrawer extends Component {
     }
 
     render() {
-        const sidebar = (<View style={{ flex: 1, height: '100%' }}>
+        const sidebar = (<View style={{ flex: 1, height: '100%', backgroundColor: 'white' }}>
+
             <List.Item><Card><Card.Header title="Username" /></Card></List.Item>
             <List.Item><Text>Notifications</Text></List.Item>
             <List.Item><Text>Privacy Statement</Text></List.Item>
@@ -54,7 +55,7 @@ class UserDrawer extends Component {
                 // this.props.setDrawerClosed()
             }}><Text>Logout</Text></List.Item></View>)
         return (<>
-            <Drawer ref={this.drawer} open={this.props != null ? this.props.drawerOpen : false} sidebar={sidebar}>
+            <Drawer ref={this.drawer} open={this.props != null ? this.props.drawerOpen : false} sidebar={sidebar} >
                 {this.props.children}
             </Drawer>
         </>)

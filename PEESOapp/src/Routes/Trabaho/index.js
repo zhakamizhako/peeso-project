@@ -48,7 +48,9 @@ class Trabaho extends Component {
       <Card.Body style={{ marginLeft: 10 }}>
         <Text>Location: {data.location}</Text>
         <Text>Salary: {data.salary}</Text>
-        {/* <Text>Highlight: {data.Highlight != null ? data.Highlight.map(entry => (<Text>{entry}</Text>)) : null}</Text> */}
+        <Text>
+          Highlights: {data.Highlight != null ? data.Highlight.map(entry => (<Text>{`\n-` + entry.name}</Text>)) : null}
+        </Text>
         {/* <Text>Deadline: {moment(data.deadline)}</Text> */}
         <Text>Status: {data.status}</Text>
       </Card.Body>

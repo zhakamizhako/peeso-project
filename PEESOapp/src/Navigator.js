@@ -8,12 +8,25 @@ import LoginScreen from './LoginScreen';
 
 import HomePage from './Routes/HomePage';
 import Trabaho from './Routes/Trabaho';
-// import ViewTrabaho from './Routes/ViewTrabaho';
+import ViewTrabaho from './Routes/Trabaho/viewTrabaho'
+import ApplyHere from './Routes/Trabaho/ApplyHere'
+
+import SavedJobs from './Routes/SavedJobs/index';
+
+import Company from './Routes/Company/companylist'
+import ViewCompany from './Routes/Company/viewCompany'
+
+import EasyServices from './Routes/EasyServices/index'
+import EasyServicesFreelancers from './Routes/EasyServices/Freelancers'
+import Book from './Routes/EasyServices/Book';
+
+import Search from './Routes/Search/index'
+
 import Drawer from "./Routes/Settings/Drawer"
 
 import { connect } from 'react-redux';
 import { View } from 'react-native'
-import { TabBar } from '@ant-design/react-native';
+import { TabBar, Icon } from '@ant-design/react-native';
 import { useNavigationState } from '@react-navigation/native';
 import TabBarItem from '@ant-design/react-native/lib/tab-bar/TabBarItem';
 
@@ -75,11 +88,57 @@ class Navigator extends React.Component {
                   component={Trabaho}
                   options={{ title: 'Trabaho Corner', headerShown: true }}
                 />
-                {/* <Stack.Screen
-                name="viewtrabaho"
-                component={ViewTrabaho}
-                options={{ title: 'View Trabaho', headerShown: true }}
-              /> */}
+                <Stack.Screen
+                  name="viewtrabaho"
+                  component={ViewTrabaho}
+                  options={{ title: 'View Trabaho', headerShown: true }}
+                />
+                <Stack.Screen
+                  name="apply"
+                  component={ApplyHere}
+                  options={{ title: 'Apply to Trabaho', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="companies"
+                  component={Company}
+                  options={{ title: 'Companies', headerShown: true }}
+                />
+                <Stack.Screen
+                  name="viewCompany"
+                  component={ViewCompany}
+                  options={{ title: 'View Company', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="savedjobs"
+                  component={SavedJobs}
+                  options={{ title: 'Saved Jobs', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="easyservices"
+                  component={EasyServices}
+                  options={{ title: 'Easy Services', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="easyservicesfreelancers"
+                  component={EasyServicesFreelancers}
+                  options={{ title: 'Freelancers', headerShown: true }}
+                />
+                <Stack.Screen
+                  name="book"
+                  component={Book}
+                  options={{ title: 'Freelancers', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="search"
+                  component={Search}
+                  options={{ title: 'Search', headerShown: true }}
+                />
+
                 {/* // )} */}
                 {!this.props.auth.loginData && (
                   <Stack.Screen
@@ -102,10 +161,10 @@ class Navigator extends React.Component {
         </View >
         <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
           <TabBar >
-            <TabBar.Item title="Menu" onPress={() => {
+            <TabBar.Item title="Menu" icon={(<Icon name="menu" > </Icon>)} onPress={() => {
               this.setState({ drawerOpen: !this.state.drawerOpen })
             }}></TabBar.Item>
-            <TabBar.Item title="P{roceddural" selected={this.state.wtf}></TabBar.Item>
+            <TabBar.Item title="This Tab bar will only appear while logged in. Or should we remove it?" selected={this.state.wtf}></TabBar.Item>
           </TabBar>
         </View>
       </>

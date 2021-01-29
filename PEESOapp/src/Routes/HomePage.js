@@ -18,12 +18,12 @@ let wsInstance = {};
 var intervalObject = null;
 
 const menuItems = [
-  { text: "Trabaho", type: 'trabaho' },
-  { text: "Companies" },
-  { text: "Saved Jobs" },
-  { text: "Search Jobs" },
-  { text: "Easy Services" },
-  { text: "My Profile" },
+  { text: "Trabaho", type: 'trabaho', icon: (<Icon size={60} name="laptop"></Icon>) },
+  { text: "Companies", type: 'companies', icon: (<Icon size={60} name="bank" />) },
+  { text: "Saved Jobs", type: 'savedjobs', icon: (<Icon size={60} name="book" />) },
+  { text: "Search Jobs", type: 'search', icon: (<Icon size={60} name="search" />) },
+  { text: "Easy Services", type: 'easyservices', icon: (<Icon size={60} name="smile" />) },
+  { text: "My Profile", type: 'profile', icon: (<Icon name="solution" size={60}></Icon>) },
 ]
 
 class HomePage extends Component {
@@ -37,16 +37,18 @@ class HomePage extends Component {
     };
   }
 
+
   render() {
     return (<View style={{ height: '100%' }}>
       <WhiteSpace />
-      <View style={{ alignSelf: 'center' }}>
+      <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}>
         <Text>[PEESO LOGO HERE]</Text>
       </View>
       <Grid
         data={menuItems}
         columnNum={2}
         isCarousel
+
         onPress={(data) => { if (data.type != null && this.props.navigation != null) { this.props.navigation.navigate(data.type) } }}
         carouselMaxRow={3}
       />

@@ -10,9 +10,14 @@ class UserSchema extends Schema {
       table.string('username', 80).notNullable().unique()
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
+      table
+        .enum("type", ["google", "normal"])
+        .notNullable()
+        .defaultTo("normal");
       // table.string('user_type')
       table.bool('is_verified')
       table.datetime('expiry')
+      table.string("status") // ?
       table.timestamps()
     })
   }
@@ -22,4 +27,4 @@ class UserSchema extends Schema {
   }
 }
 
-module.exports = UserSchema
+module.exports = UserSchema 

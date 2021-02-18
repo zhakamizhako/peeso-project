@@ -19,6 +19,8 @@ import ViewCompany from './Routes/Company/viewCompany'
 import EasyServices from './Routes/EasyServices/index'
 import EasyServicesFreelancers from './Routes/EasyServices/Freelancers'
 import Book from './Routes/EasyServices/Book';
+import Signup from './Routes/Signup';
+import SignupApplicant from './Routes/Signup/SignupApplicant'
 
 import Search from './Routes/Search/index'
 
@@ -141,13 +143,27 @@ class Navigator extends React.Component {
 
                 {/* // )} */}
                 {!this.props.auth.loginData && (
-                  <Stack.Screen
-                    {...this.props}
-                    name="login"
-                    component={LoginScreen}
-                    options={{ title: 'Login Screen', headerShown: false }}
-                  />
+                  <>
+                    <Stack.Screen
+                      {...this.props}
+                      name="login"
+                      component={LoginScreen}
+                      options={{ title: 'Login Screen', headerShown: false }}
+                    />
+                    <Stack.Screen
+                      {...this.props}
+                      name="signup"
+                      component={Signup}
+                      options={{ title: 'Sign Up', headerShown: false }}
+                    />
+                  </>
                 )}
+
+                <Stack.Screen
+                  name="signupapplicant"
+                  component={SignupApplicant}
+                  options={{ title: 'Sign Up Applicant', headerShown: false }}
+                />
               </Stack.Navigator>
               {console.log(this)}
               {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}

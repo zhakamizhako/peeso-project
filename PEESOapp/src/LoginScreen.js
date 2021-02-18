@@ -10,12 +10,13 @@ import {
 import { View, Text, ScrollView } from 'react-native';
 import { login } from './stores/modules/auth';
 import { connect } from 'react-redux';
+import { API_HOST } from '@env'
 
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
+      email: '',
       password: '',
       showPassword: false,
       isLoggingIn: false,
@@ -62,12 +63,12 @@ class LoginScreen extends Component {
                 this.setState({ loginError: false, loginErrorDetails: '' });
               }
               this.setState(state => {
-                let { username } = state;
-                username = e;
-                return { username };
+                let { email } = state;
+                email = e;
+                return { email };
               });
             }}
-            placeholder="Username"
+            placeholder="Email"
           />
           <InputItem
             type={!this.state.showPassword ? 'password' : ''}
@@ -104,7 +105,7 @@ class LoginScreen extends Component {
             loading={this.state.isLoggingIn}
             onPress={() => {
               let loginData = {
-                username: this.state.username,
+                email: this.state.email,
                 password: this.state.password,
               };
               this.setState({ isLoggingIn: true });
@@ -115,7 +116,13 @@ class LoginScreen extends Component {
           <Text style={{ alignSelf: 'center' }}>--or--</Text>
           <Button><Icon type="GooglePlusOutlined"></Icon> Sign in with Google</Button>
           <WhiteSpace size="lg" />
+          <Text>Don't have an account?</Text>
+          <Button onPress={() => this.props.navigation.navigate('signup')}>Sign Up</Button>
+
+          <WhiteSpace size="lg" />
           <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button>
+
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 250 }}><Text>API Hostname: {API_HOST}</Text></View>
         </WingBlank>
       </View>
     );

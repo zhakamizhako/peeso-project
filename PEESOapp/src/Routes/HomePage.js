@@ -8,9 +8,10 @@ import {
   Grid,
   Icon
 } from '@ant-design/react-native';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { logout, checkMe } from '../stores/modules/auth';
+import imageLogo from './../logo.png'
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
 let ws = {};
@@ -41,9 +42,10 @@ class HomePage extends Component {
   render() {
     return (<View style={{ height: '100%' }}>
       <WhiteSpace />
-      <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}>
-        <Text>[PEESO LOGO HERE]</Text>
-      </View>
+      {/* <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}> */}
+      <Image source={imageLogo} style={{ height: 150, width: '100%', alignSelf: 'center', }} resizeMode='center' />
+      {/* </View> */}
+      <WhiteSpace size="lg" />
       <Grid
         data={menuItems}
         columnNum={2}

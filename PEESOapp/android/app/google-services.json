@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "362915694741",
+    "project_id": "peeso-project",
+    "storage_bucket": "peeso-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362915694741:android:8251fb6a76b1df383b739c",
+        "android_client_info": {
+          "package_name": "com.peesoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362915694741-6o9sqdm86072i75u72l7vpnp99rudt2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.peesoapp",
+            "certificate_hash": "df27f5493297cd4aa4603fefa03883fe23eaf460"
+          }
+        },
+        {
+          "client_id": "362915694741-8riiobkpvlh1udujs4ukrn5hn7bq2j1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-WzlH0nW__Tc_TOcDT7FMZYeMmxRJvOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362915694741-8riiobkpvlh1udujs4ukrn5hn7bq2j1g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

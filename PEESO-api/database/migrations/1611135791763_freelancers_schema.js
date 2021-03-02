@@ -4,13 +4,13 @@
 const Schema = use('Schema')
 
 class FreelancersSchema extends Schema {
-  up () {
-    this.table('freelancers', (table) => {
+  up() {
+    this.create('freelancers', (table) => {
       // alter table
     })
   }
 
-  down () {
+  down() {
     this.table('freelancers', (table) => {
       // reverse alternations
     })

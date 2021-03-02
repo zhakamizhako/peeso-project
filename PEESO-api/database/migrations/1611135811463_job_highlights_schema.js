@@ -4,13 +4,15 @@
 const Schema = use('Schema')
 
 class JobHighlightsSchema extends Schema {
-  up () {
-    this.table('job_highlights', (table) => {
+  up() {
+    this.create('job_highlights', (table) => {
+      table.increments()
+      table.timestamps()
       // alter table
     })
   }
 
-  down () {
+  down() {
     this.table('job_highlights', (table) => {
       // reverse alternations
     })

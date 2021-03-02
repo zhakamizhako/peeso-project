@@ -5,7 +5,9 @@ const Schema = use('Schema')
 
 class ApplicantsSchema extends Schema {
   up() {
-    this.table('applicants', (table) => {
+    this.create('applicants', (table) => {
+      table.increments()
+      table.timestamps()
       table.integer("user_id").references('id').inTable('users')
       table.text('opening_statement', 'longtext')
       table.string("first_name")

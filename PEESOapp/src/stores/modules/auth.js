@@ -1,4 +1,4 @@
-import {CALL_API} from 'redux-api-middleware-native';
+import { CALL_API } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
 
 export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';

@@ -5,10 +5,13 @@ const Schema = use('Schema')
 
 class ProfilesSchema extends Schema {
   up() {
-    this.table('profiles', (table) => {
+    this.create('profiles', (table) => {
+      table.increments()
+      table.timestamps()
       table.string("first_name").notNullable()
       table.string("middle_name")
       table.string("last_name").notNullable()
+      table.boolean("is_company")
     })
   }
 

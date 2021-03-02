@@ -65,6 +65,12 @@ class SignupApplicant extends Component {
         console.log(value)
     }
 
+    submitInfo() {
+        console.log("submit shit")
+        console.log(this.state)
+        this.setState({ isSubmitting: true })
+    }
+
     render() {
         return (
             <ScrollView style={{ height: '100%' }}>
@@ -76,12 +82,20 @@ class SignupApplicant extends Component {
                     <List>
                         <List.Item>
                             <Text>Email</Text>
-                            <InputItem type={'email-address'} value={this.props.email ? this.props.email : this.state.email} disabled={this.props.email}></InputItem>
+                            <InputItem type={'email-address'} value={this.props.email ? this.props.email : this.state.email} onChange={(val) => this.setState(state => {
+                                let { email } = state
+                                email = val
+                                return { email }
+                            })} disabled={this.props.email}></InputItem>
                         </List.Item>
 
                         <List.Item>
                             <Text>Password</Text>
-                            <InputItem disabled={this.props.email ? true : false} type={this.state.visiblePassword ? 'visible-password' : 'password'} value={this.props.email ? null : this.state.password}></InputItem>
+                            <InputItem disabled={this.props.email ? true : false} type={this.state.visiblePassword ? 'visible-password' : 'password'} value={this.props.email ? null : this.state.password} onChange={(val) => this.setState(state => {
+                                let { password } = state
+                                password = val
+                                return { password }
+                            })}></InputItem>
                             <Checkbox disabled={this.props.email ? true : false} onChange={() => this.setState({ visiblePassword: !this.state.visiblePassword })}>Show Password</Checkbox>
                         </List.Item>
                     </List>
@@ -135,7 +149,7 @@ class SignupApplicant extends Component {
 
                         <List.Item>
                             <Text>Contact Number</Text>
-                            <InputItem value={this.state.contact_no} onChange={(val) => this.setState(state => {
+                            <InputItem value={this.state.contact_no} type="phone-pad" onChange={(val) => this.setState(state => {
                                 let { contact_no } = state
                                 contact_no = val
                                 return { contact_no }
@@ -152,7 +166,7 @@ class SignupApplicant extends Component {
                                 <Text style={{ textAlign: 'justify' }}>By pressing Accept, You are allowing the City Public Education and Employment Services Ofice to use your personal information in employment purpose only and in accordance to RA 10173.</Text>
                             </View>
                         </ScrollView>), [
-                            { text: 'Accept', onPress: () => console.log('ok') },
+                            { text: 'Accept', onPress: () => this.submitInfo() },
                             {
                                 text: 'Decline',
                                 onPress: () => console.log('cancel'),
@@ -161,7 +175,7 @@ class SignupApplicant extends Component {
                         ]);
                     }}>Next</Button>
 
-                    <Modal transparent visible={this.state.isSubmitting} >
+                    <Modal transparent visible={this.state.isSubmitting} closable={false} >
                         <ActivityIndicator text="Creating your Account..."> </ActivityIndicator>
                     </Modal>
 

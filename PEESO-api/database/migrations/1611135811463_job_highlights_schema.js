@@ -13,9 +13,7 @@ class JobHighlightsSchema extends Schema {
   }
 
   down() {
-    this.table('job_highlights', (table) => {
-      // reverse alternations
-    })
+    this.drop('job_highlights')
   }
 }
 

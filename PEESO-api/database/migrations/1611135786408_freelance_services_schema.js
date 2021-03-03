@@ -13,9 +13,7 @@ class FreelanceServicesSchema extends Schema {
   }
 
   down() {
-    this.table('freelance_services', (table) => {
-      // reverse alternations
-    })
+    this.drop('freelance_services')
   }
 }
 

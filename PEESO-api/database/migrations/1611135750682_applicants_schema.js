@@ -21,9 +21,7 @@ class ApplicantsSchema extends Schema {
   }
 
   down() {
-    this.table('applicants', (table) => {
-      // reverse alternations
-    })
+    this.drop('applicants')
   }
 }
 

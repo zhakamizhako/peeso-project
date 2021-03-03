@@ -16,10 +16,7 @@ class ProfilesSchema extends Schema {
   }
 
   down() {
-
-    this.table('profiles', (table) => {
-      // reverse alternations
-    })
+    this.drop('profiles')
   }
 }
 

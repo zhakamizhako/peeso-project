@@ -13,9 +13,7 @@ class CompanySchema extends Schema {
   }
 
   down() {
-    this.table('companies', (table) => {
-      // reverse alternations
-    })
+    this.drop('companies')
   }
 }
 

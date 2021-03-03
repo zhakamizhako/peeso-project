@@ -40,12 +40,34 @@ class VerificationScreen extends Component {
             <View style={{ height: '100%' }}>
                 <WhiteSpace size="lg" />
                 <WingBlank>
-                    <Text>Please Enter the verification code that was sent to your email.</Text>
+                    <Text style={{ fontSize: 25 }}>Let's make sure you're not a bot.</Text>
+                    <WhiteSpace size={"lg"} />
+                    <WhiteSpace size={"lg"} />
+                    <Text>Enter the OTP code that was sent to your email.</Text>
+                    <WhiteSpace size={"lg"} />
                     <List.Item><TextAreaItem placeholder="XXXXXX" value={this.state.verification_code} onChange={(val) => this.setState(state => {
                         let { verification_code } = state
                         verification_code = val
-                        return verification_code
+                        return { verification_code }
                     })}></TextAreaItem></List.Item>
+                    <WhiteSpace size={"lg"} />
+                    <WhiteSpace size={"lg"} />
+                    <List.Item
+                        style={{ borderRadius: 25, backgroundColor: '#108ee9' }}
+                        type="primary"
+                        loading={this.state.isLoggingIn}
+
+                        onPress={() => {
+                            let signupData = {
+                                email: this.state.email,
+                                password: this.state.password,
+                            };
+                            this.props.navigation.navigate("signup")
+                            // this.props.login(loginData);
+                        }}>
+                        <Text style={{ alignSelf: 'center', color: 'white' }}>Next</Text>
+                    </List.Item>
+
                 </WingBlank>
             </View>
         );

@@ -76,10 +76,10 @@ class SignupApplicant extends Component {
             <ScrollView style={{ height: '100%' }}>
                 <WhiteSpace size="lg" />
                 <WingBlank>
-                    <Text style={{ fontSize: 25 }}>Let's start with a few things.</Text>
+                    <Text style={{ fontSize: 25 }}>Tell us about yourself.</Text>
                     <WhiteSpace size={"lg"} />
                     <WhiteSpace size={"lg"} />
-                    <List>
+                    {/* <List>
                         <List.Item>
                             <Text>Email</Text>
                             <InputItem type={'email-address'} value={this.props.email ? this.props.email : this.state.email} onChange={(val) => this.setState(state => {
@@ -100,7 +100,7 @@ class SignupApplicant extends Component {
                         </List.Item>
                     </List>
                     <WhiteSpace size='lg' />
-                    <WhiteSpace size='lg' />
+                    <WhiteSpace size='lg' /> */}
                     <List>
                         <List.Item>
                             <Text>Opening Statement</Text>
@@ -155,6 +155,12 @@ class SignupApplicant extends Component {
                                 return { contact_no }
                             })}></InputItem>
                         </List.Item>
+
+                        <List.Item extra={(<Icon name="plus" />)}><Text>Key Skills</Text></List.Item>
+                        {this.state.keySkills != null && this.state.keySkills.map(data => (<List.Item>
+
+                        </List.Item>))}
+
                     </List>
                     <WhiteSpace size='lg' />
 

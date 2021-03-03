@@ -181,7 +181,7 @@ class LoginScreen extends Component {
           {/* <Button style={{ borderRadius: 25, backgroundColor: 'red' }} onPress={() => this.signInGoogle()}></Button> */}
           <WhiteSpace size="lg" />
           <Text>Don't have an account?</Text>
-          <Button style={{ borderRadius: 25, }} type="primary" onPress={() => this.props.navigation.navigate('signup')}>Sign Up</Button>
+          <Button style={{ borderRadius: 25, }} type="primary" onPress={() => this.props.navigation.navigate('signupemail')}>Sign Up</Button>
 
           <WhiteSpace size="lg" />
           {/* <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button> */}

@@ -42,6 +42,11 @@ class UserController {
             await b.save()
             var c = new Verification()
             c.user_id = b.id
+            c.otp_code = await generator.generateCodes(pattern, 1, options)
+            c.expiry = expiryDate.setHours(expiryDate.getMinutes() + 10);
+            await c.save()
+
+            response.send({ user: b })
 
         } catch (e) {
             throw new HttpException(e.message, e.code)

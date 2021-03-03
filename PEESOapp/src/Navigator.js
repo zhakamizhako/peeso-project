@@ -22,6 +22,7 @@ import Book from './Routes/EasyServices/Book';
 import Signup from './Routes/Signup';
 import SignupApplicant from './Routes/Signup/SignupApplicant'
 import VerificationScreen from './Routes/Signup/VerificationScreen'
+import SignupEmail from './Routes/Signup/SignupEmail'
 
 import Profile from './Routes/Profile/profile'
 
@@ -64,7 +65,7 @@ class Navigator extends React.Component {
 
     return (
       <>
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}>
 
             <NavigationContainer ref={this.NavigationContainerRef}>
@@ -159,6 +160,12 @@ class Navigator extends React.Component {
                       component={Signup}
                       options={{ title: 'Sign Up', headerShown: false }}
                     />
+                    <Stack.Screen
+                      {...this.props}
+                      name="signupemail"
+                      component={SignupEmail}
+                      options={{ title: 'Sign Up Email', headerShown: false }}
+                    />
                   </>
                 )}
 
@@ -170,7 +177,7 @@ class Navigator extends React.Component {
                 <Stack.Screen
                   name="verificationotp"
                   component={VerificationScreen}
-                  options={{ title: 'Sign Up Applicant', headerShown: false }}
+                  options={{ title: 'OTP', headerShown: false }}
                 />
                 {/* <Stack.Screen
                   name="signupapplicant"

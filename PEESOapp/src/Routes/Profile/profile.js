@@ -11,7 +11,7 @@ import {
 import { View, Text, ScrollView, Image } from 'react-native';
 // import { login } from './stores/modules/auth';
 import { connect } from 'react-redux';
-import imageLogo from './logo.png'
+import imageLogo from '../../logo.png'
 
 class ProfileScreen extends Component {
     constructor(props) {

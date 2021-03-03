@@ -21,6 +21,9 @@ import EasyServicesFreelancers from './Routes/EasyServices/Freelancers'
 import Book from './Routes/EasyServices/Book';
 import Signup from './Routes/Signup';
 import SignupApplicant from './Routes/Signup/SignupApplicant'
+import VerificationScreen from './Routes/Signup/VerificationScreen'
+
+import Profile from './Routes/Profile/profile'
 
 import Search from './Routes/Search/index'
 
@@ -61,7 +64,7 @@ class Navigator extends React.Component {
 
     return (
       <>
-        <View style={{ flex: 1, marginBottom: 50 }}>
+        <View style={{ flex: 1}}>
           <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}>
 
             <NavigationContainer ref={this.NavigationContainerRef}>
@@ -164,6 +167,16 @@ class Navigator extends React.Component {
                   component={SignupApplicant}
                   options={{ title: 'Sign Up Applicant', headerShown: false }}
                 />
+                <Stack.Screen
+                  name="verificationotp"
+                  component={VerificationScreen}
+                  options={{ title: 'Sign Up Applicant', headerShown: false }}
+                />
+                {/* <Stack.Screen
+                  name="signupapplicant"
+                  component={SignupApplicant}
+                  options={{ title: 'Sign Up Applicant', headerShown: false }}
+                /> */}
               </Stack.Navigator>
               {console.log(this)}
               {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
@@ -175,14 +188,14 @@ class Navigator extends React.Component {
             </NavigationContainer>
           </Drawer>
         </View >
-        <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
+        {/* <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
           <TabBar >
             <TabBar.Item title="Menu" icon={(<Icon name="menu" > </Icon>)} onPress={() => {
               this.setState({ drawerOpen: !this.state.drawerOpen })
             }}></TabBar.Item>
             <TabBar.Item title="This Tab bar will only appear while logged in. Or should we remove it?" selected={this.state.wtf}></TabBar.Item>
           </TabBar>
-        </View>
+        </View> */}
       </>
     );
   }

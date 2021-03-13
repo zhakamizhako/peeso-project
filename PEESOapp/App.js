@@ -5,6 +5,11 @@
  * @format
  * @flow
  */
+const _XHR = GLOBAL.originalXMLHttpRequest ?
+  GLOBAL.originalXMLHttpRequest :
+  GLOBAL.XMLHttpRequest
+
+XMLHttpRequest = _XHR
 
 import { Provider } from 'react-redux';
 import 'react-native-gesture-handler';

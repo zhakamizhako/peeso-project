@@ -1,4 +1,4 @@
-import { CALL_API } from 'redux-api-middleware-native';
+import { RSAA } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
 
 export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
@@ -56,7 +56,7 @@ export function checkMe(data) {
   return (dispatch, getState) => {
     let hostname = getState().network.hostname;
     return dispatch({
-      [CALL_API]: {
+      [RSAA]: {
         endpoint: `${hostname}/v1/accounts/me`,
         method: 'GET',
         // body: data,

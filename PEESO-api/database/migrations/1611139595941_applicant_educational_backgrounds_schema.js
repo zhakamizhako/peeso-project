@@ -12,6 +12,7 @@ class ApplicantEducationalBackgroundsSchema extends Schema {
       table.string("course")
       table.date("date_start")//probably by year
       table.date("date_end")//probably by year
+      table.integer('applicant_id').references('id').inTable('applicants')
     })
   }
 

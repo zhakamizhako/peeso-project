@@ -15,8 +15,9 @@ class VerificationsSchema extends Schema {
   }
 
   down() {
-    this.drop('verifications')
+    this.drop('verifications')  
   }
 }
 
 module.exports = VerificationsSchema
+

@@ -68,6 +68,10 @@ class VerificationScreen extends Component {
                         <Text style={{ alignSelf: 'center', color: 'white' }}>Next</Text>
                     </List.Item>
 
+                    <WhiteSpace size={"lg"} />
+                    <View style={{ flex: 1 }}>
+                        <Text>Didn't receive your code? <Text style={{ color: 'blue', fontWeight: 'bold' }}>Resend it</Text></Text>
+                    </View>
                 </WingBlank>
             </View>
         );

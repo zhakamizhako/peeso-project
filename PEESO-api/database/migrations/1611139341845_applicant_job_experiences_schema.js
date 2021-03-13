@@ -12,6 +12,7 @@ class ApplicantJobExperiencesSchema extends Schema {
       table.date("date_start")
       table.date("date_end")
       table.string("role")
+      table.string('name')
     })
   }
 

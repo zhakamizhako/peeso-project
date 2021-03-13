@@ -3,7 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class SkillJob extends Model {
+class ApplicantEducationalBackground extends Model {
 }
 
-module.exports = SkillJob
+module.exports = ApplicantEducationalBackground

@@ -7,10 +7,13 @@ import {
     Checkbox,
     Icon,
     Radio,
-    List
+    List,
+    Modal,
+    ActivityIndicator
 } from '@ant-design/react-native';
 import { View, Text, ScrollView } from 'react-native';
 import { login } from '../../stores/modules/auth';
+import { createAccount } from '../../stores/modules/user';
 import { connect } from 'react-redux';
 import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
 
@@ -18,7 +21,9 @@ class SignupEmail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            verification_code: null
+            verification_code: null,
+            isSubmitting: false,
+            error: null
         };
     }
 
@@ -28,7 +33,13 @@ class SignupEmail extends Component {
     }
 
     componentWillReceiveProps(props) {
-        let { auth } = props;
+        let { user } = props
+        console.log('receiving props')
+        console.log(props)
+
+        if (user.createAccountError) {
+            this.setState({ isSubmitting: false, error: user.createAccountError })
+        }
     }
 
     selectRadio(value) {
@@ -73,26 +84,32 @@ class SignupEmail extends Component {
                                     email: this.state.email,
                                     password: this.state.password,
                                 };
-                                this.props.navigation.navigate("verificationotp")
+                                this.props.createAccount(signupData)
+                                this.setState({ isSubmitting: true })
+                                // this.props.navigation.navigate("verificationotp")
                                 // this.props.login(loginData);
                             }}>
                             <Text style={{ alignSelf: 'center', color: 'white' }}>Next</Text>
                         </List.Item>
+                        {!this.state.isSubmitting && this.state.error && (<Text style={{ color: 'red' }}>{this.state.error}</Text>)}
                     </List>
                     <WhiteSpace size='lg' />
                     <WhiteSpace size='lg' />
                 </WingBlank>
+                <Modal transparent visible={this.state.isSubmitting} closable={false} >
+                    <ActivityIndicator text="Creating your Account..."> </ActivityIndicator>
+                </Modal>
             </View>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth,
+    user: state.user,
 });
 
 const mapActionCreators = {
-    login,
+    createAccount
 };
 
 export default connect(

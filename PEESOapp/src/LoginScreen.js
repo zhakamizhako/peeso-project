@@ -184,9 +184,9 @@ class LoginScreen extends Component {
           <Button style={{ borderRadius: 25, }} type="primary" onPress={() => this.props.navigation.navigate('signupemail')}>Sign Up</Button>
 
           <WhiteSpace size="lg" />
-          {/* <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button> */}
+          <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button>
 
-          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 250 }}><Text>API Hostname: {API_HOST}</Text></View>
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 50 }}><Text>API Hostname: {API_HOST}</Text></View>
         </WingBlank>
       </View>
     );

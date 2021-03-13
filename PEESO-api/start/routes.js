@@ -19,3 +19,16 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
+
+// Route.group(()=>{
+//   Route.post('/', )
+// }).prefix('v1/login')
+
+Route.group(() => {
+  Route.post('/createApplicant', 'UserController.createApplicant')
+  Route.post('/createUser', 'UserController.createUser')
+  Route.post('/newToken', 'UserController.sendNewToken')
+  Route.post('/verifyToken', 'UserController.verifyToken')
+  Route.post('/login', 'UserController.authenticate')
+  Route.get('/me', 'UserController.me').middleware(['auth:api'])
+}).prefix('v1/user')

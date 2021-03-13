@@ -3,7 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
-class SkillType extends Model {
+class KeySkill extends Model {
 }
 
-module.exports = SkillType
+module.exports = KeySkill

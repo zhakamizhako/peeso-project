@@ -145,6 +145,12 @@ class Navigator extends React.Component {
                   options={{ title: 'Search', headerShown: true }}
                 />
 
+                <Stack.Screen
+                  name="profile"
+                  component={Profile}
+                  options={{ title: 'Profile', headerShown: true }}
+                />
+
                 {/* // )} */}
                 {!this.props.auth.loginData && (
                   <>

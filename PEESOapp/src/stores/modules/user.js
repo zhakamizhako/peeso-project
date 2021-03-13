@@ -1,6 +1,6 @@
 import { CALL_API } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import { API_HOST } from ''
+import { API_HOST } from '@env'
 
 export const CREATE_ACCOUNT_SUCCESS = 'auth/CREATE_ACCOUNT_SUCCESS';
 export const CREATE_ACCOUNT_ERROR = 'auth/CREATE_ACCOUNT_ERROR';
@@ -15,12 +15,12 @@ export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
 export function createAccount(data) {
   console.log('::createAccount:::');
-  console.log(this);
+  console.log(data);
   return (dispatch, getState) => {
-    let hostname = getState().network.hostname;
+    let hostname = API_HOST;
     return dispatch({
       [CALL_API]: {
-        endpoint: `${hostname}/v1/accounts/createAccount`,
+        endpoint: `${hostname}/v1/user/createUser`,
         method: 'POST',
         body: data,
         headers: {
@@ -31,9 +31,9 @@ export function createAccount(data) {
           CREATE_ACCOUNT_FAIL,
           {
             type: CREATE_ACCOUNT_ERROR,
-            payload: (action, state, payload) => {
-              console.log(payload);
-              return payload;
+            payload: (action, state, res) => {
+              console.log(res)
+              return res;
             },
           },
         ],
@@ -41,6 +41,7 @@ export function createAccount(data) {
     });
   };
 }
+
 
 export function logout() {
   return async dispatch => {
@@ -122,8 +123,7 @@ actionHandlers[CREATE_ACCOUNT_FAIL] = (state, action) => {
 actionHandlers[CREATE_ACCOUNT_ERROR] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
-  newState.createAccountError = null;
-  newState.connectionError = action.payload.message;
+  newState.createAccountError = action.payload.message;
   return newState;
 };
 

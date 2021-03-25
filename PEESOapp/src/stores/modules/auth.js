@@ -202,6 +202,7 @@ const initialState = {
   loginData: null,
   accessToken: null,
   tokenSuccess: false,
+  tokenError: null,
 };
 
 export default function reducer(state = initialState, action) {

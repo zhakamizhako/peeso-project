@@ -15,7 +15,7 @@ class CompanySchema extends Schema {
       table.string('email')
       table.text('vision')
       table.text('mission')
-      table.text('core_values')
+      // table.text('core_values')
       table.text('development_thrusts')
       table.string('type')
       table.integer('employees_min')

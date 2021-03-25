@@ -17,6 +17,15 @@ class JobsSchema extends Schema {
       table.datetime('archived_on')
       table.datetime('approved_on')
       table.text('job_description')
+      table.datetime('work_from')
+      table.datetime('work_to')
+      table.float('lat')
+      table.float('lng')
+      table.string("location")
+      table.string('salary')
+      table.boolean('salary_included_benefits')
+      table.integer('company_id').unsigned().references('id').inTable('companies').notNull()
+      table.string('category')
 
       // alter table
     })

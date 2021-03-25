@@ -4,14 +4,16 @@
 const Schema = use('Schema')
 
 class SavedJobsSchema extends Schema {
-  up () {
+  up() {
     this.create('saved_jobs', (table) => {
       table.increments()
       table.timestamps()
+      table.integer('job_id').unsigned().references('id').inTable('jobs')
+      table.integer('user_id').unsigned().references('id').inTable('users')
     })
   }
 
-  down () {
+  down() {
     this.drop('saved_jobs')
   }
 }

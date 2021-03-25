@@ -15,6 +15,7 @@ import {
     DatePicker
 } from '@ant-design/react-native';
 import { View, Text, ScrollView } from 'react-native';
+import { createApplicant } from '../../stores/modules/user';
 import { login } from '../../stores/modules/auth';
 import { connect } from 'react-redux';
 import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
@@ -39,6 +40,8 @@ class SignupApplicant extends Component {
             openingStatement: null,
             visiblePassword: false,
             isSubmitting: false,
+            isLoggingIn: false,
+            error: null,
         };
     }
 
@@ -48,21 +51,66 @@ class SignupApplicant extends Component {
     }
 
     componentWillReceiveProps(props) {
-        let { auth } = props;
-        if (auth.connectionError) {
+        let { user, auth } = props;
+
+        console.log("signupapplicant props")
+        console.log(props)
+        console.log('------------')
+
+        console.log('currentprops')
+        console.log(this.props)
+        console.log('-------!----')
+
+        if (this.props.user.createApplicantSuccess != user.createApplicantSuccess && !auth.loginError) {
             this.setState({
-                loginError: true,
-                isLoggingIn: false,
-                loginErrorDetails: auth.connectionError,
-            });
+                isSubmitting: false
+            })
+            if (!this.props.auth.loginData) {
+                this.setState({ isLoggingIn: true })
+                this.props.login({ email: this.props.user.data.email, username: this.props.user.data.username, password: this.props.user.tempPassword, type: 'signup' })
+            }
         }
+        if (user.createApplicantError) {
+            this.setState({
+                error: user.createApplicantError,
+                isLoggingIn: false,
+            })
+        }
+
+        if (auth.loginSuccess && this.props.auth.loginData != auth.loginData && auth.loginData && auth.accessToken) {
+            if (auth.loginData.type == "signup") {
+                this.props.navigation.replace("homepage")
+            }
+        }
+
         if (auth.loginError) {
             this.setState({
-                loginError: true,
-                loginErrorDetails: auth.loginError,
-                isLoggingIn: false,
-            });
+                loginError: auth.loginError,
+                isLoggingIn: false
+            })
+
+            Modal.alert('Create Account Error', (<ScrollView>
+                <View>
+                    <Text style={{ textAlign: 'justify' }}>Account Creation has been successful, but there was an error on login.</Text>
+                    <WhiteSpace />
+                    <Text style={{ textAlign: 'justify' }}>{auth.loginError}</Text>
+                    <Text style={{ textAlign: 'justify' }}>Try again?</Text>
+                </View>
+            </ScrollView>), [
+                {
+                    text: 'Accept', onPress: () => {
+                        this.props.login({ email: this.props.user.data.email, username: this.props.user.data.username, password: this.props.user.tempPassword, type: 'signup' })
+                        this.setState({ isLoggingIn: true })
+                    }
+                },
+                {
+                    text: 'Decline',
+                    onPress: () => console.log('cancel'),
+                    style: 'cancel',
+                },
+            ]);
         }
+
     }
 
     selectRadio(value) {
@@ -73,6 +121,23 @@ class SignupApplicant extends Component {
         console.log("submit shit")
         console.log(this.state)
         this.setState({ isSubmitting: true })
+        let data = {
+            user_id: this.props.user.data.id,
+            email: this.props.user.data.email,
+            opening_statement: this.state.openingStatement,
+            first_name: this.state.firstname,
+            middle_name: this.state.middlename,
+            last_name: this.state.lastname,
+            address: this.state.address,
+            contact_no: this.state.contact_no,
+            expected_salary: this.state.expectedSalary,
+            key_skills: this.state.keySkills,
+            educational_backgrounds: this.state.educationalBackground,
+            job_experiences: this.state.educationalBackground
+        }
+        this.setState({ isSubmitting: true })
+        this.props.createApplicant(data)
+
     }
 
     render() {
@@ -161,7 +226,6 @@ class SignupApplicant extends Component {
                         </List.Item>
                         <WhiteSpace size="lg" />
 
-
                     </List>
                     <WhiteSpace size='lg' />
 
@@ -214,8 +278,8 @@ class SignupApplicant extends Component {
 
                         <DatePicker mode="date"
                             defaultDate={new Date()}
-                            minDate={new Date(2015, 7, 6)}
-                            maxDate={new Date(2026, 11, 3)}
+                            minDate={new Date(1700, 1, 1)}
+                            maxDate={new Date()}
                             // onChange={this.onChange}
                             format="YYYY-MM-DD" value={this.state.educationalBackground[index].startDate} onChange={(val) => this.setState(state => {
                                 let { educationalBackground } = state
@@ -228,8 +292,8 @@ class SignupApplicant extends Component {
                         </DatePicker>
                         <DatePicker mode="date"
                             defaultDate={new Date()}
-                            minDate={new Date(2015, 7, 6)}
-                            maxDate={new Date(2026, 11, 3)}
+                            minDate={new Date(1700, 7, 6)}
+                            maxDate={new Date()}
                             // onChange={this.onChange}
                             format="YYYY-MM-DD" value={this.state.educationalBackground[index].endDate} onChange={(val) => this.setState(state => {
                                 let { educationalBackground } = state
@@ -266,8 +330,8 @@ class SignupApplicant extends Component {
                         })}>Role</InputItem>
                         <DatePicker mode="date"
                             defaultDate={new Date()}
-                            minDate={new Date(2015, 7, 6)}
-                            maxDate={new Date(2026, 11, 3)}
+                            minDate={new Date(1700, 1, 1)}
+                            maxDate={new Date()}
                             onChange={this.onChange}
                             format="YYYY-MM-DD" value={this.state.job_experiences[index].startDate} onChange={(val) => this.setState(state => {
                                 let { job_experiences } = state
@@ -278,8 +342,8 @@ class SignupApplicant extends Component {
                         </DatePicker>
                         <DatePicker mode="date"
                             defaultDate={new Date()}
-                            minDate={new Date(2015, 7, 6)}
-                            maxDate={new Date(2026, 11, 3)}
+                            minDate={new Date(1700, 1, 1)}
+                            maxDate={new Date()}
                             onChange={this.onChange}
                             format="YYYY-MM-DD" value={this.state.job_experiences[index].endDate} onChange={(val) => this.setState(state => {
                                 let { job_experiences } = state
@@ -318,6 +382,13 @@ class SignupApplicant extends Component {
                         <ActivityIndicator text="Creating your Account..."> </ActivityIndicator>
                     </Modal>
 
+                    <Modal transparent visible={this.state.error} closable={true} >
+                        <Text>{this.state.error}</Text>
+                    </Modal>
+
+                    <Modal transparent visible={this.state.isLoggingIn} closable={false} >
+                        <ActivityIndicator text="Logging In..."> </ActivityIndicator>
+                    </Modal>
 
                 </WingBlank>
             </ScrollView>
@@ -326,10 +397,12 @@ class SignupApplicant extends Component {
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth,
+    user: state.user,
+    auth: state.auth
 });
 
 const mapActionCreators = {
+    createApplicant,
     login,
 };
 

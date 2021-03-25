@@ -8,7 +8,7 @@ class ApplicantsSchema extends Schema {
     this.create('applicants', (table) => {
       table.increments()
       table.timestamps()
-      table.integer("user_id").references('id').inTable('users')
+      table.integer("user_id").unsigned().references('id').inTable('users')
       table.text('opening_statement', 'longtext')
       table.string("first_name")
       table.string("middle_name")

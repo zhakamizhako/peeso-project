@@ -4,14 +4,14 @@
 const Schema = use('Schema')
 
 class SpecializationsSchema extends Schema {
-  up () {
+  up() {
     this.create('specializations', (table) => {
       table.increments()
       table.timestamps()
     })
   }
 
-  down () {
+  down() {
     this.drop('specializations')
   }
 }

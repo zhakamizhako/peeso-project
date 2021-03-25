@@ -9,7 +9,7 @@ import {
     List
 } from '@ant-design/react-native';
 import { View, Text, ScrollView, Image } from 'react-native';
-// import { login } from './stores/modules/auth';
+import { logout } from '../../stores/modules/auth';
 import { connect } from 'react-redux';
 import imageLogo from '../../logo.png'
 import { Avatar } from 'react-native-elements'
@@ -35,9 +35,14 @@ class ProfileScreen extends Component {
 
     componentWillReceiveProps(props) {
         let { auth } = props;
+
+        if (auth.logoutSuccess) {
+            this.props.navigation.replace('login')
+        }
     }
 
     render() {
+        let { first_name, middle_name, last_name } = this.props.auth.loginData.profile
         return (
             <View style={{ height: '100%' }}>
                 <WhiteSpace size="lg" />
@@ -46,7 +51,7 @@ class ProfileScreen extends Component {
                         <Avatar rounded size='xlarge' source={{ uri: "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png" }}></Avatar>
                     </View>
                     <WhiteSpace size="lg" />
-                    <Text style={{ alignSelf: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 'bold' }}>Antonio Manuel Turoy</Text>
+                    <Text style={{ alignSelf: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 'bold' }}>{first_name} {middle_name} {last_name}</Text>
                     <Text style={{ alignSelf: 'center', justifyContent: 'center', fontSize: 16, fontStyle: 'italic' }}>Government Employee Freelancer</Text>
                     <WhiteSpace size="lg" />
                     <WhiteSpace size="lg" />
@@ -57,7 +62,7 @@ class ProfileScreen extends Component {
                         <List.Item>Application History</List.Item>
                         <List.Item>Freelancing Booking</List.Item>
                         <List.Item>Settings</List.Item>
-                        <List.Item style={{ backgroundColor: 'red' }}><Text style={{ color: 'white' }} onPress={() => this.props.navigation.navigate('login')}>Logout</Text></List.Item>
+                        <List.Item style={{ backgroundColor: 'red' }}><Text style={{ color: 'white' }} onPress={() => this.props.logout()}>Logout</Text></List.Item>
                     </List>
                     <WhiteSpace size="lg" />
                     <WhiteSpace size="lg" />
@@ -74,6 +79,7 @@ const mapStateToProps = state => ({
 });
 
 const mapActionCreators = {
+    logout,
     // login,
 };
 

@@ -10,8 +10,9 @@ import {
 } from '@ant-design/react-native';
 import { View, Text, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { logout, checkMe } from '../stores/modules/auth';
-import imageLogo from './../logo.png'
+import { login, checkMe } from '../stores/modules/auth';
+import imageLogo from './../logo.png';
+import ToastNice from 'react-native-toast-message';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
 let ws = {};
@@ -35,9 +36,28 @@ class HomePage extends Component {
       loginErrorDetails: '',
       devices: [],
       userDetails: null,
+      networkError: true,
     };
   }
 
+  componentDidMount() {
+    this.props.checkMe()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.auth.tokenError) {
+      console.log(this.props.auth.tokenError)
+      if (tokenError != "Network Error") {
+
+      } else {
+
+      }
+    }
+    if (this.props.auth.tokenCheck && this.props.auth.loginData && this.props.auth.loginData.profile) {
+      console.log('A?')
+      ToastNice.show({ text1: "Welcome back, " + this.props.auth.loginData.profile.first_name, text2: "test!" })
+    }
+  }
 
   render() {
     return (<View style={{ height: '100%' }}>
@@ -58,4 +78,14 @@ class HomePage extends Component {
   }
 
 }
-export default HomePage;
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+const mapActionCreators = {
+  login,
+  checkMe,
+};
+
+export default connect(mapStateToProps, mapActionCreators)(HomePage);

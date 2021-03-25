@@ -8,7 +8,7 @@ class FreelanceEmployersSchema extends Schema {
     this.create('freelance_employers', (table) => {
       table.increments()
       table.timestamps()
-      table.integer("user_id").references('id').inTable('users')
+      table.integer("user_id").unsigned().references('id').inTable('users')
       //Below should be optional but oh well.
       table.string("first_name")
       table.string("middle_name")

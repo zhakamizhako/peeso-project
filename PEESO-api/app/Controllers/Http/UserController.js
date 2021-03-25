@@ -8,27 +8,95 @@ const Applicant = use('App/Models/Applicant')
 const Verification = use('App/Models/Verification')
 const KeySkill = use('App/Models/KeySkill')
 const ApplicantSkill = use('App/Models/ApplicantKeySkill')
-const EducationalBackground = use('App/Models/EducationalBackground')
+const EducationalBackground = use('App/Models/ApplicantEducationalBackground')
 const JobExperience = use('App/Models/ApplicantJobExperience')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 
 let CodeGenerator = require('node-code-generator')
 
 let generator = new CodeGenerator()
-let pattern = '*********'
+let pattern = '******'
 let options = {
     alphanumericChars:
-        '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
+        '123456789ABCDEFGHJKLMNPQRSTUVWXYZ'
 }
 class UserController {
     async authenticate({ auth, request, response }) {
-        var { } = request.all();
+        var { username, email, password, type } = request.all();
 
         try {
+            function validateEmail(email) {
+                let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                return re.test(String(email).toLowerCase())
+            }
+
+            let cb = false
+
+            console.log("email:" + email)
+            console.log("username:" + username)
+            console.log("password:" + password)
+
+            if (email != null) {
+                // if (validateEmail(email)) {
+                cb = await User.findBy('email', email)
+                // }
+            } else if (username != null && type != 'google') {
+                cb = await User.findBy('username', username)
+            }
+
+            if (!cb) {
+                throw new HttpException('Invalid Username or Password!', HttpResponse.STATUS_BAD_REQUEST)
+            }
+
+            let pass = await Hash.verify(password, cb.password)
+            if (!pass) {
+                throw new HttpException('Invalid Username or Password!', HttpResponse.STATUS_BAD_REQUEST)
+            }
+
+            var { token } = await auth.generate(cb)
+
+            let profile = await cb.profile().fetch()
+
+            let returnData = {
+                userData: cb,
+                accessToken: token
+            }
+
+            returnData.userData.profile = profile
+
+            if (!cb.is_verified) {
+                returnData.verified = false
+            } else {
+                returnData.verified = true
+            }
+
+            let test = (await User.query().where('id', cb.id).with('company').with('applicant').with('freelanceEmploy').fetch()).toJSON()
+            if (test.length == 0) {
+                returnData.noAccount = true
+            } else {
+                returnData.noAccount = false
+            }
+
+
+
+            console.log(returnData)
+            response.send(returnData)
+
 
         } catch (e) {
             throw new HttpException(e.message, e.status)
         }
+    }
+
+    async me({ auth, response }) {
+        let user_id = auth.user.id
+        let user = (await User.query().where('id', user_id).with('profile').fetch()).toJSON()[0]
+
+        if (!user) {
+            throw new HttpException('Invalid Token / Token Expired.', 404)
+        }
+
+        response.send({ user: user })
     }
 
     async createUser({ request, response }) {
@@ -53,15 +121,17 @@ class UserController {
             console.log('saved')
             var c = new Verification()
             c.user_id = b.id
-            c.otp_code = await generator.generateCodes(pattern, 1, options)
+            c.otp_code = await generator.generateCodes(pattern, 1, options)[0]
             console.log('generating date')
             let expiryOTP = new Date()
-            c.expiry = expiryOTP.setMinutes(expiryOTP.getMinutes() + 10);
-            console.log('saving')
+            expiryOTP = expiryOTP.setMinutes(expiryOTP.getMinutes() + 10);
+            console.log()
+            c.expiry = new Date(expiryOTP)
+
             await c.save()
-
+            console.log('sending bak')
+            console.log(b)
             response.send({ user: b })
-
         } catch (e) {
             console.log(e)
             console.log('----')
@@ -78,10 +148,12 @@ class UserController {
         try {
             var c = new Verification()
             c.user_id = user_id
-            c.otp_code = await generator.generateCodes(pattern, 1, options)
-            c.expiry = expiryDate.setHours(expiryDate.getMinutes() + 10);
+            c.otp_code = await generator.generateCodes(pattern, 1, options)[0]
+            let expiryOTP = new Date()
+            expiryOTP = expiryOTP.setHours(expiryOTP.getMinutes() + 10);
+            c.expiry = new Date(expiryOTP)
             await c.save()
-
+            console.log('new otp generated')
             response.send({ status: 'OK' })
         } catch (e) {
             throw new HttpException(e.message, e.status)
@@ -89,14 +161,23 @@ class UserController {
     }
 
     async verifyToken({ request, response }) {
+        console.log('verifytokencall')
         let { user_id, otp_code } = request.all()
-
+        if (otp_code == null) {
+            throw new HttpException("otp required", 403)
+        }
         try {
-            let query = await Verification.query().where('user_id', user_id).where('otp_code', otp_code).where('expiry', '<', new Date())
-            if (!query) {
-                throw new HttpException('Invalid OTP', 403)
-            }
+            console.log(user_id)
+            console.log(otp_code)
+            let query = (await Verification.query().where('user_id', user_id).where('otp_code', otp_code).where('expiry', '>', new Date()).fetch()).toJSON()
             console.log(query)
+            if (query.length == 0) {
+                throw new HttpException('Invalid OTP, or OTP has expired', 403)
+            }
+            let queryuser = await User.find(user_id)
+            queryuser.is_verified = true;
+            await queryuser.save()
+
             response.send({ status: 'OK' })
         } catch (e) {
             throw new HttpException(e.message, e.status)
@@ -113,7 +194,11 @@ class UserController {
             last_name,
             address,
             contact_no,
-            expected_salary, key_skills, educational_backgrounds, job_experiences } = request.all()
+            expected_salary, key_skills, educational_backgrounds, job_experiences, profile } = request.all()
+
+        console.log(key_skills)
+        console.log(educational_backgrounds)
+        console.log(job_experiences)
 
         try {
             let query = await User.find(user_id)
@@ -124,12 +209,6 @@ class UserController {
 
             // let c = new Profile;
             let d = new Applicant;
-
-            // c.first_name = first_name
-            // c.middle_name = middle_name
-            // c.last_name = last_name
-            // c.user_id = query.id;
-            // await c.save()
 
             d.user_id = query.id;
 
@@ -143,14 +222,24 @@ class UserController {
             d.expected_salary = expected_salary
             await d.save()
 
+            if (profile == null) {
+                let c = new Profile
+                c.first_name = d.first_name
+                c.middle_name = d.middle_name
+                c.last_name = d.last_name
+                c.user_id = user_id
+
+                await c.save()
+            }
+
             //attempt save skills
             try {
-                let skills = await JSON.parse(key_skills)
-                skills.map(async entry => {
-                    let s_a = KeySkill.findBy('skill_name', entry.name)
+                let skills = (key_skills)
+                await skills.map(async entry => {
+                    let s_a = await KeySkill.findBy('skill_name', entry.name)
                     if (!s_a) {
                         s_a = new KeySkill()
-                        s_a.name = entry.name
+                        s_a.skill_name = entry.name
                         await s_a.save()
                     }
                     let s_b = new ApplicantSkill()
@@ -166,14 +255,14 @@ class UserController {
 
             //attempt save Educational background
             try {
-                let edu_back = await JSON.parse(educational_backgrounds)
-                edu_back.map(async entry => {
+                let edu_back = (educational_backgrounds)
+                await edu_back.map(async entry => {
                     let eb_a = new EducationalBackground()
                     eb_a.name = entry.name
                     eb_a.course = entry.degree
                     eb_a.date_start = entry.startDate
                     eb_a.date_end = entry.endDate
-                    eb_a.applicant_id = user_id
+                    eb_a.applicant_id = d.id
 
                     await eb_a.save()
                 })
@@ -184,13 +273,14 @@ class UserController {
 
             //Attempt save job experiences
             try {
-                let job_expi = await JSON.parse(job_experiences)
-                job_expi.map(async entry => {
+                let job_expi = (job_experiences)
+                await job_expi.map(async entry => {
                     let jb_a = new JobExperience()
                     jb_a.name = entry.name
                     jb_a.role = entry.role
                     jb_a.date_start = entry.startDate
                     jb_a.date_end = entry.endDate
+                    jb_a.applicant_id = d.id
                     await jb_a.save()
                 })
             } catch (e) {
@@ -198,8 +288,7 @@ class UserController {
                 console.log({ message: e.message, code: e.status })
             }
 
-
-            response.send({ profile: c, applicant: d })
+            response.send({ applicant: d })
 
 
         } catch (e) {

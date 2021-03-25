@@ -6,7 +6,8 @@ import {
   Button,
   Checkbox,
   Icon,
-  List
+  List,
+  Modal, ActivityIndicator
 } from '@ant-design/react-native';
 import { View, Text, ScrollView, Image } from 'react-native';
 import { login } from './stores/modules/auth';
@@ -106,6 +107,9 @@ class LoginScreen extends Component {
         isLoggingIn: false,
       });
     }
+    if (auth.loginSuccess) {
+      this.setState({ isLoggingIn: false })
+    }
   }
 
   render() {
@@ -167,12 +171,12 @@ class LoginScreen extends Component {
             loading={this.state.isLoggingIn}
 
             onPress={() => {
-              let loginData = {
+              let user = {
                 email: this.state.email,
                 password: this.state.password,
               };
               this.setState({ isLoggingIn: true });
-              this.props.login(loginData);
+              this.props.login(user);
             }}>
             <Text style={{ alignSelf: 'center', color: 'white' }}>Login</Text>
           </List.Item>
@@ -187,6 +191,12 @@ class LoginScreen extends Component {
           <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button>
 
           <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 50 }}><Text>API Hostname: {API_HOST}</Text></View>
+
+          {/* Modal */}
+
+          <Modal transparent visible={this.state.isLoggingIn} closable={false} >
+            <ActivityIndicator text="Logging In..."> </ActivityIndicator>
+          </Modal>
         </WingBlank>
       </View>
     );

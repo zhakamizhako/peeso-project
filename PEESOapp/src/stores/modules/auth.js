@@ -1,5 +1,7 @@
 import { RSAA } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
+import { API_HOST } from '@env'
+import axios from 'axios'
 
 export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'auth/LOGIN_ERROR';
@@ -12,34 +14,100 @@ export const CHECK_ME_FAIL = 'auth/CHECK_ME_FAIL';
 export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 // export const SET_IP = 'network/SET_IP';
 
+// export function login(data) {
+//   console.log('::LOGIN:::');
+//   console.log(this);
+//   return (dispatch, getState) => {
+//     let hostname = API_HOST
+//     return dispatch({
+//       [CALL_API]: {
+//         endpoint: `${hostname}/v1/accounts/login`,
+//         method: 'POST',
+//         body: data,
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         types: [
+//           LOGIN_SUCCESS,
+//           LOGIN_FAIL,
+//           {
+//             type: LOGIN_ERROR,
+//             payload: (action, state, payload) => {
+//               console.log(payload);
+//               return payload;
+//             },
+//           },
+//         ],
+//       },
+//     });
+//   };
+// }
+
 export function login(data) {
-  console.log('::LOGIN:::');
-  console.log(this);
+  console.log('::login:::');
+  console.log(data);
   return (dispatch, getState) => {
-    let hostname = getState().network.hostname;
-    return dispatch({
-      [CALL_API]: {
-        endpoint: `${hostname}/v1/accounts/login`,
-        method: 'POST',
-        body: data,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        types: [
-          LOGIN_SUCCESS,
-          LOGIN_FAIL,
-          {
-            type: LOGIN_ERROR,
-            payload: (action, state, payload) => {
-              console.log(payload);
-              return payload;
-            },
-          },
-        ],
-      },
-    });
+    let hostname = API_HOST;
+    axios.post(`${hostname}/v1/auth/login`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(resuults => {
+      console.log('status good')
+      console.log(resuults)
+      if (data.type == "signup") {
+        resuults.type = "signup"
+      }
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: resuults.data
+      })
+    })
+      .catch(error => {
+        console.log('error')
+        console.log(error.response)
+        console.log(error.message)
+        dispatch({
+          type: LOGIN_FAIL,
+          payload:
+            (error.response ? error.response.data : error)
+        })
+      })
   };
 }
+
+export function checkMe() {
+  console.log('::checkMe:::');
+  return (dispatch, getState) => {
+    let { accessToken } = getState().auth
+    let hostname = API_HOST;
+    console.log(accessToken)
+    axios.get(`${hostname}/v1/auth/me`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      }
+    }).then(resuults => {
+      console.log('status good')
+      console.log(resuults)
+      dispatch({
+        type: CHECK_ME_SUCCESS,
+        payload: resuults.data
+      })
+    })
+      .catch(error => {
+        console.log('error')
+        console.log(error.response)
+        console.log(error.message)
+        dispatch({
+          type: CHECK_ME_FAIL,
+          payload:
+            (error.response ? error.response.data : error)
+        })
+      })
+  };
+}
+
+
 
 export function logout() {
   return async dispatch => {
@@ -47,33 +115,6 @@ export function logout() {
       type: LOGOUT_SUCCESS,
       meta: {
         done: true,
-      },
-    });
-  };
-}
-
-export function checkMe(data) {
-  return (dispatch, getState) => {
-    let hostname = getState().network.hostname;
-    return dispatch({
-      [RSAA]: {
-        endpoint: `${hostname}/v1/accounts/me`,
-        method: 'GET',
-        // body: data,
-        headers: {
-          Authorization: `Bearer ${data}`,
-        },
-        types: [
-          CHECK_ME_SUCCESS,
-          CHECK_ME_FAIL,
-          {
-            type: CHECK_ME_ERROR,
-            payload: (action, state, payload) => {
-              console.log(payload);
-              return payload;
-            },
-          },
-        ],
       },
     });
   };
@@ -104,7 +145,7 @@ actionHandlers[LOGIN_SUCCESS] = (state, action) => {
   newState = objectAssign({}, state);
   newState.loginSuccess = true;
   newState.loginError = false;
-  newState.loginData = action.payload.user;
+  newState.loginData = action.payload.userData;
   newState.accessToken = action.payload.accessToken;
   return newState;
 };
@@ -113,16 +154,15 @@ actionHandlers[LOGIN_FAIL] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
   newState.loginSuccess = false;
-  newState.connectionError = null;
-  newState.loginError = action.payload.error.message;
+  newState.loginError = action.payload.error ? action.payload.error.message : action.payload.message;
   return newState;
 };
 
 actionHandlers[LOGIN_ERROR] = (state, action) => {
   let newState;
-  newState = objectAssign({}, state);
-  newState.loginError = null;
-  newState.connectionError = action.payload.message;
+  newState.loginSuccess = false;
+
+  newState.loginError = action.payload.error ? action.payload.error.message : action.payload.message;
   return newState;
 };
 
@@ -131,6 +171,8 @@ actionHandlers[CHECK_ME_SUCCESS] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
   newState.tokenCheck = true;
+  newState.tokenError = false;
+  newState.loginData = action.payload.user
   return newState;
 };
 
@@ -138,8 +180,8 @@ actionHandlers[CHECK_ME_FAIL] = (state, action, test1, test2) => {
   console.log('Token check fail');
   let newState;
   newState = objectAssign({}, state);
-  newState.loginSuccess = false;
-  newState.loginError = action.payload.error.message;
+  newState.tokenCheck = false;
+  newState.tokenError = action.payload.error ? action.payload.error.message : action.payload.message;
   return newState;
 };
 
@@ -160,7 +202,6 @@ const initialState = {
   loginData: null,
   accessToken: null,
   tokenSuccess: false,
-  connectionError: false,
 };
 
 export default function reducer(state = initialState, action) {

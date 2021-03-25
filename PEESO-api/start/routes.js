@@ -27,8 +27,12 @@ Route.get('/', () => {
 Route.group(() => {
   Route.post('/createApplicant', 'UserController.createApplicant')
   Route.post('/createUser', 'UserController.createUser')
-  Route.post('/newToken', 'UserController.sendNewToken')
-  Route.post('/verifyToken', 'UserController.verifyToken')
+  Route.post('/newOTP', 'UserController.sendNewToken')
+  Route.post('/verifyOTP', 'UserController.verifyToken')
+}).prefix('v1/user')
+
+Route.group(() => {
+
   Route.post('/login', 'UserController.authenticate')
   Route.get('/me', 'UserController.me').middleware(['auth:api'])
-}).prefix('v1/user')
+}).prefix('v1/auth')

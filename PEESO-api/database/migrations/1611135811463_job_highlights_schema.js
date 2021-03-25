@@ -8,7 +8,8 @@ class JobHighlightsSchema extends Schema {
     this.create('job_highlights', (table) => {
       table.increments()
       table.timestamps()
-      // alter table
+      table.integer('job_id').unsigned().references('id').inTable('jobs')
+      table.string('description')
     })
   }
 

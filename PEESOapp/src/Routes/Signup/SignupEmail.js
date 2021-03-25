@@ -40,6 +40,10 @@ class SignupEmail extends Component {
         if (user.createAccountError) {
             this.setState({ isSubmitting: false, error: user.createAccountError })
         }
+        if (user.createAccountSuccess) {
+            this.setState({ isSubmitting: false })
+            this.props.navigation.replace("verificationotp")
+        }
     }
 
     selectRadio(value) {

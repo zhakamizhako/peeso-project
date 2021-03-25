@@ -4,6 +4,18 @@
 const Model = use('Model')
 
 class Applicant extends Model {
+    user() {
+        return this.belongsTo('App/Models/User')
+    }
+    keySkills() {
+        return this.hasMany('App/Models/ApplicantKeySkill')
+    }
+    experiences() {
+        return this.hasMany('App/Models/ApplicantJobExperience')
+    }
+    educationalBackground() {
+        return this.hasMany('App/Models/ApplicantEducationalBackground')
+    }
 }
 
 module.exports = Applicant

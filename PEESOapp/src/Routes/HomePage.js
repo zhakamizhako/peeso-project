@@ -10,7 +10,7 @@ import {
 } from '@ant-design/react-native';
 import { View, Text, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { login, checkMe } from '../stores/modules/auth';
+import { login, checkMe, logout } from '../stores/modules/auth';
 import imageLogo from './../logo.png';
 import ToastNice from 'react-native-toast-message';
 // import Ws from '../Tools/@adonisjs/websocket-client';
@@ -45,11 +45,14 @@ class HomePage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.auth.tokenError) {
+    if (this.props.auth.tokenError && prevProps.auth != this.props.auth) {
       console.log(this.props.auth.tokenError)
-      if (tokenError != "Network Error") {
-
+      if (this.props.auth.tokenError == "Network Error") {
+        console.log("Conn error")
       } else {
+        // this.setState({ networkError: this.props.auth.tokenError })
+        console.log("WTFFFF!?")
+        Modal.alert('Session Expired', (<Text>Try logging in again</Text>), [{ text: "OK", onPress: () => this.props.logout() }])
 
       }
     }
@@ -62,6 +65,7 @@ class HomePage extends Component {
   render() {
     return (<View style={{ height: '100%' }}>
       <WhiteSpace />
+      {/* {this.state.networkError && (<Text>Warning: Connection Error</Text>)} */}
       {/* <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}> */}
       <Image source={imageLogo} style={{ height: 150, width: '100%', alignSelf: 'center', }} resizeMode='center' />
       {/* </View> */}
@@ -74,6 +78,7 @@ class HomePage extends Component {
         onPress={(data) => { if (data.type != null && this.props.navigation != null) { this.props.navigation.navigate(data.type) } }}
         carouselMaxRow={3}
       />
+
     </View>)
   }
 
@@ -86,6 +91,7 @@ const mapStateToProps = state => ({
 const mapActionCreators = {
   login,
   checkMe,
+  logout,
 };
 
 export default connect(mapStateToProps, mapActionCreators)(HomePage);

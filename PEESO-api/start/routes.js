@@ -32,7 +32,13 @@ Route.group(() => {
 }).prefix('v1/user')
 
 Route.group(() => {
+  Route.get('/', 'JobController.getJobs').middleware(['auth:api'])
+  Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
+  Route.post('/save/:id', 'JobController.saveJob').middleware(['auth:api'])
+  Route.post('/unsave/:id', 'JobController.unsaveJob').middleware(['auth:api'])
+}).prefix('v1/jobs')
 
+Route.group(() => {
   Route.post('/login', 'UserController.authenticate')
   Route.get('/me', 'UserController.me').middleware(['auth:api'])
 }).prefix('v1/auth')

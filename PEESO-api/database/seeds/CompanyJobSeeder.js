@@ -17,8 +17,9 @@ const Hash = use('Hash')
 
 class CompanyJobSeeder {
   async run() {
-    await Database.table('users').insert([{ username: 'Dummy1', password: 'abcd', email: 'abcd@1234', type: 'normal', is_verified: true }])
+    await Database.table('users').insert([{ username: 'Dummy1', password: await Hash.make('12345'), email: 'abcd@1234', type: 'normal', is_verified: true }])
     await Database.table('users').insert([{ username: 'dummy2', password: await Hash.make('12345'), email: 'solon.rolandkimandre@gmail.com', type: 'normal', is_verified: true }])
+    await Database.table('profiles').insert([{ first_name: "Roland Kim Andre", middle_name: "Gallego", last_name: "Solon", user_id: 2 }])
     await Database.table('applicants').insert([{
       user_id: 2,
       opening_statement: 'Lorem Ipsum Opening Statement',

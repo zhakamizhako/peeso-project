@@ -10,7 +10,7 @@ import {
     List
 } from '@ant-design/react-native';
 import { View, Text, ScrollView } from 'react-native';
-import { login } from '../../stores/modules/auth';
+import { login, logout } from '../../stores/modules/auth';
 import { connect } from 'react-redux';
 
 class SignupScreen extends Component {
@@ -48,6 +48,10 @@ class SignupScreen extends Component {
                 loginErrorDetails: auth.loginError,
                 isLoggingIn: false,
             });
+        }
+        if (auth.logoutSuccess) {
+            console.log('a?')
+            this.props.navigation.replace('login')
         }
     }
 
@@ -97,9 +101,15 @@ class SignupScreen extends Component {
                         if (this.state.selectedRadio == 0) {
                             this.props.navigation.navigate('signupapplicant')
                         }
+                        if (this.state.selectedRadio == 1) {
+                            // this.props.navigation.navigate('signupapplicant')
+                        }
+                        if (this.state.selectedRadio == 2) {
+                            this.props.navigation.navigate('signupcompany')
+                        }
                     }}>Next</Button>
                     <WhiteSpace size={"lg"} />
-                    <Button onPress={() => this.props.navigation.navigate("login")}>Cancel</Button>
+                    <Button onPress={() => this.props.logout()}>Cancel</Button>
 
                 </WingBlank>
             </View>
@@ -113,6 +123,7 @@ const mapStateToProps = state => ({
 
 const mapActionCreators = {
     login,
+    logout
 };
 
 export default connect(

@@ -26,11 +26,20 @@ class ProfileScreen extends Component {
             connectionError: false,
             errorDialog: false,
             errorMessage: null,
+            first_name: null,
+            middle_name: null,
+            last_name: null
         };
     }
 
     componentDidMount() {
-
+        // if (this.props.auth.loginData && this.props.loginData.profile != null) {
+        this.setState({
+            first_name: this.props.auth.loginData.profile ? this.props.auth.loginData.profile.first_name : "Unknown",
+            middle_name: this.props.auth.loginData.profile ? this.props.auth.loginData.profile.middle_name : "Unknown",
+            last_name: this.props.auth.loginData.profile ? this.props.auth.loginData.profile.last_name : "Unknown"
+        })
+        // }
     }
 
     componentWillReceiveProps(props) {
@@ -42,7 +51,7 @@ class ProfileScreen extends Component {
     }
 
     render() {
-        let { first_name, middle_name, last_name } = this.props.auth.loginData.profile
+        // let { first_name, middle_name, last_name } = this.state
         return (
             <View style={{ height: '100%' }}>
                 <WhiteSpace size="lg" />
@@ -51,7 +60,7 @@ class ProfileScreen extends Component {
                         <Avatar rounded size='xlarge' source={{ uri: "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png" }}></Avatar>
                     </View>
                     <WhiteSpace size="lg" />
-                    <Text style={{ alignSelf: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 'bold' }}>{first_name} {middle_name} {last_name}</Text>
+                    <Text style={{ alignSelf: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 'bold' }}>{this.state.first_name} {this.state.middle_name} {this.state.last_name}</Text>
                     <Text style={{ alignSelf: 'center', justifyContent: 'center', fontSize: 16, fontStyle: 'italic' }}>Government Employee Freelancer</Text>
                     <WhiteSpace size="lg" />
                     <WhiteSpace size="lg" />

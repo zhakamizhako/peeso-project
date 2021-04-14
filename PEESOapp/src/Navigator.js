@@ -21,6 +21,8 @@ import EasyServicesFreelancers from './Routes/EasyServices/Freelancers'
 import Book from './Routes/EasyServices/Book';
 import Signup from './Routes/Signup';
 import SignupApplicant from './Routes/Signup/SignupApplicant'
+import SignupCompany from './Routes/Signup/SignupCompany'
+
 import VerificationScreen from './Routes/Signup/VerificationScreen'
 import SignupEmail from './Routes/Signup/SignupEmail'
 
@@ -66,121 +68,129 @@ class Navigator extends React.Component {
     return (
       <>
         <View style={{ flex: 1 }}>
-          <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}>
+          {/* <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}> */}
 
-            <NavigationContainer ref={this.NavigationContainerRef}>
-              <Stack.Navigator initialRouteName="login">
-                {this.props.auth.loginData && (<>
-                  <Stack.Screen
-                    name="homepage"
-                    component={HomePage}
-                    options={{ title: 'Overview', headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="trabaho"
-                    component={Trabaho}
-                    options={{ title: 'Trabaho Corner', headerShown: true }}
-                  />
-                  <Stack.Screen
-                    name="viewtrabaho"
-                    component={ViewTrabaho}
-                    options={{ title: 'View Trabaho', headerShown: true }}
-                  />
-                  <Stack.Screen
-                    name="apply"
-                    component={ApplyHere}
-                    options={{ title: 'Apply to Trabaho', headerShown: true }}
-                  />
-
-                  <Stack.Screen
-                    name="companies"
-                    component={Company}
-                    options={{ title: 'Companies', headerShown: true }}
-                  />
-                  <Stack.Screen
-                    name="viewCompany"
-                    component={ViewCompany}
-                    options={{ title: 'View Company', headerShown: true }}
-                  />
-
-                  <Stack.Screen
-                    name="savedjobs"
-                    component={SavedJobs}
-                    options={{ title: 'Saved Jobs', headerShown: true }}
-                  />
-
-                  <Stack.Screen
-                    name="easyservices"
-                    component={EasyServices}
-                    options={{ title: 'Easy Services', headerShown: true }}
-                  />
-
-                  <Stack.Screen
-                    name="easyservicesfreelancers"
-                    component={EasyServicesFreelancers}
-                    options={{ title: 'Freelancers', headerShown: true }}
-                  />
-                  <Stack.Screen
-                    name="book"
-                    component={Book}
-                    options={{ title: 'Freelancers', headerShown: true }}
-                  />
-
-                  <Stack.Screen
-                    name="search"
-                    component={Search}
-                    options={{ title: 'Search', headerShown: true }}
-                  />
-
-                  <Stack.Screen
-                    name="profile"
-                    component={Profile}
-                    options={{ title: 'Profile', headerShown: true }}
-                  />
-                </>)}
-                {!this.props.auth.loginData && (
-                  <>
-                    <Stack.Screen
-                      {...this.props}
-                      name="login"
-                      component={LoginScreen}
-                      options={{ title: 'Login Screen', headerShown: false }}
-                    />
-                    <Stack.Screen
-                      {...this.props}
-                      name="signup"
-                      component={Signup}
-                      options={{ title: 'Sign Up', headerShown: false }}
-                    />
-                    <Stack.Screen
-                      {...this.props}
-                      name="signupemail"
-                      component={SignupEmail}
-                      options={{ title: 'Sign Up Email', headerShown: false }}
-                    />
-                  </>
-                )}
-
+          <NavigationContainer ref={this.NavigationContainerRef}>
+            <Stack.Navigator initialRouteName="login">
+              {this.props.auth.loginData && this.props.auth.noAccount == false && (<>
                 <Stack.Screen
-                  name="signupapplicant"
-                  component={SignupApplicant}
-                  options={{ title: 'Sign Up Applicant', headerShown: false }}
+                  name="homepage"
+                  component={HomePage}
+                  options={{ title: 'Overview', headerShown: false }}
                 />
                 <Stack.Screen
-                  name="verificationotp"
-                  component={VerificationScreen}
-                  options={{ title: 'OTP', headerShown: false }}
+                  name="trabaho"
+                  component={Trabaho}
+                  options={{ title: 'Trabaho Corner', headerShown: true }}
                 />
-              </Stack.Navigator>
-              {console.log(this)}
-              {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
+                <Stack.Screen
+                  name="viewtrabaho"
+                  component={ViewTrabaho}
+                  options={{ title: 'View Trabaho', headerShown: true }}
+                />
+                <Stack.Screen
+                  name="apply"
+                  component={ApplyHere}
+                  options={{ title: 'Apply to Trabaho', headerShown: true }}
+                />
 
-              <View style={{ positon: 'absolute' }}>
-              </View>
+                <Stack.Screen
+                  name="companies"
+                  component={Company}
+                  options={{ title: 'Companies', headerShown: true }}
+                />
+                <Stack.Screen
+                  name="viewCompany"
+                  component={ViewCompany}
+                  options={{ title: 'View Company', headerShown: true }}
+                />
 
-              {/* )} */}
-            </NavigationContainer>
-          </Drawer>
+                <Stack.Screen
+                  name="savedjobs"
+                  component={SavedJobs}
+                  options={{ title: 'Saved Jobs', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="easyservices"
+                  component={EasyServices}
+                  options={{ title: 'Easy Services', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="easyservicesfreelancers"
+                  component={EasyServicesFreelancers}
+                  options={{ title: 'Freelancers', headerShown: true }}
+                />
+                <Stack.Screen
+                  name="book"
+                  component={Book}
+                  options={{ title: 'Freelancers', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="search"
+                  component={Search}
+                  options={{ title: 'Search', headerShown: true }}
+                />
+
+                <Stack.Screen
+                  name="profile"
+                  component={Profile}
+                  options={{ title: 'Profile', headerShown: true }}
+                />
+              </>)}
+              {!this.props.auth.loginData && (
+                <>
+                  <Stack.Screen
+                    {...this.props}
+                    name="login"
+                    component={LoginScreen}
+                    options={{ title: 'Login Screen', headerShown: false }}
+                  />
+                  <Stack.Screen
+                    {...this.props}
+                    name="signupemail"
+                    component={SignupEmail}
+                    options={{ title: 'Sign Up Email', headerShown: false }}
+                  />
+                </>
+              )}
+
+              {/* {this.props.auth.noAccount && this.props.auth.loginData == null(
+               
+              )} */}
+              <Stack.Screen
+                {...this.props}
+                name="signup"
+                component={Signup}
+                options={{ title: 'Sign Up', headerShown: false }}
+              />
+              <Stack.Screen
+                name="signupapplicant"
+                component={SignupApplicant}
+                options={{ title: 'Sign Up Applicant', headerShown: false }}
+              />
+              <Stack.Screen
+                name="signupcompany"
+                component={SignupCompany}
+                options={{ title: 'Sign Up Company', headerShown: false }}
+              />
+              <Stack.Screen
+                name="verificationotp"
+                component={VerificationScreen}
+                options={{ title: 'OTP', headerShown: false }}
+              />
+            </Stack.Navigator>
+            {console.log(this)}
+            {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
+
+            <View style={{ positon: 'absolute' }}>
+            </View>
+
+            {/* )} */}
+          </NavigationContainer>
+          {/* </Drawer> */}
         </View >
         {/* <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
           <TabBar >

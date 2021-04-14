@@ -63,14 +63,25 @@ class JobController {
         }
 
         try {
-            let job = await Job.find(id)
-            if (!job) {
+            let savedjob = await SavedJob.find(id)
+            if (!savedjob) {
                 throw new HttpException("Invalid Job", HttpException.STATUS_BAD_REQUEST);
             }
-            let save = await SavedJob.find(id)
-            await save.delete()
-
+            // let save = await SavedJob.find(id)
+            await savedjob.delete()
             response.send({ status: 'OK' })
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async getSavedJobs({ auth, response }) {
+        let { id } = auth.user
+        console.log(id)
+        console.log(auth.user)
+        try {
+            let saved = await SavedJob.query().where('user_id', id).orderBy('updated_at', 'desc').with('job.company').with('job.benefit').with('job.highlight').fetch()
+            response.send({ data: saved.toJSON() })
         } catch (e) {
             throw new HttpException(e.message, e.status)
         }

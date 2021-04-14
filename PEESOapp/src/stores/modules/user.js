@@ -11,6 +11,10 @@ export const CREATE_APPLICANT_SUCCESS = 'auth/CREATE_APPLICANT_SUCCESS';
 export const CREATE_APPLICANT_ERROR = 'auth/CREATE_APPLICANT_ERROR';
 export const CREATE_APPLICANT_FAIL = 'auth/CREATE_APPLICANT_FAIL';
 
+export const CREATE_COMPANY_SUCCESS = 'auth/CREATE_COMPANY_SUCCESS';
+export const CREATE_COMPANY_ERROR = 'auth/CREATE_COMPANY_ERROR';
+export const CREATE_COMPANY_FAIL = 'auth/CREATE_COMPANY_FAIL';
+
 export const VERIFY_OTP_SUCCESS = 'auth/VERIFY_OTP_SUCCESS';
 export const VERIFY_OTP_ERROR = 'auth/VERIFY_OTP_ERROR';
 export const VERIFY_OTP_FAIL = 'auth/VERIFY_OTP_FAIL';
@@ -25,6 +29,7 @@ export const CHECK_ME_FAIL = 'auth/CHECK_ME_FAIL';
 
 export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
+//Create applicant
 export function createApplicant(data) {
   console.log('::createApplicant:::');
   console.log(data);
@@ -53,6 +58,36 @@ export function createApplicant(data) {
       })
   };
 }
+
+export function createCompany(data) {
+  console.log('::createCompany:::');
+  console.log(data);
+  return (dispatch, getState) => {
+    let hostname = API_HOST;
+    axios.post(`${hostname}/v1/user/createCompany`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(resuults => {
+      console.log('status good')
+      console.log(resuults)
+      dispatch({
+        type: CREATE_COMPANY_SUCCESS,
+        payload: resuults.data
+      })
+    })
+      .catch(error => {
+        console.log('error')
+        console.log(error.response)
+        dispatch({
+          type: CREATE_COMPANY_FAIL,
+          payload:
+            (error.response ? error.response.data : error)
+        })
+      })
+  };
+}
+
 
 export function createAccount(data) {
   console.log('::createAccount:::');
@@ -280,6 +315,17 @@ actionHandlers[CREATE_APPLICANT_SUCCESS] = (state, action) => {
   newState.accessToken = action.payload.accessToken;
   return newState;
 };
+
+actionHandlers[CREATE_COMPANY_SUCCESS] = (state, action) => {
+  let newState;
+  newState = objectAssign({}, state);
+  newState.createCompanySuccess = true;
+  newState.createCompanyError = false;
+  newState.createCompanyData = action.payload.user;
+  newState.accessToken = action.payload.accessToken;
+  return newState;
+};
+
 actionHandlers[CREATE_APPLICANT_FAIL] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
@@ -336,6 +382,9 @@ const initialState = {
   createApplicantError: false,
   createApplicantSuccess: false,
   createApplicantData: null,
+  createCompanyError: false,
+  createCompanySuccess: false,
+  createCompanyData: null,
   data: null,
   tempPassword: null,
 };

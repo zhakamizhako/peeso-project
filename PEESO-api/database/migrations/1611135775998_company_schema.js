@@ -9,6 +9,7 @@ class CompanySchema extends Schema {
       table.increments()
       table.timestamps()
       table.integer('user_id').unsigned().references('id').inTable('users')
+      table.text('description') //overview
       table.string('name')
       table.string('address')
       table.string('contact_no')

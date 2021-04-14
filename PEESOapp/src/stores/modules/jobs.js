@@ -216,11 +216,46 @@ actionHandlers[NEW_JOB_SUCCESS] = (state, action) => {
 };
 
 actionHandlers[NEW_JOB_FAIL] = (state, action, test1, test2) => {
-    console.log('Token check fail');
+    console.log('Create Job Fail');
     let newState;
     newState = objectAssign({}, state);
     newState.newJob = false;
     newState.newJobError = action.payload.error ? action.payload.error.message : action.payload.message;
+    return newState;
+};
+
+actionHandlers[SAVE_JOB_SUCCESS] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.saveJob = true;
+    return newState;
+};
+
+actionHandlers[SAVE_JOB_FAIL] = (state, action) => {
+    console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.saveJob = false;
+    newState.saveJobError = action.payload.error ? action.payload.error.message : action.payload.message;
+    return newState;
+};
+
+actionHandlers[GET_SAVED_JOBS_SUCCESS] = (state, action) => {
+    console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getSavedJobs = true;
+    newState.getSavedJobsError = false;
+    newState.getSavedJobsData = action.payload.data
+    return newState;
+};
+
+actionHandlers[GET_SAVED_JOBS_FAIL] = (state, action) => {
+    console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getSavedJobs = false;
+    newState.getSavedJobsError = action.payload.error ? action.payload.error.message : action.payload.message;
     return newState;
 };
 
@@ -243,6 +278,13 @@ const initialState = {
     getJobError: false,
     getJobSuccess: false,
     getJobData: null,
+
+    getSavedJobs: false,
+    getSavedJobsData: [],
+    getSavedJobsError: false,
+
+    saveJob: false,
+    saveJobError: null,
 };
 
 export default function reducer(state = initialState, action) {

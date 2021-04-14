@@ -16,7 +16,7 @@ import {
 } from '@ant-design/react-native';
 import { View, Text, ScrollView } from 'react-native';
 import { createApplicant } from '../../stores/modules/user';
-import { login } from '../../stores/modules/auth';
+import { login, checkMe } from '../../stores/modules/auth';
 import { connect } from 'react-redux';
 import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
 import { TextInput } from 'react-native-gesture-handler';
@@ -46,6 +46,10 @@ class SignupApplicant extends Component {
     }
 
     componentDidMount() {
+        if (this.props.auth.loginData != null && this.props.auth.loginData.profile != null) {
+            let { first_name, middle_name, last_name, email, id } = this.props.auth.loginData.profile
+            this.setState({ first_name, middle_name, last_name, email, profile_id: id })
+        }
         // console.log(this.props.auth);
         // ws = Ws(`ws://${this.state.auth}`)
     }
@@ -68,6 +72,9 @@ class SignupApplicant extends Component {
             if (!this.props.auth.loginData) {
                 this.setState({ isLoggingIn: true })
                 this.props.login({ email: this.props.user.data.email, username: this.props.user.data.username, password: this.props.user.tempPassword, type: 'signup' })
+            } else {
+                this.props.checkMe()
+                // this.props.navigation.replace("homepage")
             }
         }
         if (user.createApplicantError) {
@@ -75,6 +82,10 @@ class SignupApplicant extends Component {
                 error: user.createApplicantError,
                 isLoggingIn: false,
             })
+        }
+
+        if (this.props.user.createApplicantSuccess && this.props.auth.tokenCheck && this.props.auth.loginData && this.props.auth.loginData.profile) {
+            this.props.navigation.replace("homepage")
         }
 
         if (auth.loginSuccess && this.props.auth.loginData != auth.loginData && auth.loginData && auth.accessToken) {
@@ -120,10 +131,13 @@ class SignupApplicant extends Component {
     submitInfo() {
         console.log("submit shit")
         console.log(this.state)
+        console.log('STATEW')
+        console.log(this.props)
+        console.log('-------------')
         this.setState({ isSubmitting: true })
         let data = {
-            user_id: this.props.user.data.id,
-            email: this.props.user.data.email,
+            user_id: this.props.user.data ? this.props.user.data.id : (this.props.auth.loginData ? this.props.auth.loginData.id : null),
+            email: this.props.user.data ? this.props.user.data.email : (this.props.auth.loginData ? this.props.auth.loginData.email : null),
             opening_statement: this.state.openingStatement,
             first_name: this.state.firstname,
             middle_name: this.state.middlename,
@@ -404,6 +418,7 @@ const mapStateToProps = state => ({
 const mapActionCreators = {
     createApplicant,
     login,
+    checkMe,
 };
 
 export default connect(

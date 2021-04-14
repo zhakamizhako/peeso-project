@@ -10,7 +10,7 @@ import {
   Toast,
   ActivityIndicator
 } from '@ant-design/react-native';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { getJobs, saveJob, unsaveJob } from '../../stores/modules/jobs';
 // import Ws from '../Tools/@adonisjs/websocket-client';
@@ -41,6 +41,7 @@ class Trabaho extends Component {
       has_fetched: false,
       is_fetching: false,
       jobsData: [],
+      error: null,
     };
   }
 
@@ -51,9 +52,18 @@ class Trabaho extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log('--------')
+    console.log(this.props)
+    console.log(prevProps)
+    console.log('--------')
     if (this.props.jobs.getJobsData != prevProps.jobs.getJobsData) {
-      this.setState({ jobsData: this.props.jobs.getJobsData, has_fetched: true, is_fetching: false })
+      this.setState({ jobsData: this.props.jobs.getJobsData, has_fetched: true, is_fetching: false, error: false })
     }
+    if (this.props.jobs.getJobsError != prevProps.jobs.getJobsError) {
+      console.log('karumba')
+      this.setState({ error: this.props.jobs.getJobsError, has_fetched: true, is_fetching: false })
+    }
+    if (this.props.jobs.saveJob)
   }
 
   save(data) {
@@ -86,10 +96,14 @@ class Trabaho extends Component {
   render() {
     return (<>
       <WingBlank>
-        <ScrollView>
-          {this.state.has_fetched && this.state.jobsData && this.state.jobsData.map((entry, index) => { return (this.renderJobData(entry, index)) })}
-          {!this.state.has_fetched && (<ActivityIndicator text="Fetching Jobs Data..."> </ActivityIndicator>)}
-        </ScrollView>
+        <RefreshControl refreshing={this.state.is_fetching} onRefresh={() => this.props.getJobs()}>
+          <ScrollView>
+            {this.state.has_fetched && this.state.jobsData && this.state.jobsData.map((entry, index) => { return (this.renderJobData(entry, index)) })}
+            {!this.state.has_fetched && (<ActivityIndicator text="Fetching Jobs Data..."> </ActivityIndicator>)}
+            {this.state.has_fetched && this.state.jobsData.length == 0 && (<View style={{ alignSelf: 'center', alignContent: 'center', marginVertical: '50%' }}><Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 25 }}>No Jobs available at the moment :(</Text></View>)}
+            {this.state.has_fetched && this.state.error && (<View style={{ alignSelf: 'center', alignContent: 'center' }}><Text style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 25 }}>Error Fetching Data. </Text><Text>{this.state.error}</Text></View>)}
+          </ScrollView>
+        </RefreshControl>
       </WingBlank>
     </>)
   }

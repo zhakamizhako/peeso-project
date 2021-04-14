@@ -6,7 +6,8 @@ import {
   Modal,
   Card,
   Grid,
-  Icon
+  Icon,
+  Toast
 } from '@ant-design/react-native';
 import { View, Text, ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
@@ -14,7 +15,7 @@ import { login, checkMe, logout } from '../stores/modules/auth';
 import imageLogo from './../logo.png';
 import ToastNice from 'react-native-toast-message';
 // import Ws from '../Tools/@adonisjs/websocket-client';
-import moment from 'moment';
+import moment, { now } from 'moment';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -49,6 +50,7 @@ class HomePage extends Component {
       console.log(this.props.auth.tokenError)
       if (this.props.auth.tokenError == "Network Error") {
         console.log("Conn error")
+        Toast.offline("No connection", Toast.SHORT);
       } else {
         // this.setState({ networkError: this.props.auth.tokenError })
         console.log("WTFFFF!?")
@@ -59,6 +61,7 @@ class HomePage extends Component {
     if (this.props.auth.tokenCheck && this.props.auth.loginData && this.props.auth.loginData.profile) {
       console.log('A?')
       ToastNice.show({ text1: "Welcome back, " + this.props.auth.loginData.profile.first_name, text2: "test!" })
+      Toast.success("Welcome back, " + this.props.auth.loginData.profile.first_name, Toast.SHORT)
     }
   }
 
@@ -69,6 +72,7 @@ class HomePage extends Component {
       {/* <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}> */}
       <Image source={imageLogo} style={{ height: 150, width: '100%', alignSelf: 'center', }} resizeMode='center' />
       {/* </View> */}
+
       <WhiteSpace size="lg" />
       <Grid
         data={menuItems}

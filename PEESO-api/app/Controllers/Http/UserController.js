@@ -4,6 +4,7 @@ const { HttpException } = use("node-exceptions");
 const Hash = use("Hash");
 const User = use('App/Models/User')
 const Profile = use('App/Models/Profile')
+const Company = use('App/Models/Company')
 const Applicant = use('App/Models/Applicant')
 const Verification = use('App/Models/Verification')
 const KeySkill = use('App/Models/KeySkill')
@@ -70,14 +71,13 @@ class UserController {
                 returnData.verified = true
             }
 
-            let test = (await User.query().where('id', cb.id).with('company').with('applicant').with('freelanceEmploy').fetch()).toJSON()
-            if (test.length == 0) {
-                returnData.noAccount = true
-            } else {
+            let test = (await User.query().where('id', cb.id).with('company').with('applicant').with('freelanceEmploy').fetch()).toJSON()[0]
+            console.log(test)
+            if (test != null && (test.company != null || test.applicant != null || test.freelanceEmploy != null)) {
                 returnData.noAccount = false
+            } else {
+                returnData.noAccount = true
             }
-
-
 
             console.log(returnData)
             response.send(returnData)
@@ -105,7 +105,12 @@ class UserController {
         if (email == null) {
             throw new HttpException('email required.', HttpResponse.STATUS_BAD_REQUEST)
         }
+
         try {
+            var btest = (await User.query().where('email', email).fetch()).toJSON()[0]
+            if (btest) {
+                throw new HttpException('This Email has already been taken', HttpResponse.STATUS_BAD_REQUEST)
+            }
             var b = new User()
             b.username = username
             b.email = email
@@ -222,14 +227,24 @@ class UserController {
             d.expected_salary = expected_salary
             await d.save()
 
-            if (profile == null) {
-                let c = new Profile
-                c.first_name = d.first_name
-                c.middle_name = d.middle_name
-                c.last_name = d.last_name
-                c.user_id = user_id
+            try {
+                let cc = await User.find(user_id)
+                let profilea = await cc.profile().fetch();
+                if (!profilea) {
+                    let c = new Profile
+                    c.first_name = d.first_name
+                    c.middle_name = d.middle_name
+                    c.last_name = d.last_name
+                    c.user_id = user_id
 
-                await c.save()
+                    await c.save()
+
+                }
+                // if (profile == null) {
+                // }
+            } catch (e) {
+                console.log('Error ?')
+                console.log(e)
             }
 
             //attempt save skills
@@ -295,6 +310,77 @@ class UserController {
             console.log(e)
             throw new HttpException(e.message, e.status)
         }
+    }
+
+    async createCompany({ request, response }) {
+        let {
+            user_id, //required
+            email,
+            company_name,
+            description,
+            address,
+            first_name,
+            middle_name,
+            last_name,
+            contact_no,
+            profile } = request.all()
+
+        try {
+            let query = await User.find(user_id)
+            if (!query) {
+                console.log("wtf")
+                throw new HttpException("User does not exist", HttpResponse.STATUS_BAD_REQUEST)
+            }
+
+            // let c = new Profile;
+            let d = new Company;
+
+            d.user_id = query.id;
+            d.name = company_name
+            d.description = description
+            // d.first_name = first_name
+            // d.middle_name = middle_name
+            // d.last_name = last_name
+            d.address = address
+            d.contact_no = contact_no
+            d.email = email
+            d.expected_salary = expected_salary
+            d.user_id = user_id
+            await d.save()
+
+            if (profile == null) {
+                let c = new Profile
+                c.first_name = first_name
+                c.middle_name = middle_name
+                c.last_name = last_name
+                c.user_id = user_id
+
+                await c.save()
+            }
+
+            response.send({ company: d })
+
+
+        } catch (e) {
+            console.log(e)
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async updateCompany({ request, auth, response }) {
+
+    }
+
+    async updateCompanyAdmin({ request, auth, response }) {//reserved for admin management
+
+    }
+
+    async updateApplicant({ request, auth, response }) {
+
+    }
+
+    async updateApplicantAdmin({ request, auth, response }) {//reserved for admin management
+
     }
 }
 

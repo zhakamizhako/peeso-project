@@ -26,6 +26,7 @@ Route.get('/', () => {
 
 Route.group(() => {
   Route.post('/createApplicant', 'UserController.createApplicant')
+  Route.post('/createCompany', 'UserController.createCompany')
   Route.post('/createUser', 'UserController.createUser')
   Route.post('/newOTP', 'UserController.sendNewToken')
   Route.post('/verifyOTP', 'UserController.verifyToken')
@@ -33,9 +34,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'JobController.getJobs').middleware(['auth:api'])
-  Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
   Route.post('/save/:id', 'JobController.saveJob').middleware(['auth:api'])
   Route.post('/unsave/:id', 'JobController.unsaveJob').middleware(['auth:api'])
+  Route.get('/getsaved/', 'JobController.getSavedJobs').middleware(['auth:api'])
+  Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
 }).prefix('v1/jobs')
 
 Route.group(() => {

@@ -146,6 +146,7 @@ actionHandlers[LOGIN_SUCCESS] = (state, action) => {
   newState.loginSuccess = true;
   newState.loginError = false;
   newState.loginData = action.payload.userData;
+  newState.noAccount = action.payload.noAccount;
   newState.accessToken = action.payload.accessToken;
   return newState;
 };
@@ -203,6 +204,7 @@ const initialState = {
   accessToken: null,
   tokenSuccess: false,
   tokenError: null,
+  logoutSuccess: false,
 };
 
 export default function reducer(state = initialState, action) {

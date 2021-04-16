@@ -38,6 +38,7 @@ Route.group(() => {
   Route.post('/unsave/:id', 'JobController.unsaveJob').middleware(['auth:api'])
   Route.get('/getsaved/', 'JobController.getSavedJobs').middleware(['auth:api'])
   Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
+  Route.post('/new', 'JobController.newJob').middleware(['auth:api'])
 }).prefix('v1/jobs')
 
 Route.group(() => {

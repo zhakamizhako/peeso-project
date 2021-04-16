@@ -194,7 +194,11 @@ actionHandlers[CHECK_ME_ERROR] = (state, action) => {
 };
 
 actionHandlers[LOGOUT_SUCCESS] = (state, action) => {
-  return initialState;
+  // return initialState;
+  let newState = initialState;
+  newState.logoutSuccess = true;
+  return newState;
+  // let newState = objectAssign({}, state)
 };
 
 const initialState = {

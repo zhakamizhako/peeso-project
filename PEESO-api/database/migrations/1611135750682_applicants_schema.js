@@ -17,6 +17,7 @@ class ApplicantsSchema extends Schema {
       table.string("contact_no")
       table.string("email")
       table.string("expected_salary")
+      table.integer('file_id').unsigned().references('id').inTable('file_uploads')
     })
   }
 

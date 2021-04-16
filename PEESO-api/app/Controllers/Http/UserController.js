@@ -344,7 +344,7 @@ class UserController {
             d.address = address
             d.contact_no = contact_no
             d.email = email
-            d.expected_salary = expected_salary
+            // d.expected_salary = expected_salary
             d.user_id = user_id
             await d.save()
 
@@ -354,6 +354,7 @@ class UserController {
                 c.middle_name = middle_name
                 c.last_name = last_name
                 c.user_id = user_id
+                c.is_company = true
 
                 await c.save()
             }

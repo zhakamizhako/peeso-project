@@ -19,16 +19,6 @@ import moment, { now } from 'moment';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
-
-const menuItems = [
-  { text: "Trabaho", type: 'trabaho', icon: (<Icon size={60} name="laptop"></Icon>) },
-  { text: "Companies", type: 'companies', icon: (<Icon size={60} name="bank" />) },
-  { text: "Saved Jobs", type: 'savedjobs', icon: (<Icon size={60} name="book" />) },
-  { text: "Search Jobs", type: 'search', icon: (<Icon size={60} name="search" />) },
-  { text: "Easy Services", type: 'easyservices', icon: (<Icon size={60} name="smile" />) },
-  { text: "My Profile", type: 'profile', icon: (<Icon name="solution" size={60}></Icon>) },
-]
-
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -66,6 +56,16 @@ class HomePage extends Component {
   }
 
   render() {
+    const menuItems = [
+      { text: "Trabaho", type: 'trabaho', icon: (<Icon size={60} name="laptop"></Icon>) },
+      { text: "Companies", type: 'companies', icon: (<Icon size={60} name="bank" />) },
+      { text: "Saved Jobs", type: 'savedjobs', icon: (<Icon size={60} name="book" />) },
+      { text: "Search Jobs", type: 'search', icon: (<Icon size={60} name="search" />) },
+      { text: "Easy Services", type: 'easyservices', icon: (<Icon size={60} name="smile" />) },
+      { text: this.props.auth.loginData && this.props.auth.loginData.profile && this.props.auth.loginData.profile.is_company ? "Manage Company" : "My Profile", type: 'profile', icon: (<Icon name="solution" size={60}></Icon>) },
+    ]
+
+
     return (<View style={{ height: '100%' }}>
       <WhiteSpace />
       {/* {this.state.networkError && (<Text>Warning: Connection Error</Text>)} */}

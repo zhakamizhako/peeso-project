@@ -16,6 +16,8 @@ import SavedJobs from './Routes/SavedJobs/index';
 import Company from './Routes/Company/companylist'
 import ViewCompany from './Routes/Company/viewCompany'
 
+import CreateJob from './Routes/CompanyDashboard/postjob'
+
 import EasyServices from './Routes/EasyServices/index'
 import EasyServicesFreelancers from './Routes/EasyServices/Freelancers'
 import Book from './Routes/EasyServices/Book';
@@ -138,6 +140,13 @@ class Navigator extends React.Component {
                   name="profile"
                   component={Profile}
                   options={{ title: 'Profile', headerShown: true }}
+                />
+              </>)}
+              {this.props.auth.loginData && this.props.auth.loginData.profile.is_company && (<>
+                <Stack.Screen
+                  name="createjob"
+                  component={CreateJob}
+                  options={{ title: 'Create a Job Post', headerShown: true }}
                 />
               </>)}
               {!this.props.auth.loginData && (

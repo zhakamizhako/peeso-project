@@ -63,7 +63,9 @@ class Trabaho extends Component {
       console.log('karumba')
       this.setState({ error: this.props.jobs.getJobsError, has_fetched: true, is_fetching: false })
     }
-    if (this.props.jobs.saveJob)
+    if (this.props.jobs.saveJob) {
+
+    }
   }
 
   save(data) {

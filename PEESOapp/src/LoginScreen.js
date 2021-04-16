@@ -164,6 +164,7 @@ class LoginScreen extends Component {
             }}>
             Show Password
           </Checkbox>
+          <Text style={{ color: "#06F", marginLeft: 14, marginTop: 10, fontWeight: 'bold' }}>Forgot Password?</Text>
           <WhiteSpace size="lg" />
           <List.Item
             style={{ borderRadius: 25, backgroundColor: '#108ee9' }}
@@ -184,13 +185,13 @@ class LoginScreen extends Component {
           <List.Item style={{ backgroundColor: '#e2402b', borderRadius: 25, }} thumb={(<Icon name="google-plus" color="white"></Icon>)} onPress={() => this.signInGoogle()}><Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Sign in with Google</Text></List.Item>
           {/* <Button style={{ borderRadius: 25, backgroundColor: 'red' }} onPress={() => this.signInGoogle()}></Button> */}
           <WhiteSpace size="lg" />
-          <Text>Don't have an account?</Text>
-          <Button style={{ borderRadius: 25, }} type="primary" onPress={() => this.props.navigation.navigate('signupemail')}>Sign Up</Button>
+          <Text style={{ marginLeft: 16, marginTop: 10, }}>Don't have an account?</Text>
+          <Button style={{ borderRadius: 25, marginTop: 10 }} type="primary" onPress={() => this.props.navigation.navigate('signupemail')}>Sign Up</Button>
 
           <WhiteSpace size="lg" />
-          <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button>
+          {/* <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button> */}
 
-          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 50 }}><Text>API Hostname: {API_HOST}</Text></View>
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 50 }}><Text>API Hostname: {API_HOST}</Text><Text>Hostname info will be removed on the final version</Text></View>
 
           {/* Modal */}
 

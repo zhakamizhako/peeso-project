@@ -16,6 +16,9 @@ class Applicant extends Model {
     educationalBackground() {
         return this.hasMany('App/Models/ApplicantEducationalBackground')
     }
+    uploaded() {
+        return this.hasOne('App/Models/FileUpload')
+    }
 }
 
 module.exports = Applicant

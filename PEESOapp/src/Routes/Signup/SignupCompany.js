@@ -67,7 +67,7 @@ class SignupCompany extends Component {
         console.log(this.props)
         console.log('-------!----')
 
-        if (this.props.user.createApplicantSuccess != user.createApplicantSuccess && !auth.loginError) {
+        if (this.props.user.createCompanySuccess != user.createCompanySuccess && !auth.loginError) {
             this.setState({
                 isSubmitting: false
             })
@@ -76,9 +76,9 @@ class SignupCompany extends Component {
                 this.props.login({ email: this.props.user.data.email, username: this.props.user.data.username, password: this.props.user.tempPassword, type: 'signup' })
             }
         }
-        if (user.createApplicantError) {
+        if (user.createCompanyError) {
             this.setState({
-                error: user.createApplicantError,
+                error: user.createCompanyError,
                 isLoggingIn: false,
             })
         }
@@ -128,8 +128,8 @@ class SignupCompany extends Component {
         console.log(this.state)
         this.setState({ isSubmitting: true })
         let data = {
-            user_id: this.props.user.data.id,
-            email: this.props.user.data.email,
+            user_id: this.props.auth.loginData ? this.props.auth.loginData.id : (this.props.user.data ? this.props.user.data.id : null),
+            email: this.props.auth.loginData ? this.props.auth.loginData.email : (this.props.user.data ? this.props.user.data.email : null),
             company_name: this.state.company_name,
             first_name: this.state.firstname,
             middle_name: this.state.middlename,
@@ -139,7 +139,7 @@ class SignupCompany extends Component {
             profile: this.state.profile_id
         }
         this.setState({ isSubmitting: true })
-        this.props.createApplicant(data)
+        this.props.createCompany(data)
 
     }
 

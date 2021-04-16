@@ -29,6 +29,21 @@ class JobController {
         }
     }
 
+    async getJobByCompany({ params, response }) {
+        let { id } = params
+        try {
+            let jobs = await Job.query().where('company_id', id).with('benefits').with('highlights').fetch()
+
+            if (!jobs || jobs.toJSON().length == 0) {
+                throw new HttpException("Invalid Job", HttpException.STATUS_BAD_REQUEST);
+            }
+
+            response.send({ data: jobs.toJSON()[0] })
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
     async saveJob({ params, auth, response }) {
         let { id } = params
 

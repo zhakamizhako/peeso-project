@@ -74,7 +74,10 @@ class VerificationScreen extends Component {
                     <WhiteSpace size={"lg"} />
                     <List.Item><InputItem placeholder="XXXXXX" value={this.state.verification_code} onChange={(val) => this.setState(state => {
                         let { verification_code } = state
-                        verification_code = val
+                        var str = val
+                        // str.toUpperCase();
+                        verification_code = str
+                        // verification_code.toUpperCase()
                         return { verification_code }
                     })}></InputItem></List.Item>
                     <WhiteSpace size={"lg"} />

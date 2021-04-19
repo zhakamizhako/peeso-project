@@ -9,7 +9,7 @@ class JobBenefitsSchema extends Schema {
       table.increments()
       table.timestamps()
       table.integer("job_id").unsigned().references('id').inTable('jobs')
-      table.string("benefit")
+      table.integer("benefit_id").unsigned().references('id').inTable('benefit_names')
     })
   }
 

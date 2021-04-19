@@ -26,6 +26,10 @@ export const GET_SAVED_JOBS_SUCCESS = 'auth/GET_SAVED_JOBS_SUCCESS';
 export const GET_SAVED_JOBS_ERROR = 'auth/GET_SAVED_JOBS_ERROR';
 export const GET_SAVED_JOBS_FAIL = 'auth/GET_SAVED_JOBS_FAIL';
 
+export const GET_BENEFITS_SUCCESS = 'auth/GET_BENEFITS_SUCCESS';
+export const GET_BENEFITS_ERROR = 'auth/GET_BENEFITS_ERROR';
+export const GET_BENEFITS_FAIL = 'auth/GET_BENEFITS_FAIL';
+
 export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
 export function getJobs(data) {
@@ -85,6 +89,36 @@ export function saveJob(data) {
                 console.log(error.message)
                 dispatch({
                     type: SAVE_JOB_FAIL,
+                    payload:
+                        (error.response ? error.response.data : error)
+                })
+            })
+    };
+}
+
+export function getBenefits(){
+    return (dispatch, getState) => {
+        let { accessToken } = getState().auth
+        let hostname = API_HOST;
+        axios.get(`${hostname}/v1/jobs/getBenefits`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        }).then(resuults => {
+            console.log('status good')
+            console.log(resuults)
+            dispatch({
+                type: GET_BENEFITS_SUCCESS,
+                payload: resuults.data
+            })
+        })
+            .catch(error => {
+                console.log('error')
+                console.log(error.response)
+                console.log(error.message)
+                dispatch({
+                    type: GET_BENEFITS_FAIL,
                     payload:
                         (error.response ? error.response.data : error)
                 })
@@ -232,7 +266,7 @@ actionHandlers[SAVE_JOB_SUCCESS] = (state, action) => {
 };
 
 actionHandlers[SAVE_JOB_FAIL] = (state, action) => {
-    console.log('User token check');
+    // console.log('User token check');
     let newState;
     newState = objectAssign({}, state);
     newState.saveJob = false;
@@ -240,8 +274,27 @@ actionHandlers[SAVE_JOB_FAIL] = (state, action) => {
     return newState;
 };
 
+actionHandlers[GET_BENEFITS_SUCCESS] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getBenefitsSuccess = true;
+    newState.getBenefitsError = false
+    newState.benefitsData = action.payload.data
+    return newState;
+};
+
+actionHandlers[GET_BENEFITS_FAIL] = (state, action) => {
+    console.log('getBenefits Error');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getBenefits = false;
+    newState.getBenefitsError = action.payload.error ? action.payload.error.message : action.payload.message;
+    return newState;
+};
+
+
 actionHandlers[GET_SAVED_JOBS_SUCCESS] = (state, action) => {
-    console.log('User token check');
+    // console.log('User token check');
     let newState;
     newState = objectAssign({}, state);
     newState.getSavedJobs = true;
@@ -251,7 +304,7 @@ actionHandlers[GET_SAVED_JOBS_SUCCESS] = (state, action) => {
 };
 
 actionHandlers[GET_SAVED_JOBS_FAIL] = (state, action) => {
-    console.log('User token check');
+    // console.log('User token check');
     let newState;
     newState = objectAssign({}, state);
     newState.getSavedJobs = false;
@@ -260,7 +313,7 @@ actionHandlers[GET_SAVED_JOBS_FAIL] = (state, action) => {
 };
 
 actionHandlers[NEW_JOB_ERROR] = (state, action) => {
-    console.log('Token check error.');
+    // console.log('Token check error.');
     let newState;
     newState = objectAssign({}, state);
     return newState;
@@ -285,6 +338,10 @@ const initialState = {
 
     saveJob: false,
     saveJobError: null,
+
+    benefitsData: [],
+    getBenefitsSuccess: false,
+    getBenefitsError: null,
 };
 
 export default function reducer(state = initialState, action) {

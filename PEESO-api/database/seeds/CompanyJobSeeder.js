@@ -52,10 +52,15 @@ class CompanyJobSeeder {
         status: "Verified and hired applicants through P-App"
       }
     ])
+    await Database.table('benefit_names').insert([
+      {name: "GSIS"},
+      {name: "Philhealth"},
+      {name: "Pag-ibig"},
+    ])
     await Database.table('job_benefits').insert([
-      { job_id: 1, benefit: "GSIS" },
-      { job_id: 1, benefit: "Philhealth" },
-      { job_id: 1, benefit: "Pag-Ibig" },
+      { job_id: 1, benefit_id: 1 },
+      { job_id: 1, benefit_id: 2 },
+      { job_id: 1, benefit_id: 3 },
     ])
   }
 }

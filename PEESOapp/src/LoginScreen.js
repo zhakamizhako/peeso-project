@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   WhiteSpace,
   WingBlank,
@@ -7,14 +7,15 @@ import {
   Checkbox,
   Icon,
   List,
-  Modal, ActivityIndicator
+  Modal,
+  ActivityIndicator,
 } from '@ant-design/react-native';
-import { View, Text, ScrollView, Image } from 'react-native';
-import { login } from './stores/modules/auth';
-import { connect } from 'react-redux';
-import { API_HOST } from '@env'
-import { GoogleSignin, statusCodes } from '@react-native-community/google-signin'
-import imageLogo from './logo.png'
+import {View, Text, ScrollView, Image} from 'react-native';
+import {login} from './stores/modules/auth';
+import {connect} from 'react-redux';
+import {API_HOST} from '@env';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+import imageLogo from './logo.png';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -56,10 +57,10 @@ class LoginScreen extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      const { user } = userInfo;
+      const {user} = userInfo;
 
-      console.log("LOGIN!")
-      console.log(user)
+      console.log('LOGIN!');
+      console.log(user);
 
       // login({
       //   ftoken: ftoken,
@@ -90,9 +91,8 @@ class LoginScreen extends Component {
     }
   };
 
-
   componentWillReceiveProps(props) {
-    let { auth } = props;
+    let {auth} = props;
     if (auth.connectionError) {
       this.setState({
         loginError: true,
@@ -108,29 +108,32 @@ class LoginScreen extends Component {
       });
     }
     if (auth.loginSuccess) {
-      this.setState({ isLoggingIn: false })
+      this.setState({isLoggingIn: false});
     }
   }
 
   render() {
     return (
-      <View style={{ height: '100%' }}>
+      <View style={{height: '100%'}}>
         <WhiteSpace size="lg" />
         <WingBlank>
-
           {/* <Text style={{ fontSize: 30, textAlign: 'center' }}>PEESO</Text> */}
-          <Image source={imageLogo} style={{ height: 250, width: '100%', alignSelf: 'center', }} resizeMode='center' />
+          <Image
+            source={imageLogo}
+            style={{height: 250, width: '100%', alignSelf: 'center'}}
+            resizeMode="center"
+          />
           <InputItem
             clear
             error={this.state.loginError}
-            onChange={e => {
+            onChange={(e) => {
               if (this.state.loginError) {
-                this.setState({ loginError: false, loginErrorDetails: '' });
+                this.setState({loginError: false, loginErrorDetails: ''});
               }
-              this.setState(state => {
-                let { email } = state;
+              this.setState((state) => {
+                let {email} = state;
                 email = e;
-                return { email };
+                return {email};
               });
             }}
             placeholder="Email"
@@ -139,63 +142,94 @@ class LoginScreen extends Component {
             type={!this.state.showPassword ? 'password' : ''}
             clear
             error={this.state.loginError}
-            onChange={e => {
+            onChange={(e) => {
               if (this.state.loginError) {
-                this.setState({ loginError: false, loginErrorDetails: '' });
+                this.setState({loginError: false, loginErrorDetails: ''});
               }
-              this.setState(state => {
-                let { password } = state;
+              this.setState((state) => {
+                let {password} = state;
                 password = e;
-                return { password };
+                return {password};
               });
             }}
             placeholder="Password"
           />
           <WhiteSpace />
-          <Text style={{ alignSelf: 'center', color: 'red' }}>
+          <Text style={{alignSelf: 'center', color: 'red'}}>
             {this.state.loginErrorDetails}
           </Text>
           <WhiteSpace />
           <Checkbox
-            style={{ marginLeft: 12 }}
+            style={{marginLeft: 12}}
             checked={this.state.showPassword}
-            onChange={event => {
-              this.setState({ showPassword: event.target.checked });
+            onChange={(event) => {
+              this.setState({showPassword: event.target.checked});
             }}>
             Show Password
           </Checkbox>
-          <Text style={{ color: "#06F", marginLeft: 14, marginTop: 10, fontWeight: 'bold' }}>Forgot Password?</Text>
+          <Text
+            style={{
+              color: '#06F',
+              marginLeft: 14,
+              marginTop: 10,
+              fontWeight: 'bold',
+            }}>
+            Forgot Password?
+          </Text>
           <WhiteSpace size="lg" />
           <List.Item
-            style={{ borderRadius: 25, backgroundColor: '#108ee9' }}
+            style={{borderRadius: 25, backgroundColor: '#108ee9'}}
             type="primary"
             loading={this.state.isLoggingIn}
-
             onPress={() => {
               let user = {
                 email: this.state.email,
                 password: this.state.password,
               };
-              this.setState({ isLoggingIn: true });
+              this.setState({isLoggingIn: true});
               this.props.login(user);
             }}>
-            <Text style={{ alignSelf: 'center', color: 'white' }}>Login</Text>
+            <Text style={{alignSelf: 'center', color: 'white'}}>Login</Text>
           </List.Item>
-          <Text style={{ alignSelf: 'center' }}>--or--</Text>
-          <List.Item style={{ backgroundColor: '#e2402b', borderRadius: 25, }} thumb={(<Icon name="google-plus" color="white"></Icon>)} onPress={() => this.signInGoogle()}><Text style={{ color: 'white', fontWeight: 'bold', alignSelf: 'center' }}>Sign in with Google</Text></List.Item>
+          <Text style={{alignSelf: 'center'}}>--or--</Text>
+          <List.Item
+            style={{backgroundColor: '#e2402b', borderRadius: 25}}
+            thumb={<Icon name="google-plus" color="white" />}
+            onPress={() => this.signInGoogle()}>
+            <Text
+              style={{color: 'white', fontWeight: 'bold', alignSelf: 'center'}}>
+              Sign in with Google
+            </Text>
+          </List.Item>
           {/* <Button style={{ borderRadius: 25, backgroundColor: 'red' }} onPress={() => this.signInGoogle()}></Button> */}
           <WhiteSpace size="lg" />
-          <Text style={{ marginLeft: 16, marginTop: 10, }}>Don't have an account?</Text>
-          <Button style={{ borderRadius: 25, marginTop: 10 }} type="primary" onPress={() => this.props.navigation.navigate('signupemail')}>Sign Up</Button>
+          <Text style={{marginLeft: 16, marginTop: 10}}>
+            Don't have an account?
+          </Text>
+          <Button
+            style={{borderRadius: 25, marginTop: 10}}
+            type="primary"
+            onPress={() => this.props.navigation.navigate('signupemail')}>
+            Sign Up
+          </Button>
 
           <WhiteSpace size="lg" />
           {/* <Button onPress={() => this.props.navigation.navigate('homepage')}>(Debug) Skip</Button> */}
 
-          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, paddingTop: 50 }}><Text>API Hostname: {API_HOST}</Text><Text>Hostname info will be removed on the final version</Text></View>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              flex: 1,
+              paddingTop: 50,
+            }}>
+            <Text>API Hostname: {API_HOST}</Text>
+            <Text>Hostname info will be removed on the final version</Text>
+          </View>
 
           {/* Modal */}
 
-          <Modal transparent visible={this.state.isLoggingIn} closable={false} >
+          <Modal transparent visible={this.state.isLoggingIn} closable={false}>
             <ActivityIndicator text="Logging In..."> </ActivityIndicator>
           </Modal>
         </WingBlank>
@@ -204,7 +238,7 @@ class LoginScreen extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
@@ -212,10 +246,7 @@ const mapActionCreators = {
   login,
 };
 
-export default connect(
-  mapStateToProps,
-  mapActionCreators,
-)(LoginScreen);
+export default connect(mapStateToProps, mapActionCreators)(LoginScreen);
 
 LoginScreen.propTypes = {};
 

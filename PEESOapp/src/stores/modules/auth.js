@@ -1,7 +1,7 @@
-import { RSAA } from 'redux-api-middleware-native';
+import {RSAA} from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import { API_HOST } from '@env'
-import axios from 'axios'
+import {API_HOST} from '@env';
+import axios from 'axios';
 
 export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'auth/LOGIN_ERROR';
@@ -48,69 +48,69 @@ export function login(data) {
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    axios.post(`${hostname}/v1/auth/login`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      if (data.type == "signup") {
-        resuults.type = "signup"
-      }
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: resuults.data
+    axios
+      .post(`${hostname}/v1/auth/login`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
-        console.log(error.message)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        if (data.type == 'signup') {
+          resuults.type = 'signup';
+        }
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        console.log(error.message);
         dispatch({
           type: LOGIN_FAIL,
-          payload:
-            (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
 
 export function checkMe() {
   console.log('::checkMe:::');
   return (dispatch, getState) => {
-    let { accessToken } = getState().auth
+    let {accessToken} = getState().auth;
     let hostname = API_HOST;
-    console.log(accessToken)
-    axios.get(`${hostname}/v1/auth/me`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      dispatch({
-        type: CHECK_ME_SUCCESS,
-        payload: resuults.data
+    console.log(accessToken);
+    axios
+      .get(`${hostname}/v1/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
-        console.log(error.message)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: CHECK_ME_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        console.log(error.message);
         dispatch({
           type: CHECK_ME_FAIL,
-          payload:
-            (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
 
-
-
 export function logout() {
-  return async dispatch => {
+  return async (dispatch) => {
     await dispatch({
       type: LOGOUT_SUCCESS,
       meta: {
@@ -156,7 +156,9 @@ actionHandlers[LOGIN_FAIL] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
   newState.loginSuccess = false;
-  newState.loginError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.loginError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 
@@ -164,7 +166,9 @@ actionHandlers[LOGIN_ERROR] = (state, action) => {
   let newState;
   newState.loginSuccess = false;
 
-  newState.loginError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.loginError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 
@@ -174,7 +178,7 @@ actionHandlers[CHECK_ME_SUCCESS] = (state, action) => {
   newState = objectAssign({}, state);
   newState.tokenCheck = true;
   newState.tokenError = false;
-  newState.loginData = action.payload.user
+  newState.loginData = action.payload.user;
   return newState;
 };
 
@@ -183,7 +187,9 @@ actionHandlers[CHECK_ME_FAIL] = (state, action, test1, test2) => {
   let newState;
   newState = objectAssign({}, state);
   newState.tokenCheck = false;
-  newState.tokenError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.tokenError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 

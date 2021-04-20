@@ -50,17 +50,17 @@ class JobController {
 
     }
 
-    async newJob({request, auth, response}){
-        let {
+    // async newJob({request, auth, response}){
+    //     let {
 
-        }
-        let {id}
-        try{
+    //     }
+    //     let {id}
+    //     try{
 
-        } catch (e){
-            throw new HttpException(e.message, e.status)     
-        }
-    }
+    //     } catch (e){
+    //         throw new HttpException(e.message, e.status)     
+    //     }
+    // }
 
     async getJobs({ response }) {
         try {

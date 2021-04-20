@@ -43,6 +43,7 @@ class PostJob extends Component {
       category: null,
       categories: [],
       benefits: [],
+      questions: [],
       // benefits: [],
       error: null,
       isLoadingBenefits: false,
@@ -229,7 +230,7 @@ class PostJob extends Component {
 
             {/* <Text>Work Hours</Text>
              */}
-             <WhiteSpace/>
+            <WhiteSpace />
             <List>
               <List.Item>Work Hours</List.Item>
               <DatePicker
@@ -272,6 +273,59 @@ class PostJob extends Component {
                 </List.Item>
               </DatePicker>
             </List>
+            <WhiteSpace />
+
+            <List>
+              <List.Item
+                extra={
+                  <Icon
+                    name="plus"
+                    onPress={() =>
+                      this.setState((state) => {
+                        let {questions} = state;
+                        questions.push({
+                          question: 'University',
+                          type: 0,
+                        });
+                        return {questions};
+                      })
+                    }
+                  />
+                }>
+                Additional Questions
+              </List.Item>
+              {this.state.questions != null &&
+                this.state.questions.map((data, index) => (
+                  <List.Item
+                    extra={
+                      <Icon
+                        name="delete"
+                        onPress={() =>
+                          this.setState((state) => {
+                            let {questions} = state;
+                            questions.splice(index, 1);
+                            return {questions};
+                          })
+                        }
+                        color="red"
+                      />
+                    }
+                    key={index}>
+                    <Text>Question {index + 1}</Text>
+                    <InputItem
+                      value={this.state.questions[index].question}
+                      onChange={(val) =>
+                        this.setState((state) => {
+                          let {questions} = state;
+                          questions[index].question = val;
+                          return {questions};
+                        })
+                      }
+                    />
+                  </List.Item>
+                ))}
+            </List>
+            <WhiteSpace size="lg" />
 
             {!this.state.isLoadingBenefits && this.state.error && (
               <Text style={{color: 'red'}}>{this.state.error}</Text>

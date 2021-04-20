@@ -1,7 +1,7 @@
-import { CALL_API } from 'redux-api-middleware-native';
+import {CALL_API} from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import { API_HOST } from '@env'
-import axios from 'axios'
+import {API_HOST} from '@env';
+import axios from 'axios';
 
 export const CREATE_ACCOUNT_SUCCESS = 'auth/CREATE_ACCOUNT_SUCCESS';
 export const CREATE_ACCOUNT_ERROR = 'auth/CREATE_ACCOUNT_ERROR';
@@ -35,27 +35,28 @@ export function createApplicant(data) {
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    axios.post(`${hostname}/v1/user/createApplicant`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      dispatch({
-        type: CREATE_APPLICANT_SUCCESS,
-        payload: resuults.data
+    axios
+      .post(`${hostname}/v1/user/createApplicant`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: CREATE_APPLICANT_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
         dispatch({
           type: CREATE_APPLICANT_FAIL,
-          payload:
-            (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
 
@@ -64,59 +65,60 @@ export function createCompany(data) {
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    axios.post(`${hostname}/v1/user/createCompany`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      dispatch({
-        type: CREATE_COMPANY_SUCCESS,
-        payload: resuults.data
+    axios
+      .post(`${hostname}/v1/user/createCompany`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: CREATE_COMPANY_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
         dispatch({
           type: CREATE_COMPANY_FAIL,
-          payload:
-            (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
-
 
 export function createAccount(data) {
   console.log('::createAccount:::');
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    axios.post(`${hostname}/v1/user/createUser`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      resuults.data.tempPassword = data.password
-      dispatch({
-        type: CREATE_ACCOUNT_SUCCESS,
-        payload: resuults.data
+    axios
+      .post(`${hostname}/v1/user/createUser`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
-        console.log(error)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        resuults.data.tempPassword = data.password;
+        dispatch({
+          type: CREATE_ACCOUNT_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        console.log(error);
         return dispatch({
           type: CREATE_ACCOUNT_FAIL,
-          payload:
-            (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
 
@@ -125,55 +127,58 @@ export function verifyOTP(data) {
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    axios.post(`${hostname}/v1/user/verifyOTP`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      dispatch({
-        type: VERIFY_OTP_SUCCESS,
-        payload: resuults.data
+    axios
+      .post(`${hostname}/v1/user/verifyOTP`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: VERIFY_OTP_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
         dispatch({
           type: VERIFY_OTP_FAIL,
-          payload: (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
-
 
 export function newOTP(data) {
   console.log('::verifyOTP:::');
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    axios.post(`${hostname}/v1/user/newOTP`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    }).then(resuults => {
-      console.log('status good')
-      console.log(resuults)
-      dispatch({
-        type: NEW_OTP_SUCCESS,
-        payload: resuults.data
+    axios
+      .post(`${hostname}/v1/user/newOTP`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-    })
-      .catch(error => {
-        console.log('error')
-        console.log(error.response)
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: NEW_OTP_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
         dispatch({
           type: NEW_OTP_FAIL,
-          payload: (error.response ? error.response.data : error)
-        })
-      })
+          payload: error.response ? error.response.data : error,
+        });
+      });
   };
 }
 
@@ -227,8 +232,8 @@ const actionHandlers = {};
 // };
 //Create Account
 actionHandlers[CREATE_ACCOUNT_SUCCESS] = (state, action) => {
-  console.log('action handler')
-  console.log(action)
+  console.log('action handler');
+  console.log(action);
   let newState;
   newState = objectAssign({}, state);
   newState.createAccountSuccess = true;
@@ -239,18 +244,20 @@ actionHandlers[CREATE_ACCOUNT_SUCCESS] = (state, action) => {
   return newState;
 };
 actionHandlers[CREATE_ACCOUNT_FAIL] = (state, action) => {
-  console.log('action failed')
-  console.log(action)
+  console.log('action failed');
+  console.log(action);
   let newState;
   newState = objectAssign({}, state);
   newState.createAccountSuccess = false;
   newState.connectionError = null;
-  newState.createAccountError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.createAccountError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 actionHandlers[CREATE_ACCOUNT_ERROR] = (state, action) => {
-  console.log('action error')
-  console.log(action)
+  console.log('action error');
+  console.log(action);
   let newState;
   newState = objectAssign({}, state);
   newState.createAccountError = action.payload.message;
@@ -271,11 +278,13 @@ actionHandlers[VERIFY_OTP_FAIL] = (state, action) => {
   newState = objectAssign({}, state);
   newState.OTPSuccess = false;
   newState.connectionError = null;
-  newState.OTPError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.OTPError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 actionHandlers[VERIFY_OTP_ERROR] = (state, action) => {
-  console.log("!")
+  console.log('!');
   let newState;
   newState = objectAssign({}, state);
   newState.OTPError = action.payload.message;
@@ -296,7 +305,9 @@ actionHandlers[NEW_OTP_FAIL] = (state, action) => {
   newState = objectAssign({}, state);
   newState.NewOTPSuccess = false;
   newState.connectionError = null;
-  newState.NewOTPError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.NewOTPError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 actionHandlers[NEW_OTP_ERROR] = (state, action) => {
@@ -331,7 +342,9 @@ actionHandlers[CREATE_APPLICANT_FAIL] = (state, action) => {
   newState = objectAssign({}, state);
   newState.createApplicantSuccess = false;
   newState.createApplicantError = null;
-  newState.createApplicantError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.createApplicantError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 actionHandlers[CREATE_APPLICANT_ERROR] = (state, action) => {
@@ -355,7 +368,9 @@ actionHandlers[CHECK_ME_FAIL] = (state, action, test1, test2) => {
   let newState;
   newState = objectAssign({}, state);
   newState.createAccountSuccess = false;
-  newState.createAccountError = action.payload.error ? action.payload.error.message : action.payload.message;
+  newState.createAccountError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
   return newState;
 };
 

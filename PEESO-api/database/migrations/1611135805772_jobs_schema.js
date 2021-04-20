@@ -25,7 +25,7 @@ class JobsSchema extends Schema {
       table.string('salary')
       table.boolean('salary_included_benefits')
       table.integer('company_id').unsigned().references('id').inTable('companies').notNull()
-      table.string('category')
+      table.integer('category_id').unsigned().references('id').inTable('job_categories')
 
       // alter table
     })

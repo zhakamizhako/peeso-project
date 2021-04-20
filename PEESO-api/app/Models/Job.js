@@ -13,6 +13,9 @@ class Job extends Model {
     highlight() {
         return this.hasMany('App/Models/JobHighlight')
     }
+    category() {
+        return this.belongsTo('App/Models/JobCategory')
+    }
 
 }
 

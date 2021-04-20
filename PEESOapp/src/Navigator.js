@@ -142,7 +142,7 @@ class Navigator extends React.Component {
                   options={{ title: 'Profile', headerShown: true }}
                 />
               </>)}
-              {this.props.auth.loginData && this.props.auth.loginData.profile.is_company && (<>
+              {this.props.auth.loginData && this.props.auth.loginData.profile && this.props.auth.loginData.profile.is_company && (<>
                 <Stack.Screen
                   name="createjob"
                   component={CreateJob}

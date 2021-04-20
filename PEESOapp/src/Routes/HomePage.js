@@ -9,7 +9,7 @@ import {
   Icon,
   Toast
 } from '@ant-design/react-native';
-import { View, Text, ScrollView, Image } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { login, checkMe, logout } from '../stores/modules/auth';
 import imageLogo from './../logo.png';
@@ -67,6 +67,7 @@ class HomePage extends Component {
 
 
     return (<View style={{ height: '100%' }}>
+      <ScrollView>
       <WhiteSpace />
       {/* {this.state.networkError && (<Text>Warning: Connection Error</Text>)} */}
       {/* <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}> */}
@@ -82,6 +83,7 @@ class HomePage extends Component {
         onPress={(data) => { if (data.type != null && this.props.navigation != null) { this.props.navigation.navigate(data.type) } }}
         carouselMaxRow={3}
       />
+      </ScrollView>
 
     </View>)
   }

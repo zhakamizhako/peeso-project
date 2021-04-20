@@ -70,12 +70,16 @@ class ProfileScreen extends Component {
                         <List.Item onPress={() => this.props.navigation.navigate('createjob')}>Post a Job</List.Item>
                         <List.Item>Current Applications</List.Item>
                         <List.Item>Uploads</List.Item>
+                        <List.Item>View Company Profile</List.Item>
+                        <List.Item>Edit Company Profile</List.Item>
                     </List>)}
                     {this.props.auth.loginData && this.props.auth.loginData.profile && !this.props.auth.loginData.profile.is_company && (<List>
                         <List.Item>My Resume</List.Item>
                         <List.Item>My Freelancing Profile</List.Item>
                         <List.Item>Application History</List.Item>
                         <List.Item>Freelancing Booking</List.Item>
+                        <List.Item>View Applicant Profile</List.Item>
+                        <List.Item>Edit Applicant Profile</List.Item>
                     </List>)}
                     <List.Item>Settings</List.Item>
                     <List.Item style={{ backgroundColor: 'red' }}><Text style={{ color: 'white' }} onPress={() => this.props.logout()}>Logout</Text></List.Item>

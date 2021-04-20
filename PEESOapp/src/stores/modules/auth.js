@@ -146,6 +146,7 @@ actionHandlers[LOGIN_SUCCESS] = (state, action) => {
   newState.loginSuccess = true;
   newState.loginError = false;
   newState.loginData = action.payload.userData;
+  newState.logoutSuccess = false;
   newState.noAccount = action.payload.noAccount;
   newState.accessToken = action.payload.accessToken;
   return newState;

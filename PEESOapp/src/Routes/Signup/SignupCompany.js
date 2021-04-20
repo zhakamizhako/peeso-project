@@ -71,10 +71,10 @@ class SignupCompany extends Component {
             this.setState({
                 isSubmitting: false
             })
-            if (!this.props.auth.loginData) {
+            // if (!this.props.auth.loginData) {
                 this.setState({ isLoggingIn: true })
                 this.props.login({ email: this.props.user.data.email, username: this.props.user.data.username, password: this.props.user.tempPassword, type: 'signup' })
-            }
+            // }
         }
         if (user.createCompanyError) {
             this.setState({
@@ -84,9 +84,9 @@ class SignupCompany extends Component {
         }
 
         if (auth.loginSuccess && this.props.auth.loginData != auth.loginData && auth.loginData && auth.accessToken) {
-            if (auth.loginData.type == "signup") {
-                this.props.navigation.replace("homepage")
-            }
+            // if (auth.loginData.type == "signup") {
+            this.props.navigation.replace("homepage")
+            // }
         }
 
         if (auth.loginError) {

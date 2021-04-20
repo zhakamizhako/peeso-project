@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 import React, {Component} from 'react';
 import {
   Button,
@@ -12,6 +13,8 @@ import {
   List,
   InputItem,
   Checkbox,
+  Radio,
+  DatePicker,
 } from '@ant-design/react-native';
 import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
 import {View, Text, ScrollView, RefreshControl} from 'react-native';
@@ -30,7 +33,7 @@ class PostJob extends Component {
     super(props);
     this.state = {
       name: null,
-      deadline: null,
+      deadline: new Date(),
       job_description: null,
       work_from: null,
       work_to: null,
@@ -38,6 +41,7 @@ class PostJob extends Component {
       salary: null,
       salary_included_benefits: false,
       category: null,
+      categories: [],
       benefits: [],
       // benefits: [],
       error: null,
@@ -53,16 +57,18 @@ class PostJob extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.jobs != prevProps.jobs) {
       if (this.props.jobs.benefitsData) {
-        this.setState({
-          benefits: this.props.jobs.benefitsData,
-          isLoadingBenefits: false,
-        });
+        // this.setState({
+        //   benefits: this.props.jobs.benefitsData.benefits,
+        //   categories
+        //   isLoadingBenefits: false,
+        // });
         this.setState((state) => {
-          let {benefits, isLoadingBenefits} = state;
+          let {benefits, isLoadingBenefits, categories} = state;
 
-          benefits = this.props.jobs.benefitsData;
+          benefits = this.props.jobs.benefitsData.benefits;
+          categories = this.props.jobs.benefitsData.categories;
           isLoadingBenefits = false;
-          return {benefits, isLoadingBenefits};
+          return {benefits, isLoadingBenefits, categories};
         });
       }
       if (this.props.jobs.getBenefitsError) {
@@ -127,20 +133,18 @@ class PostJob extends Component {
                     })
                   }
                 />
-              </List.Item>
-
-              <List.Item>
-                <Text>Category</Text>
-                <InputItem
-                  value={this.state.salary}
-                  onChange={(val) =>
+                <WhiteSpace />
+                <Checkbox
+                  checked={this.state.salary_included_benefits}
+                  onChange={(val) => {
                     this.setState((state) => {
-                      let {salary} = state;
-                      salary = val;
-                      return {salary};
-                    })
-                  }
-                />
+                      let {salary_included_benefits} = state;
+                      salary_included_benefits = val.target.checked;
+                      return {salary_included_benefits};
+                    });
+                  }}>
+                  Does salary include benefits?
+                </Checkbox>
               </List.Item>
             </List>
 
@@ -154,22 +158,121 @@ class PostJob extends Component {
                 this.state.benefits &&
                 this.state.benefits.map((entry, index) => {
                   return (
-                    <Checkbox
-                      checked={this.state.benefits[index].value}
-                      onChange={(val) => {
-                        this.setState((state) => {
-                          let {benefits} = state;
-                          benefits[index].value = val;
-                          return {benefits};
-                        });
-                      }}>
-                      {entry.name}
-                    </Checkbox>
+                    <List.Item>
+                      <Checkbox
+                        checked={this.state.benefits[index].value}
+                        onChange={(val) => {
+                          this.setState((state) => {
+                            let {benefits} = state;
+                            benefits[index].value = val.target.checked;
+                            return {benefits};
+                          });
+                        }}>
+                        {entry.name}
+                      </Checkbox>
+                    </List.Item>
                   );
                 })}
               {/* </View> */}
             </List.Item>
             <WhiteSpace size="lg" />
+
+            <List>
+              <List.Item>Select a Category</List.Item>
+              {/* <View style={{flex:1, flexDirection:'row'}}> */}
+              {this.state.isLoadingBenefits && (
+                <ActivityIndicator text="Loading Benefits..." />
+              )}
+              {!this.state.isLoadingBenefits &&
+                this.state.categories &&
+                this.state.categories.map((entry, index) => {
+                  return (
+                    <List.Item>
+                      <Radio
+                        checked={this.state.category == entry.id}
+                        onChange={(val) => {
+                          this.setState((state) => {
+                            let {category} = state;
+                            category = entry.id;
+                            return {category};
+                          });
+                        }}>
+                        {entry.name}
+                      </Radio>
+                      {/* <WhiteSpace/> */}
+                    </List.Item>
+                  );
+                })}
+              {/* </View> */}
+            </List>
+            <WhiteSpace size="lg" />
+
+            <DatePicker
+              mode="date"
+              defaultDate={new Date()}
+              minDate={new Date()}
+              // maxDate={new Date()}
+              onChange={this.onChange}
+              format="YYYY-MM-DD"
+              value={this.state.deadline}
+              onChange={(val) =>
+                this.setState((state) => {
+                  let {deadline} = state;
+                  deadline = val;
+                  return {deadline};
+                })
+              }>
+              <List.Item>
+                <Text>Deadline</Text>
+              </List.Item>
+            </DatePicker>
+
+            {/* <Text>Work Hours</Text>
+             */}
+             <WhiteSpace/>
+            <List>
+              <List.Item>Work Hours</List.Item>
+              <DatePicker
+                mode="time"
+                defaultDate={new Date()}
+                // minDate={new Date()}
+                // maxDate={new Date()}
+                onChange={this.onChange}
+                format="HH:mm"
+                value={this.state.work_from}
+                onChange={(val) =>
+                  this.setState((state) => {
+                    let {work_from} = state;
+                    work_from = val;
+                    return {work_from};
+                  })
+                }>
+                <List.Item>
+                  <Text>From</Text>
+                </List.Item>
+              </DatePicker>
+
+              <DatePicker
+                mode="time"
+                defaultDate={new Date()}
+                // minDate={new Date()}
+                // maxDate={new Date()}
+                onChange={this.onChange}
+                format="HH:mm"
+                value={this.state.work_to}
+                onChange={(val) =>
+                  this.setState((state) => {
+                    let {work_to} = state;
+                    work_to = val;
+                    return {work_to};
+                  })
+                }>
+                <List.Item>
+                  <Text>To</Text>
+                </List.Item>
+              </DatePicker>
+            </List>
+
             {!this.state.isLoadingBenefits && this.state.error && (
               <Text style={{color: 'red'}}>{this.state.error}</Text>
             )}

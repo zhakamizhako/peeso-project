@@ -35,24 +35,27 @@ class SignupScreen extends Component {
 
     componentWillReceiveProps(props) {
         let { auth } = props;
-        if (auth.connectionError) {
-            this.setState({
-                loginError: true,
-                isLoggingIn: false,
-                loginErrorDetails: auth.connectionError,
-            });
+        if (auth != this.props.auth) {
+            if (auth.connectionError) {
+                this.setState({
+                    loginError: true,
+                    isLoggingIn: false,
+                    loginErrorDetails: auth.connectionError,
+                });
+            }
+            if (auth.loginError) {
+                this.setState({
+                    loginError: true,
+                    loginErrorDetails: auth.loginError,
+                    isLoggingIn: false,
+                });
+            }
+            if (auth.logoutSuccess) {
+                console.log('a?')
+                this.props.navigation.replace('login')
+            }
         }
-        if (auth.loginError) {
-            this.setState({
-                loginError: true,
-                loginErrorDetails: auth.loginError,
-                isLoggingIn: false,
-            });
-        }
-        if (auth.logoutSuccess) {
-            console.log('a?')
-            this.props.navigation.replace('login')
-        }
+
     }
 
     selectRadio(value) {

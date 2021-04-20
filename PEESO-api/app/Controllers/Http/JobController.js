@@ -2,44 +2,51 @@
 const Job = use('App/Models/Job')
 const SavedJob = use('App/Models/SavedJob')
 const Benefit = use('App/Models/BenefitName')
+const Category = use('App/Models/JobCategory')
 const Highlight = use('App/Models/JobHighlight')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 const { HttpException } = use("node-exceptions");
 class JobController {
-    async getBenefits({response}){
-        try{
-            let b = await Benefit.query().orderBy("name", 'DESC').fetch();
-            response.send({data: await b.toJSON()})
+    async getBenefits({ response }) {
+        try {
+            let b = await Benefit.query().orderBy("name", 'ASC').fetch();
+            let c = await Category.query().orderBy("name", 'ASC').fetch();
+            response.send({
+                data: {
+                    benefits: await b.toJSON(),
+                    categories: await c.toJSON()
+                }
+            })
 
-        } catch(e){
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }
 
-    async applyJob({request, auth, response}){
+    async applyJob({ request, auth, response }) {
         let {
             id,
 
         } = request.all()
         let user_id = auth.user.id
 
-        try{
+        try {
             let j = await Job.find(id)
 
-        } catch(e){
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }
 
-    async approveJob({request, response}){
+    async approveJob({ request, response }) {
 
     }
 
-    async disapproveJob({request, response}){
+    async disapproveJob({ request, response }) {
 
     }
 
-    async archiveJob({request, response}){
+    async archiveJob({ request, response }) {
 
     }
 

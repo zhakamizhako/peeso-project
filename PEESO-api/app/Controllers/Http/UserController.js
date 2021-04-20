@@ -90,7 +90,7 @@ class UserController {
 
     async me({ auth, response }) {
         let user_id = auth.user.id
-        let user = (await User.query().where('id', user_id).with('profile').fetch()).toJSON()[0]
+        let user = (await User.query().where('id', user_id).with('profile').with("company").with("applicant").with("freelanceEmploy").fetch()).toJSON()[0]
 
         if (!user) {
             throw new HttpException('Invalid Token / Token Expired.', 404)

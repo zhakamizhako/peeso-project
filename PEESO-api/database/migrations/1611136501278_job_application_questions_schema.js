@@ -10,7 +10,7 @@ class JobApplicationQuestionsSchema extends Schema {
       table.timestamps()
       table.string('question')
       table.integer('job_id').unsigned().references('id').inTable('jobs')
-      table.boolean('is_yesno')
+      table.integer('type')
     })
   }
 

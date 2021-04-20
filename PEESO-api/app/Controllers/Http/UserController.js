@@ -337,7 +337,7 @@ class UserController {
 
             d.user_id = query.id;
             d.name = company_name
-            d.description = description
+            d.shortdesc = description
             // d.first_name = first_name
             // d.middle_name = middle_name
             // d.last_name = last_name

@@ -12,6 +12,7 @@ import {
 } from '@ant-design/react-native';
 import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
+import {getJobData} from '../../stores/modules/jobs';
 // import {logout, checkMe} from '../stores/modules/auth';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
@@ -71,18 +72,39 @@ class ViewTrabaho extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('ID TO CHECK');
+    console.log(this.props.route);
+    if (this.props.route && this.props.route.params) {
+      this.props.getJobData(this.props.route.params.id);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.jobs != prevProps.jobs) {
+      console.log('compoupdae');
+      console.log(this.props);
+      console.log(this.props.jobs.jobData);
+      if (this.props.jobs.jobData) {
+        this.setState({trabahoData: this.props.jobs.jobData});
+        console.log('hey.');
+      }
+    }
+  }
+
   saveJob() {
     Toast.success('Job Saved.');
   }
 
   renderJobData(data) {
+    console.log('render!');
     return (
       <Card style={{marginTop: 5}}>
         <Card.Header
           title={
             <>
               <Text style={{fontWeight: 'bold', fontSize: 18}}>
-                {data.JobTitle}
+                {data.name}
               </Text>
               <Text style={{fontStyle: 'italic'}}>{data.company.name}</Text>
             </>
@@ -103,21 +125,28 @@ class ViewTrabaho extends Component {
           <Text style={{fontWeight: 'bold'}}>Job Description:</Text>
           <WhiteSpace />
           <View style={{marginLeft: 10, marginRight: 10}}>
-            {data.description != null &&
+            <Text>{data.job_description}</Text>
+            {/* {data.description != null &&
               data.description.map((entry) => (
                 <>
                   <Text style={{textAlign: 'justify'}}>- {entry.text}</Text>
                   <WhiteSpace size="xs" />
                 </>
-              ))}
+              ))} */}
           </View>
           <WhiteSpace />
           <Text style={{fontWeight: 'bold'}}>Work Hours and Benefits</Text>
           <View style={{marginLeft: 10, marginRight: 10}}>
-            <Text>- {data.workHours[0] + '-' + data.workHours[1]}</Text>
             <Text>
               -{' '}
-              {data.benefits && data.benefits.map((entry) => entry.name + ', ')}
+              {moment(new Date(data.work_from)).format('HH:MM A') +
+                ' - ' +
+                moment(new Date(data.work_to)).format('HH:MM A')}
+            </Text>
+            <Text>
+              -{' '}
+              {data.benefits &&
+                data.benefits.map((entry) => entry.name.name + ', ')}
             </Text>
           </View>
           <WhiteSpace />
@@ -134,8 +163,16 @@ class ViewTrabaho extends Component {
                 : 'without benefits'}
             </Text>
           </View>
+
+          <WhiteSpace />
+          <Text style={{fontWeight: 'bold'}}>Category:</Text>
+          <View style={{marginLeft: 10, marginRight: 10}}>
+            <Text>{data.category.name}</Text>
+          </View>
           {/* <Text>Highlight: {data.Highlight != null ? data.Highlight.map(entry => (<Text>{entry}</Text>)) : null}</Text> */}
-          {/* <Text>Deadline: {moment(data.deadline)}</Text> */}
+          <Text>
+            Deadline: {moment(new Date(data.deadline)).format('MMMM DD, YYYY')}
+          </Text>
           <WhiteSpace />
           <Text style={{fontWeight: 'bold'}}>Company</Text>
           <View style={{marginLeft: 10, marginRight: 10}}>
@@ -160,10 +197,38 @@ class ViewTrabaho extends Component {
       <>
         <WingBlank>
           <ScrollView>
-            {this.renderJobData(SampleData)}
+            {this.state.trabahoData &&
+              this.renderJobData(this.state.trabahoData)}
             <WhiteSpace size="lg" />
-            <Button onPress={() => this.props.navigation.navigate('apply')}>
-              Apply Here
+            <Button
+              disabled={
+                this.props.auth &&
+                this.props.auth.loginData &&
+                this.props.auth.loginData.profile &&
+                this.props.auth.loginData.profile.is_company
+              }
+              onPress={() => {
+                if (
+                  this.props.auth &&
+                  this.props.auth.loginData &&
+                  this.props.auth.loginData.profile &&
+                  !this.props.auth.loginData.profile.is_company
+                ) {
+                  this.props.navigation.navigate('apply');
+                }
+              }}>
+              {this.props.auth &&
+                this.props.auth.loginData &&
+                this.props.auth.loginData.profile &&
+                !this.props.auth.loginData.profile.is_company &&
+                'Apply Here'}
+              {this.props.auth &&
+                this.props.auth.loginData &&
+                this.props.auth.loginData.profile &&
+                this.props.auth.loginData.profile.is_company &&
+                'You cannot apply here.'}
+              {console.log('auth')}
+              {console.log(this.props.auth)}
             </Button>
           </ScrollView>
         </WingBlank>
@@ -171,4 +236,14 @@ class ViewTrabaho extends Component {
     );
   }
 }
-export default ViewTrabaho;
+
+const mapStateToProps = (state) => ({
+  jobs: state.jobs,
+  auth: state.auth,
+});
+
+const mapActionCreators = {
+  getJobData,
+};
+
+export default connect(mapStateToProps, mapActionCreators)(ViewTrabaho);

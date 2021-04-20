@@ -15,11 +15,12 @@ import {
   Checkbox,
   Radio,
   DatePicker,
+  SegmentedControl,
 } from '@ant-design/react-native';
 import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
 import {View, Text, ScrollView, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {getBenefits} from '../../stores/modules/jobs';
+import {getBenefits, newJob, clearData} from '../../stores/modules/jobs';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
 import {now} from 'moment';
@@ -32,8 +33,7 @@ class PostJob extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: null,
-      deadline: new Date(),
+      title: null,
       job_description: null,
       work_from: null,
       work_to: null,
@@ -44,9 +44,16 @@ class PostJob extends Component {
       categories: [],
       benefits: [],
       questions: [],
+      location: null,
+      lat: null,
+      lng: null,
       // benefits: [],
       error: null,
       isLoadingBenefits: false,
+      deadline: new Date(),
+
+      isSubmitting: false,
+      postSuccess: false,
     };
   }
 
@@ -78,11 +85,46 @@ class PostJob extends Component {
           isLoadingBenefits: false,
         });
       }
+
+      if (this.props.jobs.newJobSuccess) {
+        this.props.clearData();
+        Modal.alert(
+          'Job Pos Success!',
+          <Text>
+            The admins will review this job entry. We will notify you once it
+            has been approved.
+          </Text>,
+          [
+            {
+              text: 'Okay',
+              onPress: () => this.props.navigation.replace('homepage'),
+            },
+          ],
+        );
+      }
     }
   }
 
-  save(data) {
-    this.props.saveJob(data);
+  submit() {
+    console.log(this.state);
+    let data = {
+      title: this.state.title,
+      job_description: this.state.job_description,
+      work_from: this.state.work_from,
+      work_to: this.state.work_to,
+      highlights: this.state.highlights,
+      salary: this.state.salary,
+      salary_included_benefits: this.state.salary_included_benefits,
+      category: this.state.category,
+      questions: this.state.questions,
+      benefits: this.state.benefits,
+      location: this.state.location,
+      lat: this.state.lat,
+      lng: this.state.lng,
+      deadline: this.state.deadline,
+    };
+    // this.setState({isSubmitting: true});
+    this.props.newJob(data);
   }
 
   render() {
@@ -111,12 +153,27 @@ class PostJob extends Component {
                 <Text>Description</Text>
                 <TextAreaItem
                   autoHeight
-                  value={this.state.description}
+                  value={this.state.job_description}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {description} = state;
-                      description = val;
-                      return {description};
+                      let {job_description} = state;
+                      job_description = val;
+                      return {job_description};
+                    })
+                  }
+                />
+              </List.Item>
+
+              <List.Item>
+                <Text>Location</Text>
+                <TextAreaItem
+                  autoHeight
+                  value={this.state.location}
+                  onChange={(val) =>
+                    this.setState((state) => {
+                      let {location} = state;
+                      location = val;
+                      return {location};
                     })
                   }
                 />
@@ -178,6 +235,58 @@ class PostJob extends Component {
             </List.Item>
             <WhiteSpace size="lg" />
 
+            <List>
+              <List.Item
+                extra={
+                  <Icon
+                    name="plus"
+                    onPress={() =>
+                      this.setState((state) => {
+                        let {highlights} = state;
+                        highlights.push({
+                          description: null,
+                        });
+                        return {highlights};
+                      })
+                    }
+                  />
+                }>
+                Job Highlights
+              </List.Item>
+              {this.state.highlights != null &&
+                this.state.highlights.map((data, index) => (
+                  <List.Item
+                    extra={
+                      <Icon
+                        name="delete"
+                        onPress={() =>
+                          this.setState((state) => {
+                            let {highlights} = state;
+                            highlights.splice(index, 1);
+                            return {highlights};
+                          })
+                        }
+                        color="red"
+                      />
+                    }
+                    key={index}>
+                    <Text>Highlight {index + 1}</Text>
+                    <InputItem
+                      placeholder={'Enter a job highlight' + (index + 1)}
+                      value={this.state.highlights[index].description}
+                      onChange={(val) =>
+                        this.setState((state) => {
+                          let {highlights} = state;
+                          highlights[index].description = val;
+                          return {highlights};
+                        })
+                      }
+                    />
+                  </List.Item>
+                ))}
+            </List>
+
+            <WhiteSpace size="lg" />
             <List>
               <List.Item>Select a Category</List.Item>
               {/* <View style={{flex:1, flexDirection:'row'}}> */}
@@ -284,7 +393,7 @@ class PostJob extends Component {
                       this.setState((state) => {
                         let {questions} = state;
                         questions.push({
-                          question: 'University',
+                          question: null,
                           type: 0,
                         });
                         return {questions};
@@ -313,6 +422,7 @@ class PostJob extends Component {
                     key={index}>
                     <Text>Question {index + 1}</Text>
                     <InputItem
+                      placeholder={'What, when, where, how?'}
                       value={this.state.questions[index].question}
                       onChange={(val) =>
                         this.setState((state) => {
@@ -322,6 +432,20 @@ class PostJob extends Component {
                         })
                       }
                     />
+                    <SegmentedControl
+                      values={['Normal Question', 'Work Authorization']}
+                      selectedIndex={this.state.questions[index].type}
+                      // onValueChange={(value) => console.log(value)}
+                      onChange={(v) => {
+                        let bb = v.nativeEvent.selectedSegmentIndex;
+                        this.setState((state) => {
+                          let {questions} = state;
+                          questions[index].type = bb;
+                          return {questions};
+                        });
+                        // console.log(v.nativeEvent.selectedSegmentIndex);
+                      }}
+                    />
                   </List.Item>
                 ))}
             </List>
@@ -330,9 +454,39 @@ class PostJob extends Component {
             {!this.state.isLoadingBenefits && this.state.error && (
               <Text style={{color: 'red'}}>{this.state.error}</Text>
             )}
-            <Button onPress={() => console.log(this.state)}> Test</Button>
+            <Button
+              type="primary"
+              onPress={() => {
+                console.log(this.state);
+                Modal.alert(
+                  'Have you reviewed your entry?',
+                  <View>
+                    <Text>
+                      Please review this job entry before submitting. Have you
+                      reviewed it? Submitting this will notify the admins for
+                      this job entry, and will await approval.
+                    </Text>
+                  </View>,
+                  [
+                    {text: 'Cancel'},
+                    {
+                      text: 'Yeah, submit this.',
+                      onPress: () => {
+                        this.submit();
+                      },
+                    },
+                  ],
+                );
+              }}>
+              {' '}
+              Submit
+            </Button>
           </ScrollView>
         </WingBlank>
+
+        <Modal transparent visible={this.state.isSubmitting} closable={false}>
+          <ActivityIndicator text="Submitting your job entry..." />
+        </Modal>
       </>
     );
   }
@@ -344,6 +498,8 @@ const mapStateToProps = (state) => ({
 
 const mapActionCreators = {
   getBenefits,
+  newJob,
+  clearData,
 };
 
 export default connect(mapStateToProps, mapActionCreators)(PostJob);

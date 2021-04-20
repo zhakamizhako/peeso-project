@@ -223,7 +223,7 @@ class Trabaho extends Component {
               Highlights:{' '}
               {data.highlight != null
                 ? data.highlight.map((entry) => (
-                    <Text>{'\n-' + entry.name}</Text>
+                    <Text>{'\n-' + entry.description}</Text>
                   ))
                 : null}
             </Text>
@@ -231,7 +231,7 @@ class Trabaho extends Component {
               Deadline: {moment(data.deadline).format('MMMM DD, yyyy')}
             </Text>
             <Text>Status: {data.status}</Text>
-            <Text>Category: {data.category}</Text>
+            <Text>Category: {data.category.name}</Text>
           </TouchableOpacity>
         </Card.Body>
       </Card>

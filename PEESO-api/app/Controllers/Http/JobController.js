@@ -2,9 +2,12 @@
 const Job = use('App/Models/Job')
 const SavedJob = use('App/Models/SavedJob')
 const Benefit = use('App/Models/BenefitName')
+const JobBenefit = use('App/Models/JobBenefit')
 const Category = use('App/Models/JobCategory')
 const Highlight = use('App/Models/JobHighlight')
+const User = use('App/Models/User')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
+const Question = use('App/Models/JobApplicationQuestion')
 const { HttpException } = use("node-exceptions");
 class JobController {
     async getBenefits({ response }) {
@@ -50,21 +53,102 @@ class JobController {
 
     }
 
-    // async newJob({request, auth, response}){
-    //     let {
+    async newJob({ request, auth, response }) {
+        let {
+            title,
+            job_description,
+            work_from,
+            work_to,
+            highlights,
+            salary,
+            location,
+            lat,
+            lng,
+            salary_included_benefits,
+            category,
+            benefits,
+            questions,
+            deadline
+        } = request.all()
+        let { id } = auth.user
 
-    //     }
-    //     let {id}
-    //     try{
+        try {
+            let errors = [];
+            let user = await User.find(id)
+            if (!user) {
+                throw new HttpException("Invalid request.", HttpResponse.STATUS_BAD_REQUEST)
+            }
+            let company = await user.company().fetch()
 
-    //     } catch (e){
-    //         throw new HttpException(e.message, e.status)     
-    //     }
-    // }
+            if (!company) {
+                throw new HttpException("Invalid request.", HttpResponse.STATUS_BAD_REQUEST)
+            }
+
+            let njob = new Job()
+            njob.name = title
+            njob.job_description = job_description
+            njob.deadline = deadline
+            njob.work_from = work_from
+            njob.work_to = work_to
+            njob.salary = salary
+            njob.location = location
+            njob.lat = lat
+            njob.lng = lng
+            njob.salary_included_benefits = salary_included_benefits
+            njob.category_id = category
+            njob.company_id = company.id
+            njob.status = 'Pending'
+            await njob.save()
+
+            try {
+                await highlights.map(async entry => {
+                    let h_a = new Highlight()
+                    h_a.description = entry.description
+                    h_a.job_id = njob.id
+                    await h_a.save()
+                })
+            } catch (e) {
+
+                console.log("highlight save fail")
+            }
+
+            try {
+                await questions.map(async entry => {
+                    let q_a = new Question()
+                    q_a.job_id = njob.id
+                    q_a.question = entry.question
+                    q_a.type = entry.type
+                    await q_a.save()
+                })
+            } catch (e) {
+                console.log("question save fail")
+            }
+
+            try {
+                await benefits.map(async entry => {
+                    if (entry.value && entry.value == true) {
+                        let b_a = new JobBenefit()
+                        b_a.job_id = njob.id;
+                        b_a.benefit_id = entry.id
+
+                        await b_a.save()
+                    }
+                })
+            } catch (e) {
+                console.log("benefit save fail")
+            }
+
+            response.send({ data: njob })
+
+            console.log(request.all())
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
 
     async getJobs({ response }) {
         try {
-            let jobs = (await Job.query().where('is_approved', true).orderBy('updated_at', 'DESC').with('company').with('highlight').fetch()).toJSON()
+            let jobs = (await Job.query().where('is_approved', true).orderBy('updated_at', 'DESC').with('category').with('company').with('highlight').with('benefits.name').fetch()).toJSON()
             response.send({ data: jobs })
         } catch (e) {
             throw new HttpException(e.message, e.status)
@@ -74,7 +158,7 @@ class JobController {
     async getJob({ params, response }) {
         let { id } = params
         try {
-            let jobs = await Job.query().where('id', id).with('company').with('benefits').with('highlights').fetch()
+            let jobs = await Job.query().where('id', id).with('company').with('benefits.name').with('highlight').with('category').fetch()
 
             if (!jobs || jobs.toJSON().length == 0) {
                 throw new HttpException("Invalid Job", HttpException.STATUS_BAD_REQUEST);
@@ -89,7 +173,7 @@ class JobController {
     async getJobByCompany({ params, response }) {
         let { id } = params
         try {
-            let jobs = await Job.query().where('company_id', id).with('benefits').with('highlights').fetch()
+            let jobs = await Job.query().where('company_id', id).with('benefits').with('highlight').fetch()
 
             if (!jobs || jobs.toJSON().length == 0) {
                 throw new HttpException("Invalid Job", HttpException.STATUS_BAD_REQUEST);

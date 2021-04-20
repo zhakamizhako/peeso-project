@@ -2,38 +2,77 @@ import objectAssign from 'object-assign';
 import {API_HOST} from '@env';
 import axios from 'axios';
 
-export const GET_JOBS_SUCCESS = 'auth/GET_JOBS_SUCCESS';
-export const GET_JOBS_ERROR = 'auth/GET_JOBS_ERROR';
-export const GET_JOBS_FAIL = 'auth/GET_JOBS_FAIL';
+export const GET_JOBS_SUCCESS = 'jobs/GET_JOBS_SUCCESS';
+export const GET_JOBS_ERROR = 'jobs/GET_JOBS_ERROR';
+export const GET_JOBS_FAIL = 'jobs/GET_JOBS_FAIL';
 
-export const NEW_JOB_SUCCESS = 'auth/NEW_JOB_SUCCESS';
-export const NEW_JOB_ERROR = 'auth/NEW_JOB_ERROR';
-export const NEW_JOB_FAIL = 'auth/NEW_JOB_FAIL';
+export const GET_JOB_DATA_SUCCESS = 'jobs/GET_JOB_DATA_SUCCESS';
+export const GET_JOB_DATA_ERROR = 'jobs/GET_JOB_DATA_ERROR';
+export const GET_JOB_DATA_FAIL = 'jobs/GET_JOB_DATA_FAIL';
 
-export const APPLY_JOB_SUCCESS = 'auth/APPLY_JOB_SUCCESS';
-export const APPLY_JOB_ERROR = 'auth/APPLY_JOB_ERROR';
-export const APPLY_JOB_FAIL = 'auth/APPLY_JOB_FAIL';
+export const NEW_JOB_SUCCESS = 'jobs/NEW_JOB_SUCCESS';
+export const NEW_JOB_ERROR = 'jobs/NEW_JOB_ERROR';
+export const NEW_JOB_FAIL = 'jobs/NEW_JOB_FAIL';
 
-export const SAVE_JOB_SUCCESS = 'auth/SAVE_JOB_SUCCESS';
-export const SAVE_JOB_ERROR = 'auth/SAVE_JOB_ERROR';
-export const SAVE_JOB_FAIL = 'auth/SAVE_JOB_FAIL';
+export const APPLY_JOB_SUCCESS = 'jobs/APPLY_JOB_SUCCESS';
+export const APPLY_JOB_ERROR = 'jobs/APPLY_JOB_ERROR';
+export const APPLY_JOB_FAIL = 'jobs/APPLY_JOB_FAIL';
 
-export const UNSAVE_JOB_SUCCESS = 'auth/UNSAVE_JOB_SUCCESS';
-export const UNSAVE_JOB_ERROR = 'auth/UNSAVE_JOB_ERROR';
-export const UNSAVE_JOB_FAIL = 'auth/UNSAVE_JOB_FAIL';
+export const SAVE_JOB_SUCCESS = 'jobs/SAVE_JOB_SUCCESS';
+export const SAVE_JOB_ERROR = 'jobs/SAVE_JOB_ERROR';
+export const SAVE_JOB_FAIL = 'jobs/SAVE_JOB_FAIL';
 
-export const GET_SAVED_JOBS_SUCCESS = 'auth/GET_SAVED_JOBS_SUCCESS';
-export const GET_SAVED_JOBS_ERROR = 'auth/GET_SAVED_JOBS_ERROR';
-export const GET_SAVED_JOBS_FAIL = 'auth/GET_SAVED_JOBS_FAIL';
+export const UNSAVE_JOB_SUCCESS = 'jobs/UNSAVE_JOB_SUCCESS';
+export const UNSAVE_JOB_ERROR = 'jobs/UNSAVE_JOB_ERROR';
+export const UNSAVE_JOB_FAIL = 'jobs/UNSAVE_JOB_FAIL';
 
-export const GET_BENEFITS_SUCCESS = 'auth/GET_BENEFITS_SUCCESS';
-export const GET_BENEFITS_ERROR = 'auth/GET_BENEFITS_ERROR';
-export const GET_BENEFITS_FAIL = 'auth/GET_BENEFITS_FAIL';
+export const GET_SAVED_JOBS_SUCCESS = 'jobs/GET_SAVED_JOBS_SUCCESS';
+export const GET_SAVED_JOBS_ERROR = 'jobs/GET_SAVED_JOBS_ERROR';
+export const GET_SAVED_JOBS_FAIL = 'jobs/GET_SAVED_JOBS_FAIL';
 
-export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
+export const GET_BENEFITS_SUCCESS = 'jobs/GET_BENEFITS_SUCCESS';
+export const GET_BENEFITS_ERROR = 'jobs/GET_BENEFITS_ERROR';
+export const GET_BENEFITS_FAIL = 'jobs/GET_BENEFITS_FAIL';
+
+// export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
+
+export const CLEAR_DATA = 'jobs/CLEAR_DATA';
+
+export function getJobData(data) {
+  console.log('::getJboData:::');
+  console.log(data);
+  return (dispatch, getState) => {
+    let {accessToken} = getState().auth;
+    let hostname = API_HOST;
+    axios
+      .get(`${hostname}/v1/jobs/${data}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: GET_JOB_DATA_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        console.log(error.message);
+        dispatch({
+          type: GET_JOB_DATA_FAIL,
+          payload: error.response ? error.response.data : error,
+        });
+      });
+  };
+}
 
 export function getJobs(data) {
-  console.log('::login:::');
+  console.log('::jbos:::');
   console.log(data);
   return (dispatch, getState) => {
     let {accessToken} = getState().auth;
@@ -92,6 +131,39 @@ export function saveJob(data) {
         console.log(error.message);
         dispatch({
           type: SAVE_JOB_FAIL,
+          payload: error.response ? error.response.data : error,
+        });
+      });
+  };
+}
+
+export function newJob(data) {
+  console.log('::newJob:::');
+  console.log(data);
+  return (dispatch, getState) => {
+    let {accessToken} = getState().auth;
+    let hostname = API_HOST;
+    axios
+      .post(`${hostname}/v1/jobs/new`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: NEW_JOB_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        console.log(error.message);
+        dispatch({
+          type: NEW_JOB_FAIL,
           payload: error.response ? error.response.data : error,
         });
       });
@@ -195,11 +267,23 @@ export function getSavedJobs(data) {
   };
 }
 
+export function clearData() {
+  return async (dispatch) => {
+    await dispatch({
+      type: CLEAR_DATA,
+      meta: {
+        done: true,
+      },
+    });
+  };
+}
+
 export const actions = {
   getJobs,
   saveJob,
   unsavejob,
   getSavedJobs,
+  clearData,
 };
 
 const actionHandlers = {};
@@ -236,6 +320,26 @@ actionHandlers[GET_JOBS_FAIL] = (state, action) => {
   return newState;
 };
 
+actionHandlers[GET_JOB_DATA_SUCCESS] = (state, action) => {
+  let newState;
+  newState = objectAssign({}, state);
+  newState.getJobDataSuccess = true;
+  newState.getJobDataError = false;
+  newState.jobData = action.payload.data;
+  newState.accessToken = action.payload.accessToken;
+  return newState;
+};
+
+actionHandlers[GET_JOB_DATA_FAIL] = (state, action) => {
+  let newState;
+  newState = objectAssign({}, state);
+  newState.getJobDataSuccess = false;
+  newState.getJobDataError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
+  return newState;
+};
+
 actionHandlers[GET_JOBS_ERROR] = (state, action) => {
   let newState;
   newState.getJobsSuccess = false;
@@ -247,7 +351,6 @@ actionHandlers[GET_JOBS_ERROR] = (state, action) => {
 };
 
 actionHandlers[NEW_JOB_SUCCESS] = (state, action) => {
-  console.log('User token check');
   let newState;
   newState = objectAssign({}, state);
   newState.newJob = true;
@@ -333,18 +436,17 @@ actionHandlers[NEW_JOB_ERROR] = (state, action) => {
   return newState;
 };
 
-actionHandlers[LOGOUT_SUCCESS] = (state, action) => {
+actionHandlers[CLEAR_DATA] = (state, action) => {
   return initialState;
 };
+// actionHandlers[LOGOUT_SUCCESS] = (state, action) => {
+//   return initialState;
+// };
 
 const initialState = {
   getJobsError: false,
   getJobsSuccess: false,
   getJobsData: null,
-
-  getJobError: false,
-  getJobSuccess: false,
-  getJobData: null,
 
   getSavedJobs: false,
   getSavedJobsData: [],
@@ -356,6 +458,10 @@ const initialState = {
   benefitsData: [],
   getBenefitsSuccess: false,
   getBenefitsError: null,
+
+  getJobDataSuccess: false,
+  getJobDataError: null,
+  getJobData: null,
 };
 
 export default function reducer(state = initialState, action) {

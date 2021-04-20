@@ -218,7 +218,7 @@ class SignupCompany extends Component {
             </List.Item>
 
             <List.Item>
-              <Text>Company Description</Text>
+              <Text>Short Company Description</Text>
               <TextAreaItem
                 autoHeight
                 value={this.state.description}

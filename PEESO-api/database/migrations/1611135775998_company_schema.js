@@ -10,6 +10,7 @@ class CompanySchema extends Schema {
       table.timestamps()
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.text('description') //overview
+      table.text('shortdesc') //short description
       table.string('name')
       table.string('address')
       table.string('contact_no')

@@ -4,7 +4,7 @@
 const Model = use('Model')
 
 class Job extends Model {
-    benefit() {
+    benefits() {
         return this.hasMany('App/Models/JobBenefit')
     }
     company() {
@@ -14,7 +14,7 @@ class Job extends Model {
         return this.hasMany('App/Models/JobHighlight')
     }
     category() {
-        return this.belongsTo('App/Models/JobCategory')
+        return this.belongsTo('App/Models/JobCategory', 'category_id')
     }
 
 }

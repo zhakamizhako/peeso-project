@@ -50,6 +50,18 @@ class JobController {
 
     }
 
+    async newJob({request, auth, response}){
+        let {
+
+        }
+        let {id}
+        try{
+
+        } catch (e){
+            throw new HttpException(e.message, e.status)     
+        }
+    }
+
     async getJobs({ response }) {
         try {
             let jobs = (await Job.query().where('is_approved', true).orderBy('updated_at', 'DESC').with('company').with('highlight').fetch()).toJSON()

@@ -12,6 +12,17 @@ class CompanyController {
         }
     }
 
+    async getCompany({ params, response }) {
+        let { id } = params
+        try {
+            let cdata = await Company.query().where('id', id).with('ratings').fetch()
+            response.send({ data: (await cdata.toJSON())[0] })
+
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
     async updateCompany({ request, response }) {
         try {
 

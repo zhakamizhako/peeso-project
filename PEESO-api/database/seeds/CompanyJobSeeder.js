@@ -29,6 +29,13 @@ class CompanyJobSeeder {
       contact_no: "09232901913",
       email: "solon.rolandkimandre@gmail.com",
     }])
+    await Database.table('profiles').insert([{
+      user_id: 2,
+      first_name: 'Roland Kim Andre',
+      middle_name: 'Gallego',
+      last_name: 'Solon',
+      is_company: false,
+    }])
     await Database.table('companies').insert([{ user_id: 1, name: "El Racho", address: "Dummy address st, dummy address bldg, dummy address phase, dummy address city", contact_no: "1234567890", email: "abcd@1234", vision: "lorem ipsum vision", mission: "lorem ipsum mission", development_thrusts: "lorem ipsum development thrusts", type: "Private", employees_min: 5, employees_max: 20 }])
     await Database.table('company_core_values').insert([
       { company_id: 1, text: "ABCD" },

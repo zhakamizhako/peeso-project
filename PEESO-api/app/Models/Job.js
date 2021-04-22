@@ -16,6 +16,10 @@ class Job extends Model {
     category() {
         return this.belongsTo('App/Models/JobCategory', 'category_id')
     }
+    questions() {
+        return this.hasMany('App/Models/JobApplicationQuestion')
+    }
+
 
 }
 

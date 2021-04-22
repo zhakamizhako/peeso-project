@@ -6,6 +6,7 @@ const JobBenefit = use('App/Models/JobBenefit')
 const Category = use('App/Models/JobCategory')
 const Highlight = use('App/Models/JobHighlight')
 const User = use('App/Models/User')
+// const JobQuestions = use('App/Models/')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 const Question = use('App/Models/JobApplicationQuestion')
 const { HttpException } = use("node-exceptions");
@@ -36,6 +37,18 @@ class JobController {
         try {
             let j = await Job.find(id)
 
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async getJobQuestions({ params, response }) {
+        let { id } = params
+
+        try {
+            let j = (await Job.query().where('id', id).with('questions').fetch()).toJSON()[0]
+
+            response.send({ data: j })
         } catch (e) {
             throw new HttpException(e.message, e.status)
         }

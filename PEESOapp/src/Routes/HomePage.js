@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -9,13 +9,13 @@ import {
   Icon,
   Toast,
 } from '@ant-design/react-native';
-import {View, Text, Image, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
-import {login, checkMe, logout} from '../stores/modules/auth';
+import { View, Text, Image, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { login, checkMe, logout } from '../stores/modules/auth';
 import imageLogo from './../logo.png';
 import ToastNice from 'react-native-toast-message';
 // import Ws from '../Tools/@adonisjs/websocket-client';
-import moment, {now} from 'moment';
+import moment, { now } from 'moment';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -45,7 +45,7 @@ class HomePage extends Component {
         // this.setState({ networkError: this.props.auth.tokenError })
         console.log('WTFFFF!?');
         Modal.alert('Session Expired', <Text>Try logging in again</Text>, [
-          {text: 'OK', onPress: () => this.props.logout()},
+          { text: 'OK', onPress: () => this.props.logout() },
         ]);
       }
     }
@@ -59,10 +59,10 @@ class HomePage extends Component {
         text1: 'Welcome back, ' + this.props.auth.loginData.profile.first_name,
         text2: 'test!',
       });
-      Toast.success(
-        'Welcome back, ' + this.props.auth.loginData.profile.first_name,
-        Toast.SHORT,
-      );
+      // Toast.success(
+      //   'Welcome back, ' + this.props.auth.loginData.profile.first_name,
+      //   Toast.SHORT,
+      // );
     }
   }
 
@@ -96,8 +96,8 @@ class HomePage extends Component {
       {
         text:
           this.props.auth.loginData &&
-          this.props.auth.loginData.profile &&
-          this.props.auth.loginData.profile.is_company
+            this.props.auth.loginData.profile &&
+            this.props.auth.loginData.profile.is_company
             ? 'Manage Company'
             : 'My Profile',
         type: 'profile',
@@ -106,14 +106,14 @@ class HomePage extends Component {
     ];
 
     return (
-      <View style={{height: '100%'}}>
+      <View style={{ height: '100%' }}>
         <ScrollView>
           <WhiteSpace />
           {/* {this.state.networkError && (<Text>Warning: Connection Error</Text>)} */}
           {/* <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}> */}
           <Image
             source={imageLogo}
-            style={{height: 150, width: '100%', alignSelf: 'center'}}
+            style={{ height: 150, width: '100%', alignSelf: 'center' }}
             resizeMode="center"
           />
           {/* </View> */}

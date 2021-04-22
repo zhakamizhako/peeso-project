@@ -1,31 +1,31 @@
-import {CALL_API} from 'redux-api-middleware-native';
+import { CALL_API } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import {API_HOST} from '@env';
+import { API_HOST } from '@env';
 import axios from 'axios';
 
-export const CREATE_ACCOUNT_SUCCESS = 'auth/CREATE_ACCOUNT_SUCCESS';
-export const CREATE_ACCOUNT_ERROR = 'auth/CREATE_ACCOUNT_ERROR';
-export const CREATE_ACCOUNT_FAIL = 'auth/CREATE_ACCOUNT_FAIL';
+export const CREATE_ACCOUNT_SUCCESS = 'signup/CREATE_ACCOUNT_SUCCESS';
+export const CREATE_ACCOUNT_ERROR = 'signup/CREATE_ACCOUNT_ERROR';
+export const CREATE_ACCOUNT_FAIL = 'signup/CREATE_ACCOUNT_FAIL';
 
-export const CREATE_APPLICANT_SUCCESS = 'auth/CREATE_APPLICANT_SUCCESS';
-export const CREATE_APPLICANT_ERROR = 'auth/CREATE_APPLICANT_ERROR';
-export const CREATE_APPLICANT_FAIL = 'auth/CREATE_APPLICANT_FAIL';
+export const CREATE_APPLICANT_SUCCESS = 'signup/CREATE_APPLICANT_SUCCESS';
+export const CREATE_APPLICANT_ERROR = 'signup/CREATE_APPLICANT_ERROR';
+export const CREATE_APPLICANT_FAIL = 'signup/CREATE_APPLICANT_FAIL';
 
-export const CREATE_COMPANY_SUCCESS = 'auth/CREATE_COMPANY_SUCCESS';
-export const CREATE_COMPANY_ERROR = 'auth/CREATE_COMPANY_ERROR';
-export const CREATE_COMPANY_FAIL = 'auth/CREATE_COMPANY_FAIL';
+export const CREATE_COMPANY_SUCCESS = 'signup/CREATE_COMPANY_SUCCESS';
+export const CREATE_COMPANY_ERROR = 'signup/CREATE_COMPANY_ERROR';
+export const CREATE_COMPANY_FAIL = 'signup/CREATE_COMPANY_FAIL';
 
-export const VERIFY_OTP_SUCCESS = 'auth/VERIFY_OTP_SUCCESS';
-export const VERIFY_OTP_ERROR = 'auth/VERIFY_OTP_ERROR';
-export const VERIFY_OTP_FAIL = 'auth/VERIFY_OTP_FAIL';
+export const VERIFY_OTP_SUCCESS = 'signup/VERIFY_OTP_SUCCESS';
+export const VERIFY_OTP_ERROR = 'signup/VERIFY_OTP_ERROR';
+export const VERIFY_OTP_FAIL = 'signup/VERIFY_OTP_FAIL';
 
-export const NEW_OTP_SUCCESS = 'auth/NEW_OTP_SUCCESS';
-export const NEW_OTP_ERROR = 'auth/NEW_OTP_ERROR';
-export const NEW_OTP_FAIL = 'auth/NEW_OTP_FAIL';
+export const NEW_OTP_SUCCESS = 'signup/NEW_OTP_SUCCESS';
+export const NEW_OTP_ERROR = 'signup/NEW_OTP_ERROR';
+export const NEW_OTP_FAIL = 'signup/NEW_OTP_FAIL';
 
-export const CHECK_ME_SUCCESS = 'auth/CHECK_ME_SUCCESS';
-export const CHECK_ME_ERROR = 'auth/CHECK_ME_ERROR';
-export const CHECK_ME_FAIL = 'auth/CHECK_ME_FAIL';
+export const CHECK_ME_SUCCESS = 'signup/CHECK_ME_SUCCESS';
+export const CHECK_ME_ERROR = 'signup/CHECK_ME_ERROR';
+export const CHECK_ME_FAIL = 'signup/CHECK_ME_FAIL';
 
 export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 

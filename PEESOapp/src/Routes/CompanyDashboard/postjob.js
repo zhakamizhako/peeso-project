@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-duplicate-props */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Button,
   WhiteSpace,
@@ -26,12 +26,12 @@ import {
   RefreshControl,
   DynamicColorIOS,
 } from 'react-native';
-import { connect } from 'react-redux';
-import { getBenefits, newJob, clearData } from '../../stores/modules/jobs';
+import {connect} from 'react-redux';
+import {getBenefits, newJob, clearData} from '../../stores/modules/jobs';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
-import { now } from 'moment';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {now} from 'moment';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -65,7 +65,7 @@ class PostJob extends Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoadingBenefits: true });
+    this.setState({isLoadingBenefits: true});
     this.props.getBenefits();
   }
 
@@ -78,16 +78,19 @@ class PostJob extends Component {
         //   isLoadingBenefits: false,
         // });
         this.setState((state) => {
-          let { benefits, isLoadingBenefits, categories } = state;
+          let {benefits, isLoadingBenefits, categories} = state;
 
           benefits = this.props.jobs.benefitsData.benefits;
           let b = [];
-          this.props.jobs.benefitsData.categories.map((entry) => {
-            b.push({ value: entry.id, label: entry.name });
-          });
-          categories = b;
-          isLoadingBenefits = false;
-          return { benefits, isLoadingBenefits, categories };
+          if (this.props.jobs.benefitsData.categories) {
+            this.props.jobs.benefitsData.categories.map((entry) => {
+              b.push({value: entry.id, label: entry.name});
+            });
+            categories = b;
+            isLoadingBenefits = false;
+          }
+
+          return {benefits, isLoadingBenefits, categories};
         });
       }
       if (this.props.jobs.getBenefitsError) {
@@ -97,8 +100,9 @@ class PostJob extends Component {
         });
       }
 
-      if (this.props.jobs.newJobSuccess) {
+      if (this.props.jobs.newJob) {
         this.props.clearData();
+        // this.setState({isSubmitting: false, title:null, categories:[], })
         Modal.alert(
           'Job Pos Success!',
           <Text>
@@ -152,9 +156,9 @@ class PostJob extends Component {
                   value={this.state.title}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let { title } = state;
+                      let {title} = state;
                       title = val;
-                      return { title };
+                      return {title};
                     })
                   }
                 />
@@ -167,9 +171,9 @@ class PostJob extends Component {
                   value={this.state.job_description}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let { job_description } = state;
+                      let {job_description} = state;
                       job_description = val;
-                      return { job_description };
+                      return {job_description};
                     })
                   }
                 />
@@ -182,9 +186,9 @@ class PostJob extends Component {
                   value={this.state.location}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let { location } = state;
+                      let {location} = state;
                       location = val;
-                      return { location };
+                      return {location};
                     })
                   }
                 />
@@ -196,9 +200,9 @@ class PostJob extends Component {
                   value={this.state.salary}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let { salary } = state;
+                      let {salary} = state;
                       salary = val;
-                      return { salary };
+                      return {salary};
                     })
                   }
                 />
@@ -207,9 +211,9 @@ class PostJob extends Component {
                   checked={this.state.salary_included_benefits}
                   onChange={(val) => {
                     this.setState((state) => {
-                      let { salary_included_benefits } = state;
+                      let {salary_included_benefits} = state;
                       salary_included_benefits = val.target.checked;
-                      return { salary_included_benefits };
+                      return {salary_included_benefits};
                     });
                   }}>
                   Does salary include benefits?
@@ -232,9 +236,9 @@ class PostJob extends Component {
                         checked={this.state.benefits[index].value}
                         onChange={(val) => {
                           this.setState((state) => {
-                            let { benefits } = state;
+                            let {benefits} = state;
                             benefits[index].value = val.target.checked;
-                            return { benefits };
+                            return {benefits};
                           });
                         }}>
                         {entry.name}
@@ -253,11 +257,11 @@ class PostJob extends Component {
                     name="plus"
                     onPress={() =>
                       this.setState((state) => {
-                        let { highlights } = state;
+                        let {highlights} = state;
                         highlights.push({
                           description: null,
                         });
-                        return { highlights };
+                        return {highlights};
                       })
                     }
                   />
@@ -272,9 +276,9 @@ class PostJob extends Component {
                         name="delete"
                         onPress={() =>
                           this.setState((state) => {
-                            let { highlights } = state;
+                            let {highlights} = state;
                             highlights.splice(index, 1);
-                            return { highlights };
+                            return {highlights};
                           })
                         }
                         color="red"
@@ -287,9 +291,9 @@ class PostJob extends Component {
                       value={this.state.highlights[index].description}
                       onChange={(val) =>
                         this.setState((state) => {
-                          let { highlights } = state;
+                          let {highlights} = state;
                           highlights[index].description = val;
-                          return { highlights };
+                          return {highlights};
                         })
                       }
                     />
@@ -304,7 +308,7 @@ class PostJob extends Component {
                 value={this.state.category}
                 onChange={(val) => {
                   console.log(val);
-                  this.setState({ category: val });
+                  this.setState({category: val});
                 }}
                 data={this.state.categories}>
                 <List.Item>Select a Category</List.Item>
@@ -346,9 +350,9 @@ class PostJob extends Component {
               value={this.state.deadline}
               onChange={(val) =>
                 this.setState((state) => {
-                  let { deadline } = state;
+                  let {deadline} = state;
                   deadline = val;
-                  return { deadline };
+                  return {deadline};
                 })
               }>
               <List.Item>
@@ -371,9 +375,9 @@ class PostJob extends Component {
                 value={this.state.work_from}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let { work_from } = state;
+                    let {work_from} = state;
                     work_from = val;
-                    return { work_from };
+                    return {work_from};
                   })
                 }>
                 <List.Item>
@@ -391,9 +395,9 @@ class PostJob extends Component {
                 value={this.state.work_to}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let { work_to } = state;
+                    let {work_to} = state;
                     work_to = val;
-                    return { work_to };
+                    return {work_to};
                   })
                 }>
                 <List.Item>
@@ -410,12 +414,12 @@ class PostJob extends Component {
                     name="plus"
                     onPress={() =>
                       this.setState((state) => {
-                        let { questions } = state;
+                        let {questions} = state;
                         questions.push({
                           question: null,
                           type: 0,
                         });
-                        return { questions };
+                        return {questions};
                       })
                     }
                   />
@@ -430,9 +434,9 @@ class PostJob extends Component {
                         name="delete"
                         onPress={() =>
                           this.setState((state) => {
-                            let { questions } = state;
+                            let {questions} = state;
                             questions.splice(index, 1);
-                            return { questions };
+                            return {questions};
                           })
                         }
                         color="red"
@@ -445,9 +449,9 @@ class PostJob extends Component {
                       value={this.state.questions[index].question}
                       onChange={(val) =>
                         this.setState((state) => {
-                          let { questions } = state;
+                          let {questions} = state;
                           questions[index].question = val;
-                          return { questions };
+                          return {questions};
                         })
                       }
                     />
@@ -458,9 +462,9 @@ class PostJob extends Component {
                       onChange={(v) => {
                         let bb = v.nativeEvent.selectedSegmentIndex;
                         this.setState((state) => {
-                          let { questions } = state;
+                          let {questions} = state;
                           questions[index].type = bb;
-                          return { questions };
+                          return {questions};
                         });
                         // console.log(v.nativeEvent.selectedSegmentIndex);
                       }}
@@ -471,7 +475,7 @@ class PostJob extends Component {
             <WhiteSpace size="lg" />
 
             {!this.state.isLoadingBenefits && this.state.error && (
-              <Text style={{ color: 'red' }}>{this.state.error}</Text>
+              <Text style={{color: 'red'}}>{this.state.error}</Text>
             )}
             <Button
               type="primary"
@@ -487,7 +491,7 @@ class PostJob extends Component {
                     </Text>
                   </View>,
                   [
-                    { text: 'Cancel' },
+                    {text: 'Cancel'},
                     {
                       text: 'Yeah, submit this.',
                       onPress: () => {

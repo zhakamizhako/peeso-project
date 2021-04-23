@@ -207,14 +207,16 @@ class Trabaho extends Component {
         />
         <Card.Body style={{marginLeft: 10}}>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('viewtrabaho')}>
+            onPress={() =>
+              this.props.navigation.navigate('viewtrabaho', {id: data.id})
+            }>
             <Text>Location: {data.location}</Text>
             <Text>Salary: {data.salary}</Text>
             <Text>
               Highlights:{' '}
               {data.highlight != null
                 ? data.highlight.map((entry) => (
-                    <Text>{'\n-' + entry.name}</Text>
+                    <Text>{'\n-' + entry.description}</Text>
                   ))
                 : null}
             </Text>

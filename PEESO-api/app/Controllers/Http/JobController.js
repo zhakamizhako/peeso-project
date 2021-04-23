@@ -46,7 +46,7 @@ class JobController {
         let { id } = params
 
         try {
-            let j = (await Job.query().where('id', id).with('questions').fetch()).toJSON()[0]
+            let j = (await Job.query().where('id', id).with('company').with('questions').fetch()).toJSON()[0]
 
             response.send({ data: j })
         } catch (e) {
@@ -249,7 +249,7 @@ class JobController {
         console.log(id)
         console.log(auth.user)
         try {
-            let saved = await SavedJob.query().where('user_id', id).orderBy('updated_at', 'desc').with('job.company').with('job.benefit').with('job.highlight').fetch()
+            let saved = await SavedJob.query().where('user_id', id).orderBy('updated_at', 'desc').with('job.company').with('job.benefits.name').with('job.highlight').fetch()
             response.send({ data: saved.toJSON() })
         } catch (e) {
             throw new HttpException(e.message, e.status)

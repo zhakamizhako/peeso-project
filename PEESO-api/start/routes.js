@@ -34,6 +34,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'JobController.getJobs').middleware(['auth:api'])
+  Route.get('/company/:id', 'JobController.getJobByCompany').middleware(['auth:api'])
   Route.post('/save/:id', 'JobController.saveJob').middleware(['auth:api'])
   Route.post('/unsave/:id', 'JobController.unsaveJob').middleware(['auth:api'])
   Route.get('/getsaved/', 'JobController.getSavedJobs').middleware(['auth:api'])
@@ -42,7 +43,7 @@ Route.group(() => {
   Route.post('/new', 'JobController.newJob').middleware(['auth:api'])
   Route.post('/update', 'JobController.update').middleware(['auth:api'])
   Route.post('/close', 'JobController.close').middleware(['auth:api'])
-  Route.post('/apply', 'JobController.apply').middleware(['auth:api'])
+  Route.post('/apply', 'JobController.applyJob').middleware(['auth:api'])
   Route.get('/getInfo/:id', 'JobController.getJobQuestions').middleware(['auth:api'])
   Route.post('/cancelapply', 'JobController.cancelapply').middleware(['auth:api'])
 }).prefix('v1/jobs')

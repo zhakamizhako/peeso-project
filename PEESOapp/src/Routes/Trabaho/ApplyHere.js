@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -12,14 +12,16 @@ import {
   InputItem,
   ActivityIndicator,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
-import {connect} from 'react-redux';
-import {newApplication, applyJob} from '../../stores/modules/jobs';
+import FilePickerManager from 'react-native-file-picker';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { newApplication, applyJob } from '../../stores/modules/jobs';
 // import {logout, checkMe} from '../stores/modules/auth';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
-import {now} from 'moment';
+import { now } from 'moment';
 import Input from '@ant-design/react-native/lib/input-item/Input';
+import RNFetchBlob from 'rn-fetch-blob';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -32,16 +34,16 @@ const SampleData = {
       'A first-class private company of the Province of Davao del Norte.',
   },
   questions: [
-    {text: 'Do you have a job experience related to government services?'},
-    {text: 'Have you completed college?'},
-    {text: 'Do you have a second-level eligibility?'},
+    { text: 'Do you have a job experience related to government services?' },
+    { text: 'Have you completed college?' },
+    { text: 'Do you have a second-level eligibility?' },
   ],
   authorization_questions: [
     {
       text:
         'Are you willing to be assigned to other partner-government agency of LGU?',
     },
-    {text: 'Are you willing to be wat?'},
+    { text: 'Are you willing to be wat?' },
   ],
 };
 
@@ -57,14 +59,15 @@ class ApplyHere extends Component {
     super(props);
     this.state = {
       // company_name: '',
-      // user: { firstname: '', middlename: '', lastname: '', contact_no: '' },
-      // input_name: '',
-      // input_email: '',
-      // input_contact_no: '',
+      user: { firstname: '', middlename: '', lastname: '', contact_no: '' },
+      input_email: '',
+      input_contact_no: '',
       questions_additional: [],
       questions_authorization: [],
       jobData: null,
       isLoading: false,
+      selectedFile: null,
+      isSubmitting: false,
       // answers_additional: [],
       // answers_authorization: [],
     };
@@ -75,14 +78,30 @@ class ApplyHere extends Component {
     console.log(this.props);
     if (this.props.route) {
       this.props.newApplication(this.props.route.params.id);
-      this.setState({isLoading: true});
+      this.setState({ isLoading: true });
     }
+    this.setState((state) => {
+      let { user, input_email, input_contact_no } = state;
+      if (this.props.auth.loginData && this.props.auth.loginData.profile) {
+        let d = this.props.auth.loginData.applicant;
+        user.firstname = d.first_name;
+        user.middlename = d.middle_name;
+        user.lastname = d.last_name;
+        input_email = this.props.auth.loginData.email;
+        input_contact_no = d.contact_no;
+      }
+
+      return { user, input_email, input_contact_no };
+    });
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.jobs != prevProps.jobs) {
       console.log('AAAAAAAAAAAAAa');
-      if (this.props.jobs.getJobApplicationInfoData) {
+      if (
+        this.props.jobs.getJobApplicationInfoData !=
+        prevProps.jobs.getJobApplicationInfoData
+      ) {
         console.log('AASSDD');
         console.log(this.props.jobs.getJobApplicationInfoData);
         this.setState((state) => {
@@ -94,7 +113,7 @@ class ApplyHere extends Component {
             answers_additional,
             answers_authorization,
           } = state;
-          let {questions} = this.props.jobs.getJobApplicationInfoData;
+          let { questions } = this.props.jobs.getJobApplicationInfoData;
           jobData = this.props.jobs.getJobApplicationInfoData;
           // jobData.questions = null;
           isLoading = false;
@@ -124,9 +143,57 @@ class ApplyHere extends Component {
     }
   }
 
-  saveJob() {
+  async saveJob() {
     console.log('AAA');
     console.log(this.state);
+    const data = {};
+    let answers = [];
+    this.state.questions_additional.map((entry) => {
+      answers.push(entry);
+    });
+    this.state.questions_authorization.map((entry) => {
+      answers.push(entry);
+    });
+    data.id = this.state.jobData.id;
+    data.applicant_id = this.props.auth.loginData.applicant.id;
+    data.answers = answers;
+    data.firstname = this.state.user.firstname;
+    data.middlename = this.state.user.middlename;
+    data.lastname = this.state.user.lastname;
+    data.contact_no = this.state.input_contact_no;
+    data.email = this.state.input_email;
+    var temp = null;
+    var pathuri = this.state.selectedFile.uri;
+    console.log('pathuri', pathuri);
+    temp = await RNFetchBlob.fs
+      .readFile(`${pathuri}`, 'base64')
+      .then((dataX) => {
+        data.resume = dataX;
+        data.filetype = /[.]/.exec(this.state.selectedFile.fileName)
+          ? /[^.]+$/.exec(this.state.selectedFile.fileName)[0]
+          : undefined;
+      });
+
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAA');
+    console.log(data);
+
+    this.props.applyJob(data);
+
+    // data.append('id', this.state.jobData.id);
+    // data.append('firstname', this.state.user.firstname);
+    // data.append('middlename', this.state.user.middlename);
+    // data.append('lastname', this.state.user.lastname);
+    // data.append('contact_no', this.state.input_contact_no);
+    // data.append('email', this.state.input_email);
+    // data.append('answers', JSON.stringify(answers));
+    // data.append(
+    //   'applicant_id',
+    //   this.props.auth.loginData ? this.props.auth.loginData.applicant.id : null,
+    // );
+    // data.append('resume', this.state.selectedFile);
+
+    // this.setState({ isSubmitting: true });
+    // this.props.applyJob(data);
     // Toast.success('Your application was sent to ' + this.state.company_name);
     // this.props.navigation.navigate('homepage');
   }
@@ -136,25 +203,25 @@ class ApplyHere extends Component {
     let questionsData = this.state.questions_additional;
     let authorizationData = this.state.questions_authorization;
     return (
-      <Card style={{marginTop: 5}}>
+      <Card style={{ marginTop: 5 }}>
         <Card.Header
           title={
             <>
-              <Text style={{fontWeight: 'bold', fontSize: 18}}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
                 Applying to {data.company.name}
               </Text>
-              <Text style={{fontWeight: 'bold', fontSize: 15}}>
+              <Text style={{ fontWeight: 'bold', fontSize: 15 }}>
                 ({data.name})
               </Text>
             </>
           }
         />
-        <Card.Body style={{marginLeft: 10}}>
+        <Card.Body style={{ marginLeft: 10 }}>
           {this.renderContactInformation()}
           <WhiteSpace size="lg" />
-          <Text style={{fontWeight: 'bold'}}>Additional Questions</Text>
+          <Text style={{ fontWeight: 'bold' }}>Additional Questions</Text>
           <WhiteSpace />
-          <View style={{marginLeft: 10, marginRight: 10}}>
+          <View style={{ marginLeft: 10, marginRight: 10 }}>
             {questionsData != null &&
               questionsData.map((entry, index) => (
                 <List.Item>
@@ -165,9 +232,9 @@ class ApplyHere extends Component {
                     value={this.state.questions_additional[index].answer}
                     onChange={(val) =>
                       this.setState((state) => {
-                        let {questions_additional} = state;
+                        let { questions_additional } = state;
                         questions_additional[index].answer = val;
-                        return {questions_additional};
+                        return { questions_additional };
                       })
                     }
                   />{' '}
@@ -175,9 +242,9 @@ class ApplyHere extends Component {
               ))}
           </View>
           <WhiteSpace />
-          <Text style={{fontWeight: 'bold'}}>Work Authorization</Text>
+          <Text style={{ fontWeight: 'bold' }}>Work Authorization</Text>
           <WhiteSpace />
-          <View style={{marginLeft: 10, marginRight: 10}}>
+          <View style={{ marginLeft: 10, marginRight: 10 }}>
             {authorizationData != null &&
               authorizationData.map((entry, index) => (
                 <List.Item>
@@ -188,9 +255,9 @@ class ApplyHere extends Component {
                     value={this.state.questions_authorization[index].answer}
                     onChange={(val) => {
                       this.setState((state) => {
-                        let {questions_authorization} = state;
+                        let { questions_authorization } = state;
                         questions_authorization[index].answer = val;
-                        return {questions_authorization};
+                        return { questions_authorization };
                       });
                     }}
                   />
@@ -205,19 +272,105 @@ class ApplyHere extends Component {
   renderContactInformation() {
     return (
       <>
-        <Text style={{fontWeight: 'bold'}}>Contact Information</Text>
+        <Text style={{ fontWeight: 'bold' }}>Contact Information</Text>
         <List.Item>
-          <InputItem value={this.state.input_name}>Name</InputItem>
+          <InputItem
+            value={this.state.user.firstname}
+            onChange={(val) =>
+              this.setState((state) => {
+                let { user } = state;
+                user.firstname = val;
+                return { user };
+              })
+            }>
+            First Name
+          </InputItem>
+
+          <InputItem
+            value={this.state.user.middlename}
+            onChange={(val) =>
+              this.setState((state) => {
+                let { user } = state;
+                user.middlename = val;
+                return { user };
+              })
+            }>
+            Middle
+          </InputItem>
+
+          <InputItem
+            value={this.state.user.lastname}
+            onChange={(val) =>
+              this.setState((state) => {
+                let { user } = state;
+                user.lastname = val;
+                return { user };
+              })
+            }>
+            Last Name
+          </InputItem>
         </List.Item>
         <List.Item>
-          <InputItem value={this.state.input_email}>Email Address</InputItem>
+          <InputItem
+            value={this.state.input_email}
+            onChange={(val) =>
+              this.setState((state) => {
+                let { input_email } = state;
+                input_email = val;
+                return { input_email };
+              })
+            }>
+            Email Address
+          </InputItem>
         </List.Item>
         <List.Item>
-          <InputItem value={this.state.input_contact_no}>
+          <InputItem
+            value={this.state.input_contact_no}
+            onChange={(val) =>
+              this.setState((state) => {
+                let { input_contact_no } = state;
+                input_contact_no = val;
+                return { input_contact_no };
+              })
+            }>
             Contact Number
           </InputItem>
         </List.Item>
-        <Button>Upload Resume</Button>
+        {this.state.selectedFile && (
+          <List.Item
+            thumb={`file://${this.state.selectedFile.path}`}
+            extra={
+              <Icon
+                name={'delete'}
+                color="red"
+                onPress={() => {
+                  this.setState({ selectedFile: null });
+                }}
+              />
+            }>
+            <Text>{this.state.selectedFile.fileName}</Text>
+          </List.Item>
+        )}
+        <Button
+          onPress={() => {
+            FilePickerManager.showFilePicker(null, (response) => {
+              console.log('response');
+              console.log(response);
+
+              if (response.didCancel) {
+                console.log('Cancelled');
+              } else if (response.error) {
+                console.log('picker error');
+                console.log(response.error);
+              } else {
+                console.log('good');
+                this.setState({ selectedFile: response });
+                console.log(response);
+              }
+            });
+          }}>
+          Select Resume File
+        </Button>
       </>
     );
   }
@@ -241,6 +394,13 @@ class ApplyHere extends Component {
                 <ActivityIndicator text="Loading Data......" />
               </>
             )}
+
+            <Modal
+              transparent
+              visible={this.state.isSubmitting}
+              closable={false}>
+              <ActivityIndicator text="Sending your Application Info..." />
+            </Modal>
           </ScrollView>
         </WingBlank>
       </>
@@ -250,6 +410,7 @@ class ApplyHere extends Component {
 
 const mapStateToProps = (state) => ({
   jobs: state.jobs,
+  auth: state.auth,
 });
 
 const mapActionCreators = {

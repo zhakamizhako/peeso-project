@@ -9,6 +9,7 @@ class FileUploadsSchema extends Schema {
       table.increments()
       table.timestamps()
       table.string('filename')
+      table.text('path')
       table.string('type')
       table.integer('uploaded_by').unsigned().references('id').inTable('users')
     })

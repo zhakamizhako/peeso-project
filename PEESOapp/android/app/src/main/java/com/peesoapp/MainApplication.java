@@ -12,6 +12,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;  // <--- import
+import com.filepicker.FilePickerPackage;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           new SplashScreenReactPackage();  //here 
           new RNGoogleSigninPackage(); // <-- this needs to be in the list
+          new FilePickerPackage();
 
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());

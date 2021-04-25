@@ -13,7 +13,9 @@ class ProfilesSchema extends Schema {
       table.string("middle_name")
       table.string("last_name").notNullable()
       table.boolean("is_company")
+      table.string('contact_no')
       table.integer('profile_pic').unsigned().references('id').inTable('file_uploads')
+
     })
   }
 

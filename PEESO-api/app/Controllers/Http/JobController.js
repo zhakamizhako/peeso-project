@@ -9,7 +9,13 @@ const User = use('App/Models/User')
 // const JobQuestions = use('App/Models/')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 const Question = use('App/Models/JobApplicationQuestion')
+const Application = use('App/Models/JobApplication')
+const Answers = use('App/Models/JobApplicationAnswer')
+const Upload = use('App/Models/FileUpload')
 const { HttpException } = use("node-exceptions");
+const fs = use('fs')
+const { v4: uuidv4 } = require('uuid');
+
 class JobController {
     async getBenefits({ response }) {
         try {
@@ -30,16 +36,90 @@ class JobController {
     async applyJob({ request, auth, response }) {
         let {
             id,
-
+            applicant_id,
+            answers,
+            firstname,
+            middlename,
+            lastname,
+            email,
+            contact_no,
+            resume,
+            filetype
+            //uploaded files
         } = request.all()
+        // const resume = request.file('resume')
+
+
+        // console.log(resume)
         let user_id = auth.user.id
 
         try {
             let j = await Job.find(id)
+            console.log(j)
+            console.log(id)
+            console.log(applicant_id)
+            console.log(answers)
+            console.log(firstname)
+            console.log(middlename)
+            console.log(lastname)
+            console.log(email)
+            console.log(contact_no)
+            // console.log(resume)
 
+            if (resume != null && filetype != null) {
+                let x = await this.processBase64File(resume, 'Resume', filetype)
+                console.log(x)
+            }
+
+            let app = new Application()
+            app.job_id = id
+            app.applicant_id = applicant_id
+            app.first_name = firstname
+            app.middle_name = middlename
+            app.last_name = lastname
+            app.email = email
+            app.contact_no = contact_no
+            app.is_approved = false
+            app.status = "Pending"
+            await app.save()
+
+            answers.map(async (entry) => {
+                let ans = new Answers()
+                ans.application_id = app.id
+                ans.job_application_questions_id = entry.id
+                ans.answer = entry.answer
+
+                await ans.save()
+            })
+
+            response.send({ message: 'OK' })
         } catch (e) {
             throw new HttpException(e.message, e.status)
         }
+    }
+
+    async processBase64File(file, type, filetype, user_id) {
+        let base64String = file
+        let base64Data = base64String.split(';base64').pop();
+        let name = uuidv4()
+        let status = null
+        try {
+            status = await fs.writeFileSync(`public/${type}/${name}.${filetype}`, base64Data, { encoding: 'base64' })
+        } catch (e) {
+            console.log(e)
+            status = false
+        }
+        if (status != false) {
+            let b = new Upload()
+            b.filename = name
+            b.path = `public/${type}/${name}.${filetype}`
+            b.uploaded_by = user_id
+            b.type = type
+            await b.save()
+            return { name: name, tmpPath: `public/${type}/${name}.${filetype}`, id: b.id }
+            // imageData.push({ name: name, tmpPath: `${type}/${name}.${filetype}` })
+        }
+
     }
 
     async getJobQuestions({ params, response }) {
@@ -192,10 +272,18 @@ class JobController {
                 throw new HttpException("Invalid Job", HttpException.STATUS_BAD_REQUEST);
             }
 
-            response.send({ data: jobs.toJSON()[0] })
+            response.send({ data: jobs.toJSON() })
         } catch (e) {
             throw new HttpException(e.message, e.status)
         }
+    }
+
+    async getApplicants({ params, auth, response }) {
+
+    }
+
+    async getApplication({ params, response }) {
+
     }
 
     async saveJob({ params, auth, response }) {

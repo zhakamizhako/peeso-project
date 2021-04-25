@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-duplicate-props */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   WhiteSpace,
   WingBlank,
@@ -15,14 +15,14 @@ import {
   Stepper,
   DatePicker,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {createApplicant} from '../../stores/modules/user';
-import {login, checkMe} from '../../stores/modules/auth';
-import {connect} from 'react-redux';
+import { View, Text, ScrollView } from 'react-native';
+import { createApplicant } from '../../stores/modules/user';
+import { login, checkMe } from '../../stores/modules/auth';
+import { connect } from 'react-redux';
 import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
-import {TextInput} from 'react-native-gesture-handler';
+import { TextInput } from 'react-native-gesture-handler';
 import Input from '@ant-design/react-native/lib/input-item/Input';
-import {now} from 'moment';
+import { now } from 'moment';
 
 class SignupApplicant extends Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class SignupApplicant extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let {user, auth} = props;
+    let { user, auth } = props;
 
     console.log('signupapplicant props');
     console.log(props);
@@ -89,7 +89,7 @@ class SignupApplicant extends Component {
         isSubmitting: false,
       });
       if (!this.props.auth.loginData) {
-        this.setState({isLoggingIn: true});
+        this.setState({ isLoggingIn: true });
         this.props.login({
           email: this.props.user.data.email,
           username: this.props.user.data.username,
@@ -138,13 +138,13 @@ class SignupApplicant extends Component {
         'Create Account Error',
         <ScrollView>
           <View>
-            <Text style={{textAlign: 'justify'}}>
+            <Text style={{ textAlign: 'justify' }}>
               Account Creation has been successful, but there was an error on
               login.
             </Text>
             <WhiteSpace />
-            <Text style={{textAlign: 'justify'}}>{auth.loginError}</Text>
-            <Text style={{textAlign: 'justify'}}>Try again?</Text>
+            <Text style={{ textAlign: 'justify' }}>{auth.loginError}</Text>
+            <Text style={{ textAlign: 'justify' }}>Try again?</Text>
           </View>
         </ScrollView>,
         [
@@ -157,7 +157,7 @@ class SignupApplicant extends Component {
                 password: this.props.user.tempPassword,
                 type: 'signup',
               });
-              this.setState({isLoggingIn: true});
+              this.setState({ isLoggingIn: true });
             },
           },
           {
@@ -180,18 +180,18 @@ class SignupApplicant extends Component {
     console.log('STATEW');
     console.log(this.props);
     console.log('-------------');
-    this.setState({isSubmitting: true});
+    this.setState({ isSubmitting: true });
     let data = {
       user_id: this.props.user.data
         ? this.props.user.data.id
         : this.props.auth.loginData
-        ? this.props.auth.loginData.id
-        : null,
+          ? this.props.auth.loginData.id
+          : null,
       email: this.props.user.data
         ? this.props.user.data.email
         : this.props.auth.loginData
-        ? this.props.auth.loginData.email
-        : null,
+          ? this.props.auth.loginData.email
+          : null,
       opening_statement: this.state.openingStatement,
       first_name: this.state.firstname,
       middle_name: this.state.middlename,
@@ -203,16 +203,16 @@ class SignupApplicant extends Component {
       educational_backgrounds: this.state.educationalBackground,
       job_experiences: this.state.educationalBackground,
     };
-    this.setState({isSubmitting: true});
+    this.setState({ isSubmitting: true });
     this.props.createApplicant(data);
   }
 
   render() {
     return (
-      <ScrollView style={{height: '100%'}}>
+      <ScrollView style={{ height: '100%' }}>
         <WhiteSpace size="lg" />
         <WingBlank>
-          <Text style={{fontSize: 25}}>Tell us about yourself.</Text>
+          <Text style={{ fontSize: 25 }}>Tell us about yourself.</Text>
           <WhiteSpace size={'lg'} />
           <WhiteSpace size={'lg'} />
           {/* <List>
@@ -245,9 +245,9 @@ class SignupApplicant extends Component {
                 value={this.state.openingStatement}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let {openingStatement} = state;
+                    let { openingStatement } = state;
                     openingStatement = val;
-                    return {openingStatement};
+                    return { openingStatement };
                   })
                 }
               />
@@ -259,9 +259,9 @@ class SignupApplicant extends Component {
                 value={this.state.firstname}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let {firstname} = state;
+                    let { firstname } = state;
                     firstname = val;
-                    return {firstname};
+                    return { firstname };
                   })
                 }
               />
@@ -273,9 +273,9 @@ class SignupApplicant extends Component {
                 value={this.state.middlename}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let {middlename} = state;
+                    let { middlename } = state;
                     middlename = val;
-                    return {middlename};
+                    return { middlename };
                   })
                 }
               />
@@ -287,9 +287,9 @@ class SignupApplicant extends Component {
                 value={this.state.lastname}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let {lastname} = state;
+                    let { lastname } = state;
                     lastname = val;
-                    return {lastname};
+                    return { lastname };
                   })
                 }
               />
@@ -302,9 +302,9 @@ class SignupApplicant extends Component {
                 value={this.state.address}
                 onChange={(val) =>
                   this.setState((state) => {
-                    let {address} = state;
+                    let { address } = state;
                     address = val;
-                    return {address};
+                    return { address };
                   })
                 }
               />
@@ -317,9 +317,9 @@ class SignupApplicant extends Component {
                 type="phone-pad"
                 onChange={(val) =>
                   this.setState((state) => {
-                    let {contact_no} = state;
+                    let { contact_no } = state;
                     contact_no = val;
-                    return {contact_no};
+                    return { contact_no };
                   })
                 }
               />
@@ -334,9 +334,9 @@ class SignupApplicant extends Component {
                 name="plus"
                 onPress={() =>
                   this.setState((state) => {
-                    let {keySkills} = state;
-                    keySkills.push({name: null, rate: 0});
-                    return {keySkills};
+                    let { keySkills } = state;
+                    keySkills.push({ name: null, rate: 0 });
+                    return { keySkills };
                   })
                 }
               />
@@ -351,9 +351,9 @@ class SignupApplicant extends Component {
                     name="delete"
                     onPress={() =>
                       this.setState((state) => {
-                        let {keySkills} = state;
+                        let { keySkills } = state;
                         keySkills.splice(index, 1);
-                        return {keySkills};
+                        return { keySkills };
                       })
                     }
                     color="red"
@@ -365,9 +365,9 @@ class SignupApplicant extends Component {
                   placeholder="Graphic Designing : Adobe Photoshop"
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {keySkills} = state;
+                      let { keySkills } = state;
                       keySkills[index].name = val;
-                      return {keySkills};
+                      return { keySkills };
                     })
                   }
                 />
@@ -378,9 +378,9 @@ class SignupApplicant extends Component {
                   max={5}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {keySkills} = state;
+                      let { keySkills } = state;
                       keySkills[index].rate = val;
-                      return {keySkills};
+                      return { keySkills };
                     })
                   }
                 />
@@ -394,14 +394,14 @@ class SignupApplicant extends Component {
                 name="plus"
                 onPress={() =>
                   this.setState((state) => {
-                    let {educationalBackground} = state;
+                    let { educationalBackground } = state;
                     educationalBackground.push({
                       name: 'University',
                       startDate: new Date(),
                       endDate: new Date(),
                       degree: '',
                     });
-                    return {educationalBackground};
+                    return { educationalBackground };
                   })
                 }
               />
@@ -416,9 +416,9 @@ class SignupApplicant extends Component {
                     name="delete"
                     onPress={() =>
                       this.setState((state) => {
-                        let {educationalBackground} = state;
+                        let { educationalBackground } = state;
                         educationalBackground.splice(index, 1);
-                        return {educationalBackground};
+                        return { educationalBackground };
                       })
                     }
                     color="red"
@@ -430,9 +430,9 @@ class SignupApplicant extends Component {
                   placeholder="University of ABC"
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {educationalBackground} = state;
+                      let { educationalBackground } = state;
                       educationalBackground[index].name = val;
-                      return {educationalBackground};
+                      return { educationalBackground };
                     })
                   }
                 />
@@ -443,9 +443,9 @@ class SignupApplicant extends Component {
                   max={5}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {educationalBackground} = state;
+                      let { educationalBackground } = state;
                       educationalBackground[index].degree = val;
-                      return {educationalBackground};
+                      return { educationalBackground };
                     })
                   }
                 />
@@ -460,9 +460,9 @@ class SignupApplicant extends Component {
                   value={this.state.educationalBackground[index].startDate}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {educationalBackground} = state;
+                      let { educationalBackground } = state;
                       educationalBackground[index].startDate = val;
-                      return {educationalBackground};
+                      return { educationalBackground };
                     })
                   }>
                   <List.Item>
@@ -479,9 +479,9 @@ class SignupApplicant extends Component {
                   value={this.state.educationalBackground[index].endDate}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {educationalBackground} = state;
+                      let { educationalBackground } = state;
                       educationalBackground[index].endDate = val;
-                      return {educationalBackground};
+                      return { educationalBackground };
                     })
                   }>
                   <List.Item>
@@ -498,7 +498,7 @@ class SignupApplicant extends Component {
                 name="plus"
                 onPress={() =>
                   this.setState((state) => {
-                    let {job_experiences} = state;
+                    let { job_experiences } = state;
                     job_experiences.push({
                       name: null,
                       startDate: new Date(),
@@ -506,7 +506,7 @@ class SignupApplicant extends Component {
                       role: null,
                       isPresent: false,
                     });
-                    return {job_experiences};
+                    return { job_experiences };
                   })
                 }
               />
@@ -521,9 +521,9 @@ class SignupApplicant extends Component {
                     name="delete"
                     onPress={() =>
                       this.setState((state) => {
-                        let {job_experiences} = state;
+                        let { job_experiences } = state;
                         job_experiences.splice(index, 1);
-                        return {job_experiences};
+                        return { job_experiences };
                       })
                     }
                     color="red"
@@ -535,9 +535,9 @@ class SignupApplicant extends Component {
                   placeholder="Juan and Company Ltd."
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {job_experiences} = state;
+                      let { job_experiences } = state;
                       job_experiences[index].name = val;
-                      return {job_experiences};
+                      return { job_experiences };
                     })
                   }>
                   Company
@@ -550,9 +550,9 @@ class SignupApplicant extends Component {
                   max={5}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {job_experiences} = state;
+                      let { job_experiences } = state;
                       job_experiences[index].role = val;
-                      return {job_experiences};
+                      return { job_experiences };
                     })
                   }>
                   Role
@@ -567,9 +567,9 @@ class SignupApplicant extends Component {
                   value={this.state.job_experiences[index].startDate}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {job_experiences} = state;
+                      let { job_experiences } = state;
                       job_experiences[index].startDate = val;
-                      return {job_experiences};
+                      return { job_experiences };
                     })
                   }>
                   <List.Item>
@@ -586,9 +586,9 @@ class SignupApplicant extends Component {
                   value={this.state.job_experiences[index].endDate}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {job_experiences} = state;
+                      let { job_experiences } = state;
                       job_experiences[index].endDate = val;
-                      return {job_experiences};
+                      return { job_experiences };
                     })
                   }>
                   <List.Item>
@@ -599,9 +599,9 @@ class SignupApplicant extends Component {
                   value={this.state.job_experiences[index].isPresent}
                   onChange={(val) =>
                     this.setState((state) => {
-                      let {job_experiences} = state;
+                      let { job_experiences } = state;
                       job_experiences[index].isPresent = val;
-                      return {job_experiences};
+                      return { job_experiences };
                     })
                   }>
                   Up to Present?
@@ -618,11 +618,11 @@ class SignupApplicant extends Component {
                 'Disclaimer',
                 <ScrollView>
                   <View>
-                    <Text style={{textAlign: 'justify'}}>
+                    <Text style={{ textAlign: 'justify' }}>
                       Based on Republic Act 10183--Data Privacy Act of 2012,{' '}
                     </Text>
                     <WhiteSpace />
-                    <Text style={{textAlign: 'justify'}}>
+                    <Text style={{ textAlign: 'justify' }}>
                       By pressing Accept, You are allowing the City Public
                       Education and Employment Services Ofice to use your
                       personal information in employment purpose only and in
@@ -631,7 +631,7 @@ class SignupApplicant extends Component {
                   </View>
                 </ScrollView>,
                 [
-                  {text: 'Accept', onPress: () => this.submitInfo()},
+                  { text: 'Accept', onPress: () => this.submitInfo() },
                   {
                     text: 'Decline',
                     onPress: () => console.log('cancel'),

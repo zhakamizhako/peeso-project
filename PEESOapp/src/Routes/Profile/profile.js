@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   WhiteSpace,
   WingBlank,
@@ -8,11 +8,11 @@ import {
   Icon,
   List,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView, Image} from 'react-native';
-import {logout} from '../../stores/modules/auth';
-import {connect} from 'react-redux';
+import { View, Text, ScrollView, Image } from 'react-native';
+import { logout } from '../../stores/modules/auth';
+import { connect } from 'react-redux';
 import imageLogo from '../../logo.png';
-import {Avatar} from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +49,7 @@ class ProfileScreen extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let {auth} = props;
+    let { auth } = props;
 
     if (auth.logoutSuccess) {
       this.props.navigation.replace('login');
@@ -59,10 +59,10 @@ class ProfileScreen extends Component {
   render() {
     // let { first_name, middle_name, last_name } = this.state
     return (
-      <View style={{height: '100%'}}>
+      <View style={{ height: '100%' }}>
         <WhiteSpace size="lg" />
         <WingBlank>
-          <View style={{alignSelf: 'center'}}>
+          <View style={{ alignSelf: 'center' }}>
             <Avatar
               rounded
               size="xlarge"
@@ -120,7 +120,10 @@ class ProfileScreen extends Component {
                   onPress={() => this.props.navigation.navigate('createjob')}>
                   Post a Job
                 </List.Item>
-                <List.Item>Current Applications</List.Item>
+                <List.Item
+                  onPress={() => this.props.navigation.navigate('myjobs')}>
+                  Current Applications
+                </List.Item>
                 <List.Item>Uploads</List.Item>
                 <List.Item>View Company Profile</List.Item>
                 <List.Item>Edit Company Profile</List.Item>
@@ -139,8 +142,8 @@ class ProfileScreen extends Component {
               </List>
             )}
           <List.Item>Settings</List.Item>
-          <List.Item style={{backgroundColor: 'red'}}>
-            <Text style={{color: 'white'}} onPress={() => this.props.logout()}>
+          <List.Item style={{ backgroundColor: 'red' }}>
+            <Text style={{ color: 'white' }} onPress={() => this.props.logout()}>
               Logout
             </Text>
           </List.Item>
@@ -149,7 +152,7 @@ class ProfileScreen extends Component {
 
           <Image
             source={imageLogo}
-            style={{height: 80, width: '100%', alignSelf: 'center'}}
+            style={{ height: 80, width: '100%', alignSelf: 'center' }}
             resizeMode="center"
           />
         </WingBlank>

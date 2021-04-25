@@ -7,6 +7,10 @@ export const GET_JOBS_SUCCESS = 'jobs/GET_JOBS_SUCCESS';
 export const GET_JOBS_ERROR = 'jobs/GET_JOBS_ERROR';
 export const GET_JOBS_FAIL = 'jobs/GET_JOBS_FAIL';
 
+export const GET_COMPANY_JOBS_SUCCESS = 'jobs/GET_COMPANY_JOBS_SUCCESS';
+export const GET_COMPANY_JOBS_ERROR = 'jobs/GET_COMPANY_JOBS_ERROR';
+export const GET_COMPANY_JOBS_FAIL = 'jobs/GET_COMPANY_JOBS_FAIL';
+
 export const GET_JOB_DATA_SUCCESS = 'jobs/GET_JOB_DATA_SUCCESS';
 export const GET_JOB_DATA_ERROR = 'jobs/GET_JOB_DATA_ERROR';
 export const GET_JOB_DATA_FAIL = 'jobs/GET_JOB_DATA_FAIL';
@@ -75,6 +79,40 @@ export function getJobData(data) {
             });
     };
 }
+
+export function getCompanyJobs(data) {
+    console.log('::getcompanyjobs:::');
+    console.log(data);
+    return (dispatch, getState) => {
+        let { accessToken } = getState().auth;
+        let hostname = API_HOST;
+        axios
+            .get(`${hostname}/v1/jobs/company/${data}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((resuults) => {
+                console.log('status good');
+                console.log(resuults);
+                dispatch({
+                    type: GET_COMPANY_JOBS_SUCCESS,
+                    payload: resuults.data,
+                });
+            })
+            .catch((error) => {
+                console.log('error');
+                console.log(error.response);
+                console.log(error.message);
+                dispatch({
+                    type: GET_COMPANY_JOBS_FAIL,
+                    payload: error.response ? error.response.data : error,
+                });
+            });
+    };
+}
+
 
 export function getJobs(data) {
     // console.log('::login:::')
@@ -148,21 +186,23 @@ export function applyJob(data) {
     return (dispatch, getState) => {
         let { accessToken } = getState().auth;
         let hostname = API_HOST;
-        axios
-            .post(`${hostname}/v1/jobs/apply/${data}`, null, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-            .then((resuults) => {
-                console.log('status good');
-                console.log(resuults);
-                dispatch({
-                    type: APPLY_JOB_SUCCESS,
-                    payload: resuults.data,
-                });
-            })
+
+        axios({
+            method: 'post',
+            url: `${hostname}/v1/jobs/apply`,
+            data: data,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }).then((resuults) => {
+            console.log('status good');
+            console.log(resuults);
+            dispatch({
+                type: APPLY_JOB_SUCCESS,
+                payload: resuults.data,
+            });
+        })
             .catch((error) => {
                 console.log('error');
                 console.log(error.response);
@@ -172,6 +212,31 @@ export function applyJob(data) {
                     payload: error.response ? error.response.data : error,
                 });
             });
+
+        // axios
+        //     .post(`${hostname}/v1/jobs/apply`, data, {
+        //         headers: {
+        //             'Content-Type': 'multipart/form-data',
+        //             Authorization: `Bearer ${accessToken}`,
+        //         },
+        //     })
+        //     .then((resuults) => {
+        //         console.log('status good');
+        //         console.log(resuults);
+        //         dispatch({
+        //             type: APPLY_JOB_SUCCESS,
+        //             payload: resuults.data,
+        //         });
+        //     })
+        //     .catch((error) => {
+        //         console.log('error');
+        //         console.log(error.response);
+        //         console.log(error.message);
+        //         dispatch({
+        //             type: APPLY_JOB_FAIL,
+        //             payload: error.response ? error.response.data : error,
+        //         });
+        //     });
     };
 }
 
@@ -541,6 +606,27 @@ actionHandlers[GET_SAVED_JOBS_FAIL] = (state, action) => {
     return newState;
 };
 
+actionHandlers[GET_COMPANY_JOBS_SUCCESS] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getCompanyJobs = true;
+    newState.getCompanyJobsError = false;
+    newState.getCompanyJobsData = action.payload.data;
+    return newState;
+};
+
+actionHandlers[GET_COMPANY_JOBS_FAIL] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getCompanyJobs = false;
+    newState.getCompanyJobsError = action.payload.error
+        ? action.payload.error.message
+        : action.payload.message;
+    return newState;
+};
+
 actionHandlers[NEW_JOB_ERROR] = (state, action) => {
     // console.log('Token check error.');
     let newState;
@@ -581,6 +667,10 @@ const initialState = {
 
     applyJobError: null,
     applyJobSuccess: false,
+
+    getCompanyJobsSuccess: false,
+    getCompanyJobsError: null,
+    getCompanyJobsData: [],
 
 };
 

@@ -8,25 +8,26 @@
 const _XHR = GLOBAL.originalXMLHttpRequest
   ? GLOBAL.originalXMLHttpRequest
   : GLOBAL.XMLHttpRequest;
+GLOBAL.FormData = GLOBAL.originalFormData || GLOBAL.FormData;
 
 XMLHttpRequest = _XHR;
 
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import 'react-native-gesture-handler';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import configureStore from './configureStore';
-import {PersistGate} from 'redux-persist/integration/react';
-import {Provider as AntProvider} from '@ant-design/react-native';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider as AntProvider } from '@ant-design/react-native';
 import Navigator from './src/Navigator.js';
 import enUS from '@ant-design/react-native/lib/locale-provider/en_US';
 import SplashScreen from 'react-native-splash-screen';
-import {StatusBar, View} from 'react-native';
+import { StatusBar, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-    const {persistor, store} = configureStore();
+    const { persistor, store } = configureStore();
     this.persistor = persistor;
     this.store = store;
   }

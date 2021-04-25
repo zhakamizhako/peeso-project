@@ -147,7 +147,7 @@ class PostJob extends Component {
       <>
         <WingBlank>
           <ScrollView>
-            <Text>Create a job thingy</Text>
+            {/* <Text>Create a job thingy</Text> */}
             <List>
               <List.Item>
                 <Text>Job Title</Text>

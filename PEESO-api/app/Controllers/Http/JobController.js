@@ -66,11 +66,6 @@ class JobController {
             console.log(contact_no)
             // console.log(resume)
 
-            if (resume != null && filetype != null) {
-                let x = await this.processBase64File(resume, 'Resume', filetype)
-                console.log(x)
-            }
-
             let app = new Application()
             app.job_id = id
             app.applicant_id = applicant_id
@@ -81,11 +76,17 @@ class JobController {
             app.contact_no = contact_no
             app.is_approved = false
             app.status = "Pending"
+            if (resume != null && filetype != null) {
+                var x = await this.processBase64File(resume, 'Resume', filetype, auth.user.id)
+                console.log(x)
+                app.file_id = x.id
+            }
+
             await app.save()
 
             answers.map(async (entry) => {
                 let ans = new Answers()
-                ans.application_id = app.id
+                ans.job_application_id = app.id
                 ans.job_application_questions_id = entry.id
                 ans.answer = entry.answer
 
@@ -112,11 +113,11 @@ class JobController {
         if (status != false) {
             let b = new Upload()
             b.filename = name
-            b.path = `public/${type}/${name}.${filetype}`
+            b.path = `${type}/${name}.${filetype}`
             b.uploaded_by = user_id
             b.type = type
             await b.save()
-            return { name: name, tmpPath: `public/${type}/${name}.${filetype}`, id: b.id }
+            return { name: name, tmpPath: `${type}/${name}.${filetype}`, id: b.id }
             // imageData.push({ name: name, tmpPath: `${type}/${name}.${filetype}` })
         }
 
@@ -144,6 +145,33 @@ class JobController {
 
     async archiveJob({ request, response }) {
 
+    }
+
+    async checkForApplication({request, auth, response}){
+        let { id } = auth.user
+        let { job_id } = request.all()
+
+        try{
+            let x = await User.find(id)
+            let y = await User.applicant().fetch()
+
+            let b = await Application.query().where('applicant_id', y.id)
+        } catch (e){
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async myApplications({auth, response}){
+        let {id} = auth.user
+
+        try{
+            let user = await User.find(id)
+            let b = await user.applicant().fetch()
+            
+            let x = await Application.query().where('applicant_id', user.id).with('job.company')
+        } catch(e){
+            throw new HttpException(e.message, e.status)
+        }
     }
 
     async newJob({ request, auth, response }) {

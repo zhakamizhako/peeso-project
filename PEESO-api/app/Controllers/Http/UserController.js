@@ -12,6 +12,9 @@ const ApplicantSkill = use('App/Models/ApplicantKeySkill')
 const EducationalBackground = use('App/Models/ApplicantEducationalBackground')
 const JobExperience = use('App/Models/ApplicantJobExperience')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
+const Upload = use('App/Models/FileUpload')
+const fs = use('fs')
+const { v4: uuidv4 } = require('uuid');
 
 let CodeGenerator = require('node-code-generator')
 
@@ -90,13 +93,52 @@ class UserController {
 
     async me({ auth, response }) {
         let user_id = auth.user.id
-        let user = (await User.query().where('id', user_id).with('profile').with("company").with("applicant").with("freelanceEmploy").fetch()).toJSON()[0]
+        let user = (await User.query().where('id', user_id).with('profile.picture').with("company").with("applicant").with("freelanceEmploy").fetch()).toJSON()[0]
 
         if (!user) {
             throw new HttpException('Invalid Token / Token Expired.', 404)
         }
 
         response.send({ user: user })
+    }
+
+    async processBase64File(file, type, filetype, user_id) {
+        let base64String = file
+        let base64Data = base64String.split(';base64').pop();
+        let name = uuidv4()
+        let status = null
+        try {
+            status = await fs.writeFileSync(`public/${type}/${name}.${filetype}`, base64Data, { encoding: 'base64' })
+        } catch (e) {
+            console.log(e)
+            status = false
+        }
+        if (status != false) {
+            let b = new Upload()
+            b.filename = name
+            b.path = `${type}/${name}.${filetype}`
+            b.uploaded_by = user_id
+            b.type = type
+            await b.save()
+            return { name: name, tmpPath: `${type}/${name}.${filetype}`, id: b.id }
+            // imageData.push({ name: name, tmpPath: `${type}/${name}.${filetype}` })
+        }
+
+    }
+
+    async uploadProfilePic({request, auth, response}){
+        let { photo, fileType } = request.all()
+
+        let u = await User.find(auth.user.id)
+        let profile = await u.profile().fetch()
+
+        let upload = await this.processBase64File(photo, 'Profile', fileType, u)
+
+        profile.profile_pic = upload.id
+
+        await profile.save()
+
+        response.send({data:profile})
     }
 
     async createUser({ request, response }) {

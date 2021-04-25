@@ -12,6 +12,7 @@ import {
 import {View, Text, ScrollView} from 'react-native';
 import {Rating} from 'react-native-elements';
 import {connect} from 'react-redux';
+import {getCompanies} from '../../stores/modules/company';
 // import {logout, checkMe} from '../stores/modules/auth';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
@@ -127,12 +128,22 @@ const SampleData = [
 class Company extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      data: [],
+      isLoading: false,
+    };
   }
 
   followCompany() {
     Toast.success('Followed Company!');
   }
+
+  componentDidMount() {
+    this.setState({isLoading: true});
+    this.props.getCompanies();
+  }
+
+  componentDidUpdate(prevProps) {}
 
   renderCompanyData(data, index) {
     return (
@@ -188,7 +199,7 @@ class Company extends Component {
       <>
         <WingBlank>
           <ScrollView>
-            {SampleData.map((entry, index) => {
+            {this.state.data.map((entry, index) => {
               return this.renderCompanyData(entry, index);
             })}
           </ScrollView>
@@ -197,4 +208,15 @@ class Company extends Component {
     );
   }
 }
-export default Company;
+
+const mapActionCreators = {
+  getCompanies,
+};
+
+const mapStateToProps = (state) => ({
+  company: state.company,
+  // jobs: state.jobs,
+  // auth: state.auth,
+});
+
+export default connect(mapStateToProps, mapActionCreators)(Company);

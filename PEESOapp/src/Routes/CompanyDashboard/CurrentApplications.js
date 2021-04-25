@@ -107,8 +107,12 @@ class Trabaho extends Component {
                         <Text>Category: {data.category}</Text>
                         <Text>Saved on: {moment(entrySaved).format('MMMM DD, yyyy')}</Text>
                         <Text>Applications: ??</Text>
-                        <Text>Tap here to view Applicants</Text>
+
+                        {/* <Text>Tap here to view Applicants</Text> */}
                     </TouchableOpacity>
+
+                    <WhiteSpace size="lg"/>
+                    <Button disabled={!data.is_approved}>{!data.is_approved && ('This Job is awaiting admin approval.')}{data.status != 'Pending' && ('View Applicants')}</Button>
                 </Card.Body>
             </Card>
         );

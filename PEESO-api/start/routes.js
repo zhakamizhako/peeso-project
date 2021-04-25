@@ -30,6 +30,7 @@ Route.group(() => {
   Route.post('/createUser', 'UserController.createUser')
   Route.post('/newOTP', 'UserController.sendNewToken')
   Route.post('/verifyOTP', 'UserController.verifyToken')
+  Route.post('updateprofilepic', 'UserController.uploadProfilePic').middleware(['auth:api'])
 }).prefix('v1/user')
 
 Route.group(() => {

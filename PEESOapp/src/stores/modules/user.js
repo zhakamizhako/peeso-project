@@ -1,6 +1,6 @@
-import { CALL_API } from 'redux-api-middleware-native';
+import {CALL_API} from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import { API_HOST } from '@env';
+import {API_HOST} from '@env';
 import axios from 'axios';
 
 export const CREATE_ACCOUNT_SUCCESS = 'signup/CREATE_ACCOUNT_SUCCESS';
@@ -26,6 +26,10 @@ export const NEW_OTP_FAIL = 'signup/NEW_OTP_FAIL';
 export const CHECK_ME_SUCCESS = 'signup/CHECK_ME_SUCCESS';
 export const CHECK_ME_ERROR = 'signup/CHECK_ME_ERROR';
 export const CHECK_ME_FAIL = 'signup/CHECK_ME_FAIL';
+
+export const UPDATE_PROFILE_PIC_SUCCESS = 'signup/UPDATE_PROFILE_PIC_SUCCESS';
+export const UPDATE_PROFILE_PIC_ERROR = 'signup/UPDATE_PROFILE_PIC_ERROR';
+export const UPDATE_PROFILE_PIC_FAIL = 'signup/UPDATE_PROFILE_PIC_FAIL';
 
 export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
@@ -54,6 +58,38 @@ export function createApplicant(data) {
         console.log(error.response);
         dispatch({
           type: CREATE_APPLICANT_FAIL,
+          payload: error.response ? error.response.data : error,
+        });
+      });
+  };
+}
+
+export function updateProfilePic(data) {
+  console.log('::createApplicant:::');
+  console.log(data);
+  return (dispatch, getState) => {
+    let hostname = API_HOST;
+    let {accessToken} = getState().auth;
+    axios
+      .post(`${hostname}/v1/user/updateProfilePic`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: UPDATE_PROFILE_PIC_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        dispatch({
+          type: UPDATE_PROFILE_PIC_FAIL,
           payload: error.response ? error.response.data : error,
         });
       });
@@ -369,6 +405,26 @@ actionHandlers[CHECK_ME_FAIL] = (state, action, test1, test2) => {
   newState = objectAssign({}, state);
   newState.createAccountSuccess = false;
   newState.createAccountError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
+  return newState;
+};
+
+actionHandlers[UPDATE_PROFILE_PIC_SUCCESS] = (state, action) => {
+  // console.log('User token check');
+  let newState;
+  newState = objectAssign({}, state);
+  newState.updateProfilePicSuccess = true;
+  newState.updateProfilePicError = false;
+  return newState;
+};
+
+actionHandlers[UPDATE_PROFILE_PIC_FAIL] = (state, action, test1, test2) => {
+  // console.log('Token check fail');
+  let newState;
+  newState = objectAssign({}, state);
+  newState.updateProfilePicSuccess = false;
+  newState.updateProfilePicError = action.payload.error
     ? action.payload.error.message
     : action.payload.message;
   return newState;

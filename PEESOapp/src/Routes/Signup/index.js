@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   WhiteSpace,
   WingBlank,
@@ -9,9 +9,9 @@ import {
   Radio,
   List,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {login, logout} from '../../stores/modules/auth';
-import {connect} from 'react-redux';
+import { View, Text, ScrollView } from 'react-native';
+import { login, logout } from '../../stores/modules/auth';
+import { connect } from 'react-redux';
 
 class SignupScreen extends Component {
   constructor(props) {
@@ -34,7 +34,7 @@ class SignupScreen extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let {auth} = props;
+    let { auth } = props;
     if (auth != this.props.auth) {
       if (auth.connectionError) {
         this.setState({
@@ -63,10 +63,10 @@ class SignupScreen extends Component {
 
   render() {
     return (
-      <View style={{height: '100%'}}>
+      <View style={{ height: '100%' }}>
         <WhiteSpace size="lg" />
         <WingBlank>
-          <Text style={{fontSize: 25}}>
+          <Text style={{ fontSize: 25 }}>
             What are you creating an account for?
           </Text>
           <WhiteSpace size={'lg'} />
@@ -77,7 +77,7 @@ class SignupScreen extends Component {
               checked={this.state.selectedRadio == 0}
               onChange={(event) => {
                 if (event.target.checked) {
-                  this.setState({selectedRadio: 0});
+                  this.setState({ selectedRadio: 0 });
                 }
               }}>
               Applicant
@@ -87,7 +87,7 @@ class SignupScreen extends Component {
               checked={this.state.selectedRadio == 1}
               onChange={(event) => {
                 if (event.target.checked) {
-                  this.setState({selectedRadio: 1});
+                  this.setState({ selectedRadio: 1 });
                 }
               }}>
               Freelance Employer
@@ -97,7 +97,7 @@ class SignupScreen extends Component {
               checked={this.state.selectedRadio == 2}
               onChange={(event) => {
                 if (event.target.checked) {
-                  this.setState({selectedRadio: 2});
+                  this.setState({ selectedRadio: 2 });
                 }
               }}>
               Company
@@ -117,7 +117,7 @@ class SignupScreen extends Component {
                 this.props.navigation.navigate('signupapplicant');
               }
               if (this.state.selectedRadio == 1) {
-                // this.props.navigation.navigate('signupapplicant')
+                this.props.navigation.navigate('signupfreelance');
               }
               if (this.state.selectedRadio == 2) {
                 this.props.navigation.navigate('signupcompany');

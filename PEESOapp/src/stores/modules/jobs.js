@@ -23,6 +23,10 @@ export const NEW_JOB_SUCCESS = 'jobs/NEW_JOB_SUCCESS';
 export const NEW_JOB_ERROR = 'jobs/NEW_JOB_ERROR';
 export const NEW_JOB_FAIL = 'jobs/NEW_JOB_FAIL';
 
+export const GET_APPLICATIONS_SUCCESS = 'jobs/GET_APPLICATIONS_SUCCESS';
+export const GET_APPLICATIONS_ERROR = 'jobs/GET_APPLICATIONS_ERROR';
+export const GET_APPLICATIONS_FAIL = 'jobs/GET_APPLICATIONS_FAIL';
+
 export const APPLY_JOB_SUCCESS = 'jobs/APPLY_JOB_SUCCESS';
 export const APPLY_JOB_ERROR = 'jobs/APPLY_JOB_ERROR';
 export const APPLY_JOB_FAIL = 'jobs/APPLY_JOB_FAIL';
@@ -46,6 +50,7 @@ export const GET_BENEFITS_FAIL = 'jobs/GET_BENEFITS_FAIL';
 // export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
 export const CLEAR_DATA = 'jobs/CLEAR_DATA';
+export const CLEAR_DATA_APPLICATION = 'jobs/CLEAR_DATA_APPLICATION';
 
 export function getJobData(data) {
     console.log('::getJboData:::');
@@ -107,6 +112,39 @@ export function getCompanyJobs(data) {
                 console.log(error.message);
                 dispatch({
                     type: GET_COMPANY_JOBS_FAIL,
+                    payload: error.response ? error.response.data : error,
+                });
+            });
+    };
+}
+
+export function getApplications(data) {
+    // console.log('::login:::')
+    console.log(data);
+    return (dispatch, getState) => {
+        let { accessToken } = getState().auth;
+        let hostname = API_HOST;
+        axios
+            .get(`${hostname}/v1/jobs/GetApplications`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((resuults) => {
+                console.log('status good');
+                console.log(resuults);
+                dispatch({
+                    type: GET_APPLICATIONS_SUCCESS,
+                    payload: resuults.data,
+                });
+            })
+            .catch((error) => {
+                console.log('error');
+                console.log(error.response);
+                console.log(error.message);
+                dispatch({
+                    type: GET_APPLICATIONS_FAIL,
                     payload: error.response ? error.response.data : error,
                 });
             });
@@ -356,6 +394,7 @@ export function unsavejob(data) {
                     type: UNSAVE_JOB_SUCCESS,
                     payload: resuults.data,
                 });
+                dispatch(getSavedJobs());
             })
             .catch((error) => {
                 console.log('error');
@@ -369,9 +408,9 @@ export function unsavejob(data) {
     };
 }
 
-export function getSavedJobs(data) {
+export function getSavedJobs() {
     console.log('::getSavedJobs:::');
-    console.log(data);
+    // console.log(data);
     return (dispatch, getState) => {
         let { accessToken } = getState().auth;
         let hostname = API_HOST;
@@ -412,6 +451,18 @@ export function clearData() {
     };
 }
 
+export function clearDataApplication() {
+    return async (dispatch) => {
+        await dispatch({
+            type: CLEAR_DATA_APPLICATION,
+            meta: {
+                done: true,
+            },
+        });
+    };
+}
+
+
 export const actions = {
     getJobs,
     saveJob,
@@ -420,6 +471,8 @@ export const actions = {
     clearData,
     newApplication,
     applyJob,
+    getApplications,
+    clearDataApplication,
 };
 
 const actionHandlers = {};
@@ -435,6 +488,28 @@ const actionHandlers = {};
 //   newState.hostname = action.meta.value;
 //   return newState;
 // };
+
+actionHandlers[GET_APPLICATIONS_SUCCESS] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getApplicationsSuccess = true;
+    newState.getApplicationsError = false;
+    newState.getApplicationsData = action.payload.data;
+    newState.accessToken = action.payload.accessToken;
+    return newState;
+};
+
+actionHandlers[GET_APPLICATIONS_FAIL] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getApplicationsSuccess = false;
+    newState.getApplicationsError = action.payload.error
+        ? action.payload.error.message
+        : action.payload.message;
+    return newState;
+};
+
+//
 
 actionHandlers[GET_JOBS_SUCCESS] = (state, action) => {
     let newState;
@@ -637,6 +712,18 @@ actionHandlers[NEW_JOB_ERROR] = (state, action) => {
 actionHandlers[CLEAR_DATA] = (state, action) => {
     return initialState;
 };
+
+actionHandlers[CLEAR_DATA_APPLICATION] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.applyJobError = null;
+    newState.applyJobSuccess = false;
+    newState.getJobApplicationInfoData = null;
+    newState.getJobApplicationInfoError = null;
+    newState.getJobApplicationInfoSuccess = false;
+    return newState;
+};
+
 
 const initialState = {
     getJobsError: false,

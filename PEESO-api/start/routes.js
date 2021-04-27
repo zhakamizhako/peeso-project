@@ -50,8 +50,9 @@ Route.group(() => {
 }).prefix('v1/jobs')
 
 Route.group(() => {
-  Route.post('/', 'CompanyController.getCompanies').middleware(['auth:api'])
+  Route.get('/', 'CompanyController.getCompanies').middleware(['auth:api'])
   Route.get('/:id', 'CompanyController.getCompany').middleware(['auth:api'])
+  Route.post('/edit', 'CompanyController.updateCompany').middleware(['auth:api'])
 }).prefix('v1/companies')
 
 Route.group(() => {

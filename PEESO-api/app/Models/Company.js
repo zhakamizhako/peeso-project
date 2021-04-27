@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Company extends Model {
     ratings() {
-        return this.hasMany('App/Models/CompanyRating')
+        return this.hasMany('App/Models/Rating')
     }
 }
 

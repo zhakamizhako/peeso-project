@@ -16,8 +16,11 @@ class FreelanceEmployersSchema extends Schema {
       table.string("address")
       table.string("contact_no")
       table.string("email")
+      table.integer('house_picture_id').unsigned().references('id').inTable('file_uploads') //hjouse picture
+      table.integer('verification_photo_id').unsigned().references('id').inTable('file_uploads') //profile pic
     })
   }
+
 
   down() {
     this.drop('freelance_employers')

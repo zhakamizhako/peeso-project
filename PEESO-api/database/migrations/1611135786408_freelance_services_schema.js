@@ -8,6 +8,9 @@ class FreelanceServicesSchema extends Schema {
     this.create('freelance_services', (table) => {
       table.increments()
       table.timestamps()
+      table.string("name")
+      table.float("min_estimate")
+      table.float("max_estimate")
       // alter table
     })
   }

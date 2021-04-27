@@ -3,23 +3,23 @@ import objectAssign from 'object-assign';
 import { API_HOST } from '@env';
 import axios from 'axios';
 
-export const GET_COMPANY_SUCCESS = 'company/GET_COMPANY_SUCCESS';
-export const GET_COMPANY_ERROR = 'company/GET_COMPANY_ERROR';
-export const GET_COMPANY_FAIL = 'company/GET_COMPANY_FAIL';
+export const GET_EASY_SERVICES_SUCCESS = 'company/GET_EASY_SERVICES_SUCCESS';
+export const GET_EASY_SERVICES_ERROR = 'company/GET_EASY_SERVICES_ERROR';
+export const GET_EASY_SERVICES_FAIL = 'company/GET_EASY_SERVICES_FAIL';
 
-export const GET_COMPANIES_SUCCESS = 'company/GET_COMPANIES_SUCCESS';
-export const GET_COMPANIES_ERROR = 'company/GET_COMPANIES_ERROR';
-export const GET_COMPANIES_FAIL = 'company/GET_COMPANIES_FAIL';
+export const GET_AVAILABLE_PERSONNEL_SUCCESS = 'company/GET_AVAILABLE_PERSONNEL_SUCCESS';
+export const GET_AVAILABLE_PERSONNEL_ERROR = 'company/GET_AVAILABLE_PERSONNEL_ERROR';
+export const GET_AVAILABLE_PERSONNEL_FAIL = 'company/GET_AVAILABLE_PERSONNEL_FAIL';
 
-export const FOLLOW_SUCCESS = 'company/FOLLOW_SUCCESS';
-export const FOLLOW_ERROR = 'company/FOLLOW_ERROR';
-export const FOLLOW_FAIL = 'company/FOLLOW_FAIL';
+export const BOOK_SUCCESS = 'company/BOOK_SUCCESS';
+export const BOOK_ERROR = 'company/BOOK_ERROR';
+export const BOOK_FAIL = 'company/BOOK_FAIL';
 
-export const UNFOLLOW_SUCCESS = 'company/UNFOLLOW_SUCCESS';
-export const UNFOLLOW_ERROR = 'company/UNFOLLOW_ERROR';
-export const UNFOLLOW_FAIL = 'company/UNFOLLOW_FAIL';
+// export const UNBOOK_SUCCESS = 'company/UNBOOK_SUCCESS';
+// export const UNBOOK_ERROR = 'company/UNBOOK_ERROR';
+// export const UNBOOK_FAIL = 'company/UNBOOK_FAIL';
 
-export function getCompany(data) {
+export function getEasyServices(data) {
     console.log('::login:::');
     console.log(data);
     return (dispatch, getState) => {
@@ -36,7 +36,7 @@ export function getCompany(data) {
                 console.log('status good');
                 console.log(resuults);
                 dispatch({
-                    type: GET_COMPANY_SUCCESS,
+                    type: GET_EASY_SERVICES_SUCCESS,
                     payload: resuults.data,
                 });
             })
@@ -45,14 +45,14 @@ export function getCompany(data) {
                 console.log(error.response);
                 console.log(error.message);
                 dispatch({
-                    type: GET_COMPANY_FAIL,
+                    type: GET_EASY_SERVICES_FAIL,
                     payload: error.response ? error.response.data : error,
                 });
             });
     };
 }
 
-export function getCompanies() {
+export function getAvailablePersonnel(data) {
     console.log('::login:::');
     // console.log(data);
     return (dispatch, getState) => {
@@ -69,7 +69,7 @@ export function getCompanies() {
                 console.log('status good');
                 console.log(resuults);
                 dispatch({
-                    type: GET_COMPANIES_SUCCESS,
+                    type: GET_AVAILABLE_PERSONNEL_SUCCESS,
                     payload: resuults.data,
                 });
             })
@@ -78,7 +78,7 @@ export function getCompanies() {
                 console.log(error.response);
                 console.log(error.message);
                 dispatch({
-                    type: GET_COMPANIES_FAIL,
+                    type: GET_AVAILABLE_PERSONNEL_FAIL,
                     payload: error.response ? error.response.data : error,
                 });
             });
@@ -100,7 +100,7 @@ export function editCompany(data) {
                 console.log('status good');
                 console.log(resuults);
                 dispatch({
-                    type: GET_COMPANY_SUCCESS,
+                    type: GET_EASY_SERVICES_SUCCESS,
                     payload: resuults.data,
                 });
             })
@@ -110,7 +110,7 @@ export function editCompany(data) {
                 console.log(error.response);
                 console.log(error.message);
                 dispatch({
-                    type: GET_COMPANY_FAIL,
+                    type: GET_EASY_SERVICES_FAIL,
                     payload: error.response ? error.response.data : error,
                 });
             });
@@ -118,8 +118,8 @@ export function editCompany(data) {
 }
 
 export const actions = {
-    getCompany,
-    getCompanies,
+    getEasyServices,
+    getEasyServices,
 };
 
 const actionHandlers = {};
@@ -136,41 +136,41 @@ const actionHandlers = {};
 //   return newState;
 // };
 
-actionHandlers[GET_COMPANY_SUCCESS] = (state, action) => {
+actionHandlers[GET_EASY_SERVICES_SUCCESS] = (state, action) => {
     let newState;
     newState = objectAssign({}, state);
-    newState.getCompanySuccess = true;
-    newState.getCompanyError = false;
-    newState.getCompanyData = action.payload.data;
+    newState.getEasyServicesSuccess = true;
+    newState.getEasyServicesError = false;
+    newState.getEasyServicesData = action.payload.data;
     newState.accessToken = action.payload.accessToken;
     return newState;
 };
 
-actionHandlers[GET_COMPANY_FAIL] = (state, action) => {
+actionHandlers[GET_EASY_SERVICES_FAIL] = (state, action) => {
     let newState;
     newState = objectAssign({}, state);
-    newState.getCompanySuccess = false;
-    newState.getCompanyError = action.payload.error
+    newState.getEasyServicesSuccess = false;
+    newState.getEasyServicesError = action.payload.error
         ? action.payload.error.message
         : action.payload.message;
     return newState;
 };
 
-actionHandlers[GET_COMPANIES_SUCCESS] = (state, action) => {
+actionHandlers[GET_AVAILABLE_PERSONNEL_SUCCESS] = (state, action) => {
     let newState;
     newState = objectAssign({}, state);
-    newState.companiesSuccess = true;
-    newState.companiesError = false;
-    newState.companiesData = action.payload.data;
+    newState.getAvailablePersonnelSuccess = true;
+    newState.getAvailablePersonnelError = false;
+    newState.getAvailablePersonnelData = action.payload.data;
     newState.accessToken = action.payload.accessToken;
     return newState;
 };
 
-actionHandlers[GET_COMPANIES_FAIL] = (state, action) => {
+actionHandlers[GET_AVAILABLE_PERSONNEL_FAIL] = (state, action) => {
     let newState;
     newState = objectAssign({}, state);
-    newState.companiesSuccess = false;
-    newState.companiesError = action.payload.error
+    newState.getAvailablePersonnelSuccess = false;
+    newState.getAvailablePersonnelError = action.payload.error
         ? action.payload.error.message
         : action.payload.message;
     return newState;
@@ -181,13 +181,13 @@ actionHandlers[GET_COMPANIES_FAIL] = (state, action) => {
 // };
 
 const initialState = {
-    getCompanyError: false,
-    getCompanySuccess: false,
-    getCompanyData: null,
+    getEasyServicesError: false,
+    getEasyServicesSuccess: false,
+    getEasyServicesData: null,
 
-    companiesSuccess: false,
-    companiesError: null,
-    companiesData: null,
+    getAvailablePersonnelSuccess: false,
+    getAvailablePersonnelError: null,
+    getAvailablePersonnelData: null,
 
 };
 

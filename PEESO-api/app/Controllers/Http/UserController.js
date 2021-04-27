@@ -4,6 +4,7 @@ const { HttpException } = use("node-exceptions");
 const Hash = use("Hash");
 const User = use('App/Models/User')
 const Profile = use('App/Models/Profile')
+const FreelanceEmployer = use('App/Models/FreelanceEmployer')
 const Company = use('App/Models/Company')
 const Applicant = use('App/Models/Applicant')
 const Verification = use('App/Models/Verification')
@@ -16,7 +17,8 @@ const Upload = use('App/Models/FileUpload')
 const fs = use('fs')
 const { v4: uuidv4 } = require('uuid');
 
-let CodeGenerator = require('node-code-generator')
+let CodeGenerator = require('node-code-generator');
+const { first, last } = require('../../Models/Company');
 
 let generator = new CodeGenerator()
 let pattern = '******'
@@ -126,19 +128,19 @@ class UserController {
 
     }
 
-    async uploadProfilePic({request, auth, response}){
+    async uploadProfilePic({ request, auth, response }) {
         let { photo, fileType } = request.all()
 
         let u = await User.find(auth.user.id)
         let profile = await u.profile().fetch()
 
-        let upload = await this.processBase64File(photo, 'Profile', fileType, u)
+        let upload = await this.processBase64File(photo, 'Profile', fileType, u.id)
 
         profile.profile_pic = upload.id
 
         await profile.save()
 
-        response.send({data:profile})
+        response.send({ data: profile })
     }
 
     async createUser({ request, response }) {
@@ -402,6 +404,70 @@ class UserController {
             }
 
             response.send({ company: d })
+
+
+        } catch (e) {
+            console.log(e)
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async createFreelanceEmployer({ request, response }) {
+        let {
+            first_name,
+            middle_name,
+            last_name,
+            user_id,
+            email,
+            contact_no,
+            address,
+            photoverification,
+            photohouse,
+            filetypeverification,
+            filetypehouse,
+        } = request.all()
+
+        try {
+            let query = await User.find(user_id)
+            if (!query) {
+                console.log("wtf")
+                throw new HttpException("User does not exist", HttpResponse.STATUS_BAD_REQUEST)
+            }
+
+            let profile = await query.profile().fetch()
+
+            if (!profile) {
+                let c = new Profile()
+                c.first_name = first_name
+                c.middle_name = middle_name
+                c.last_name = last_name
+                c.is_company = false
+                c.user_id = query.id
+                c.contact_no = contact_no
+                await c.save()
+
+                profile = await query.profile().fetch()
+            }
+
+            let d = new FreelanceEmployer()
+
+            if (photoverification && filetypeverification) {
+                let bb = await this.processBase64File(photoprofile, filetypeprofile, "Verification", query.id)
+                d.verification_photo_id = bb.id
+            }
+
+            if (photohouse && filetypehouse) {
+                let bb = await this.processBase64File(photohouse, filetypehouse, "VerificationHouse", query.id)
+                d.house_picture_id = bb.id
+            }
+            // let c = new Profile;
+            d.user_id = query.id
+            d.first_name = profile.first_name
+            d.middle_name = profile.middle_name
+            d.last_name = profile.last_name
+            d.email = email
+            d.address = address
+            await d.save()
 
 
         } catch (e) {

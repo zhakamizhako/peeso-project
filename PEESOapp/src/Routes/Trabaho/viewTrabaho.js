@@ -168,6 +168,7 @@ class ViewTrabaho extends Component {
             <Text>{data.category.name}</Text>
           </View>
           {/* <Text>Highlight: {data.Highlight != null ? data.Highlight.map(entry => (<Text>{entry}</Text>)) : null}</Text> */}
+          <WhiteSpace />
           <Text>
             Deadline: {moment(new Date(data.deadline)).format('MMMM DD, YYYY')}
           </Text>

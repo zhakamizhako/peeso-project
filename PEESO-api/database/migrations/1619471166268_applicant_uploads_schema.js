@@ -4,14 +4,17 @@
 const Schema = use('Schema')
 
 class ApplicantUploadsSchema extends Schema {
-  up () {
+  up() {
     this.create('applicant_uploads', (table) => {
       table.increments()
       table.timestamps()
+      table.integer('applicant_id').unsigned().references('id').inTable('applicants')
+      table.string('type')
+      table.string('file_upload_id')
     })
   }
 
-  down () {
+  down() {
     this.drop('applicant_uploads')
   }
 }

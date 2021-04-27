@@ -1,7 +1,8 @@
-import {CALL_API} from 'redux-api-middleware-native';
+import { CALL_API } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import {API_HOST} from '@env';
+import { API_HOST } from '@env';
 import axios from 'axios';
+import { checkMe as check } from './auth';
 
 export const CREATE_ACCOUNT_SUCCESS = 'signup/CREATE_ACCOUNT_SUCCESS';
 export const CREATE_ACCOUNT_ERROR = 'signup/CREATE_ACCOUNT_ERROR';
@@ -10,6 +11,13 @@ export const CREATE_ACCOUNT_FAIL = 'signup/CREATE_ACCOUNT_FAIL';
 export const CREATE_APPLICANT_SUCCESS = 'signup/CREATE_APPLICANT_SUCCESS';
 export const CREATE_APPLICANT_ERROR = 'signup/CREATE_APPLICANT_ERROR';
 export const CREATE_APPLICANT_FAIL = 'signup/CREATE_APPLICANT_FAIL';
+
+export const CREATE_FREELANCE_EMPLOYER_SUCCESS =
+  'signup/CREATE_FREELANCE_EMPLOYER_SUCCESS';
+export const CREATE_FREELANCE_EMPLOYER_ERROR =
+  'signup/CREATE_FREELANCE_EMPLOYER_ERROR';
+export const CREATE_FREELANCE_EMPLOYER_FAIL =
+  'signup/CREATE_FREELANCE_EMPLOYER_FAIL';
 
 export const CREATE_COMPANY_SUCCESS = 'signup/CREATE_COMPANY_SUCCESS';
 export const CREATE_COMPANY_ERROR = 'signup/CREATE_COMPANY_ERROR';
@@ -64,12 +72,42 @@ export function createApplicant(data) {
   };
 }
 
+export function createFreelanceEmployer(data) {
+  // console.log('::createApplicant:::');
+  console.log(data);
+  return (dispatch, getState) => {
+    let hostname = API_HOST;
+    axios
+      .post(`${hostname}/v1/user/createFreelance`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: CREATE_FREELANCE_EMPLOYER_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        dispatch({
+          type: CREATE_FREELANCE_EMPLOYER_FAIL,
+          payload: error.response ? error.response.data : error,
+        });
+      });
+  };
+}
+
 export function updateProfilePic(data) {
   console.log('::createApplicant:::');
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    let {accessToken} = getState().auth;
+    let { accessToken } = getState().auth;
     axios
       .post(`${hostname}/v1/user/updateProfilePic`, data, {
         headers: {
@@ -84,6 +122,7 @@ export function updateProfilePic(data) {
           type: UPDATE_PROFILE_PIC_SUCCESS,
           payload: resuults.data,
         });
+        dispatch(check());
       })
       .catch((error) => {
         console.log('error');
@@ -383,6 +422,7 @@ actionHandlers[CREATE_APPLICANT_FAIL] = (state, action) => {
     : action.payload.message;
   return newState;
 };
+
 actionHandlers[CREATE_APPLICANT_ERROR] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
@@ -437,6 +477,23 @@ actionHandlers[CHECK_ME_ERROR] = (state, action) => {
   return newState;
 };
 
+actionHandlers[CREATE_FREELANCE_EMPLOYER_SUCCESS] = (state, action) => {
+  let newState;
+  newState = objectAssign({}, state);
+  newState.createFreelanceEmployerSuccess = true;
+  newState.createFreelanceEmployerError = false;
+  newState.createFreelanceEmployerData = action.payload.user;
+  newState.accessToken = action.payload.accessToken;
+  return newState;
+};
+
+actionHandlers[CREATE_FREELANCE_EMPLOYER_ERROR] = (state, action) => {
+  let newState;
+  newState = objectAssign({}, state);
+  newState.createFreelanceEmployerError = action.payload.message;
+  return newState;
+};
+
 // actionHandlers[LOGOUT_SUCCESS] = (state, action) => {
 //   return initialState;
 // };
@@ -456,6 +513,9 @@ const initialState = {
   createCompanyError: false,
   createCompanySuccess: false,
   createCompanyData: null,
+  createFreelanceEmployerSuccess: false,
+  createFreelanceEmployerError: null,
+  createFreelanceEmployerData: null,
   data: null,
   tempPassword: null,
 };

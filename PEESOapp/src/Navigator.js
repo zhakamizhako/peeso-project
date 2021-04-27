@@ -1,8 +1,8 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 // import Switch from '@react-navigation/switch';
 import LoginScreen from './LoginScreen';
 
@@ -18,6 +18,7 @@ import ViewCompany from './Routes/Company/viewCompany';
 
 import CreateJob from './Routes/CompanyDashboard/postjob';
 import MyApplications from './Routes/CompanyDashboard/CurrentApplications';
+import EditCompanyProfile from './Routes/CompanyDashboard/EditCompanyProfile';
 
 import EasyServices from './Routes/EasyServices/index';
 import EasyServicesFreelancers from './Routes/EasyServices/Freelancers';
@@ -25,6 +26,7 @@ import Book from './Routes/EasyServices/Book';
 import Signup from './Routes/Signup';
 import SignupApplicant from './Routes/Signup/SignupApplicant';
 import SignupCompany from './Routes/Signup/SignupCompany';
+import SignupFreelanceEmployer from './Routes/Signup/SignupFreelanceEmployer';
 
 import VerificationScreen from './Routes/Signup/VerificationScreen';
 import SignupEmail from './Routes/Signup/SignupEmail';
@@ -36,10 +38,10 @@ import Search from './Routes/Search/index';
 
 import Drawer from './Routes/Settings/Drawer';
 
-import {connect} from 'react-redux';
-import {View} from 'react-native';
-import {TabBar, Icon} from '@ant-design/react-native';
-import {useNavigationState} from '@react-navigation/native';
+import { connect } from 'react-redux';
+import { View } from 'react-native';
+import { TabBar, Icon } from '@ant-design/react-native';
+import { useNavigationState } from '@react-navigation/native';
 import TabBarItem from '@ant-design/react-native/lib/tab-bar/TabBarItem';
 
 const Stack = createStackNavigator();
@@ -63,7 +65,7 @@ class Navigator extends React.Component {
   }
 
   setDrawerClosed() {
-    this.setState({drawerOpen: false});
+    this.setState({ drawerOpen: false });
   }
 
   render() {
@@ -71,7 +73,7 @@ class Navigator extends React.Component {
 
     return (
       <>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           {/* <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}> */}
 
           <NavigationContainer ref={this.NavigationContainerRef}>
@@ -81,73 +83,73 @@ class Navigator extends React.Component {
                   <Stack.Screen
                     name="homepage"
                     component={HomePage}
-                    options={{title: 'Overview', headerShown: false}}
+                    options={{ title: 'Overview', headerShown: false }}
                   />
                   <Stack.Screen
                     name="trabaho"
                     component={Trabaho}
-                    options={{title: 'Trabaho Corner', headerShown: true}}
+                    options={{ title: 'Trabaho Corner', headerShown: true }}
                   />
                   <Stack.Screen
                     name="viewtrabaho"
                     component={ViewTrabaho}
-                    options={{title: 'View Trabaho', headerShown: true}}
+                    options={{ title: 'View Trabaho', headerShown: true }}
                   />
                   <Stack.Screen
                     name="apply"
                     component={ApplyHere}
-                    options={{title: 'Apply to Trabaho', headerShown: true}}
+                    options={{ title: 'Apply to Trabaho', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="companies"
                     component={Company}
-                    options={{title: 'Companies', headerShown: true}}
+                    options={{ title: 'Companies', headerShown: true }}
                   />
                   <Stack.Screen
                     name="viewCompany"
                     component={ViewCompany}
-                    options={{title: 'View Company', headerShown: true}}
+                    options={{ title: 'View Company', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="savedjobs"
                     component={SavedJobs}
-                    options={{title: 'Saved Jobs', headerShown: true}}
+                    options={{ title: 'Saved Jobs', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="easyservices"
                     component={EasyServices}
-                    options={{title: 'Easy Services', headerShown: true}}
+                    options={{ title: 'Easy Services', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="easyservicesfreelancers"
                     component={EasyServicesFreelancers}
-                    options={{title: 'Freelancers', headerShown: true}}
+                    options={{ title: 'Freelancers', headerShown: true }}
                   />
                   <Stack.Screen
                     name="book"
                     component={Book}
-                    options={{title: 'Freelancers', headerShown: true}}
+                    options={{ title: 'Freelancers', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="search"
                     component={Search}
-                    options={{title: 'Search', headerShown: true}}
+                    options={{ title: 'Search', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="profile"
                     component={Profile}
-                    options={{title: 'Profile', headerShown: true}}
+                    options={{ title: 'Profile', headerShown: true }}
                   />
                   <Stack.Screen
                     name="viewprofile"
                     component={ViewProfile}
-                    options={{title: 'View Profile', headerShown: true}}
+                    options={{ title: 'View Profile', headerShown: true }}
                   />
                 </>
               )}
@@ -158,13 +160,21 @@ class Navigator extends React.Component {
                     <Stack.Screen
                       name="createjob"
                       component={CreateJob}
-                      options={{title: 'Create a Job Post', headerShown: true}}
+                      options={{ title: 'Create a Job Post', headerShown: true }}
                     />
                     <Stack.Screen
                       name="myjobs"
                       component={MyApplications}
                       options={{
                         title: 'Current Jobs/Applications',
+                        headerShown: true,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="editcompany"
+                      component={EditCompanyProfile}
+                      options={{
+                        title: 'Edit Company Profile',
                         headerShown: true,
                       }}
                     />
@@ -176,13 +186,13 @@ class Navigator extends React.Component {
                     {...this.props}
                     name="login"
                     component={LoginScreen}
-                    options={{title: 'Login Screen', headerShown: false}}
+                    options={{ title: 'Login Screen', headerShown: false }}
                   />
                   <Stack.Screen
                     {...this.props}
                     name="signupemail"
                     component={SignupEmail}
-                    options={{title: 'Sign Up Email', headerShown: false}}
+                    options={{ title: 'Sign Up Email', headerShown: false }}
                   />
                 </>
               )}
@@ -194,28 +204,37 @@ class Navigator extends React.Component {
                 {...this.props}
                 name="signup"
                 component={Signup}
-                options={{title: 'Sign Up', headerShown: false}}
+                options={{ title: 'Sign Up', headerShown: false }}
               />
               <Stack.Screen
                 name="signupapplicant"
                 component={SignupApplicant}
-                options={{title: 'Sign Up Applicant', headerShown: false}}
+                options={{ title: 'Sign Up Applicant', headerShown: false }}
               />
               <Stack.Screen
                 name="signupcompany"
                 component={SignupCompany}
-                options={{title: 'Sign Up Company', headerShown: false}}
+                options={{ title: 'Sign Up Company', headerShown: false }}
+              />
+              <Stack.Screen
+                {...this.props}
+                name="signupfreelance"
+                component={SignupFreelanceEmployer}
+                options={{
+                  title: 'Sign Up Freelance Employer',
+                  headerShown: false,
+                }}
               />
               <Stack.Screen
                 name="verificationotp"
                 component={VerificationScreen}
-                options={{title: 'OTP', headerShown: false}}
+                options={{ title: 'OTP', headerShown: false }}
               />
             </Stack.Navigator>
             {console.log(this)}
             {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
 
-            <View style={{positon: 'absolute'}} />
+            <View style={{ positon: 'absolute' }} />
 
             {/* )} */}
           </NavigationContainer>

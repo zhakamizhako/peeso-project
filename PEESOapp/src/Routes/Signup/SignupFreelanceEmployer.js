@@ -83,7 +83,7 @@ class SignupFreelanceEmployer extends Component {
         console.log('-------!----');
 
         if (
-            this.props.user.createCompanySuccess != user.createCompanySuccess &&
+            this.props.user.createFreelanceEmployerSuccess != user.createFreelanceEmployerSuccess &&
             !auth.loginError
         ) {
             this.setState({
@@ -99,10 +99,11 @@ class SignupFreelanceEmployer extends Component {
             });
             // }
         }
-        if (user.createCompanyError) {
+        if (user.createFreelanceEmployerError) {
             this.setState({
-                error: user.createCompanyError,
+                error: user.createFreelanceEmployerError,
                 isLoggingIn: false,
+                isSubmitting: false,
             });
         }
 
@@ -184,14 +185,12 @@ class SignupFreelanceEmployer extends Component {
             last_name: this.state.lastname,
             address: this.state.address,
             contact_no: this.state.contact_no,
-            profile: this.props.auth.loginData
+            profile: this.props.auth.loginData && this.props.auth.loginData.profile
                 ? this.props.auth.loginData.profile.id
                 : this.props.user.data
                     ? this.props.user.data.id
                     : null,
         };
-
-
 
         this.setState({ isSubmitting: true });
         this.props.createFreelanceEmployer(data);

@@ -1,8 +1,8 @@
-import { CALL_API } from 'redux-api-middleware-native';
+import {CALL_API} from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import { API_HOST } from '@env';
+import {API_HOST} from '@env';
 import axios from 'axios';
-import { checkMe as check } from './auth';
+import {checkMe as check} from './auth';
 
 export const CREATE_ACCOUNT_SUCCESS = 'signup/CREATE_ACCOUNT_SUCCESS';
 export const CREATE_ACCOUNT_ERROR = 'signup/CREATE_ACCOUNT_ERROR';
@@ -107,7 +107,7 @@ export function updateProfilePic(data) {
   console.log(data);
   return (dispatch, getState) => {
     let hostname = API_HOST;
-    let { accessToken } = getState().auth;
+    let {accessToken} = getState().auth;
     axios
       .post(`${hostname}/v1/user/updateProfilePic`, data, {
         headers: {
@@ -487,10 +487,10 @@ actionHandlers[CREATE_FREELANCE_EMPLOYER_SUCCESS] = (state, action) => {
   return newState;
 };
 
-actionHandlers[CREATE_FREELANCE_EMPLOYER_ERROR] = (state, action) => {
+actionHandlers[CREATE_FREELANCE_EMPLOYER_FAIL] = (state, action) => {
   let newState;
   newState = objectAssign({}, state);
-  newState.createFreelanceEmployerError = action.payload.message;
+  newState.createFreelanceEmployerError = action.payload.error;
   return newState;
 };
 

@@ -46,6 +46,9 @@ class User extends Model {
   profile() {
     return this.hasOne('App/Models/Profile')
   }
+  freelancer() {
+    return this.hasOne('App/Models/Freelancer')
+  }
 
 }
 

@@ -185,7 +185,14 @@ class ProfileScreen extends Component {
             !this.props.auth.loginData.profile.is_company && (
               <List>
                 <List.Item>My Resume</List.Item>
-                <List.Item>My Freelancing Profile</List.Item>
+                <List.Item
+                  onPress={() =>
+                    this.props.navigation.navigate('freelanceprofile', {
+                      id: this.props.auth.loginData.id,
+                    })
+                  }>
+                  My Freelancing Profile
+                </List.Item>
                 <List.Item>Application History</List.Item>
                 <List.Item>Freelancing Booking</List.Item>
                 {/* <List.Item>View Applicant Profile</List.Item>

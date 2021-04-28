@@ -33,6 +33,8 @@ import SignupEmail from './Routes/Signup/SignupEmail';
 
 import Profile from './Routes/Profile/profile';
 import ViewProfile from './Routes/Profile/viewprofile';
+import EditFreelancer from './Routes/Profile/EditFreelancer';
+import FreelanceProfile from './Routes/Profile/FreelanceProfile';
 
 import Search from './Routes/Search/index';
 
@@ -150,6 +152,19 @@ class Navigator extends React.Component {
                     name="viewprofile"
                     component={ViewProfile}
                     options={{ title: 'View Profile', headerShown: true }}
+                  />
+                  <Stack.Screen
+                    name="freelanceprofile"
+                    component={FreelanceProfile}
+                    options={{ title: "Freelancer's Profile", headerShown: true }}
+                  />
+                  <Stack.Screen
+                    name="editfreelance"
+                    component={EditFreelancer}
+                    options={{
+                      title: 'Edit your Freelancer Profile',
+                      headerShown: true,
+                    }}
                   />
                 </>
               )}

@@ -224,14 +224,19 @@ class ViewTrabaho extends Component {
               }}>
               {this.props.auth &&
                 this.props.auth.loginData &&
-                this.props.auth.loginData.profile &&
-                !this.props.auth.loginData.profile.is_company &&
+                this.props.auth.loginData.applicant &&
+                !this.props.auth.loginData.company &&
                 'Apply Here'}
               {this.props.auth &&
                 this.props.auth.loginData &&
                 this.props.auth.loginData.profile &&
                 this.props.auth.loginData.profile.is_company &&
                 'You cannot apply here.'}
+              {this.props.auth &&
+                this.props.auth.loginData &&
+                this.props.auth.loginData.freelanceEmploy &&
+                !this.props.auth.loginData.applicant &&
+                'Register as Applicant'}
               {console.log('auth')}
               {console.log(this.props.auth)}
             </Button>

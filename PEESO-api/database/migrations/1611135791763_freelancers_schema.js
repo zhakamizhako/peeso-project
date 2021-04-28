@@ -10,8 +10,13 @@ class FreelancersSchema extends Schema {
       table.timestamps()
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.integer('freelance_service_id').unsigned().references('id').inTable('freelance_services')
+      table.float('price_min')
+      table.float('price_max')
       table.boolean('is_available')
-
+      table.text("job_experience")
+      table.string('email')
+      table.string('contact_no')
+      table.integer('profile_pic').unsigned().references('id').inTable('file_uploads')
     })
   }
 

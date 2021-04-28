@@ -23,9 +23,16 @@ Route.get('/', () => {
 // Route.group(()=>{
 //   Route.post('/', )
 // }).prefix('v1/login')
+Route.group(() => {
+  Route.get('/types', 'EasyServiceController.getTypes').middleware(['auth:api'])
+  Route.get('/getPersonData/:id', 'EasyServiceController.getPersonData').middleware(['auth:api'])
+  Route.post('/updateProfile', 'EasyServiceController.updateProfile').middleware(['auth:api'])
+
+}).prefix('v1/easyservice')
 
 Route.group(() => {
   Route.post('/createApplicant', 'UserController.createApplicant')
+  Route.post('/createFreelance', 'UserController.createFreelanceEmployer')
   Route.post('/createCompany', 'UserController.createCompany')
   Route.post('/createUser', 'UserController.createUser')
   Route.post('/newOTP', 'UserController.sendNewToken')

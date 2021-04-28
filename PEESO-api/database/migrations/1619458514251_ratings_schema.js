@@ -10,7 +10,7 @@ class RatingsSchema extends Schema {
       table.timestamps()
       table.integer('applicant_id').unsigned().references('id').inTable('applicants')
       table.integer('company_id').unsigned().references('id').inTable('companies').unsigned().references('id').inTable('applicants')
-      table.integer('freelancers').unsigned().references('id').inTable('companies').unsigned().references('id').inTable('applicants')
+      table.integer('freelancer_id').unsigned().references('id').inTable('companies').unsigned().references('id').inTable('applicants')
       table.text('body')
       table.string('title')
       table.integer('profile_id').unsigned().references('id').inTable('profiles')

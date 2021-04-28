@@ -35,11 +35,27 @@ class EasyServices extends Component {
     super(props);
     this.state = {
       data: [],
+      isLoading: false,
     };
   }
 
   componentDidMount() {
-    this.setState({ data: SampleData });
+    this.setState({ isLoading: true });
+    this.props.getEasyServices();
+    // this.setState({ data: SampleData });
+  }
+
+  componentDidUpdate(prevProps) {
+    let { easyservices } = this.props;
+
+    if (easyservices != prevProps.easyservices) {
+      if (easyservices.getEasyServicesData) {
+        this.setState({
+          data: easyservices.getEasyServicesData,
+          isLoading: false,
+        });
+      }
+    }
   }
 
   renderJobData(data, index) {
@@ -47,9 +63,11 @@ class EasyServices extends Component {
       <List.Item
         extra={'PHP ' + data.min + '-' + data.max}
         onPress={() =>
-          this.props.navigation.navigate('easyservicesfreelancers')
+          this.props.navigation.navigate('easyservicesfreelancers', {
+            id: data.id,
+          })
         }>
-        {data.freelanceJob}
+        {data.name}
       </List.Item>
     );
   }
@@ -71,8 +89,11 @@ class EasyServices extends Component {
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  easyservices: state.easyservices,
 });
 
-const mapActionCreators = {};
+const mapActionCreators = {
+  getEasyServices,
+};
 
 export default connect(mapStateToProps, mapActionCreators)(EasyServices);

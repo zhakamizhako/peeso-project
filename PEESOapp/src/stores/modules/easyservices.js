@@ -169,7 +169,7 @@ export function getAvailablePersonnel(data) {
         let { accessToken } = getState().auth;
         let hostname = API_HOST;
         axios
-            .get(`${hostname}/v1/easyservice/getpersonnel`, {
+            .get(`${hostname}/v1/easyservice/getAvailablePersonnel/${data}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${accessToken}`,

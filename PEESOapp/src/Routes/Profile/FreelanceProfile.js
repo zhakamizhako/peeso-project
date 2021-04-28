@@ -138,7 +138,9 @@ class ProfileScreen extends Component {
 
                     <List>
                         <List.Item>Reviews</List.Item>
-                        <List.Item>STAR</List.Item>
+                        <WhiteSpace size="lg" />
+                        {/* <Text>No Reviews yet...</Text> */}
+                        <List.Item>No reviews yet...</List.Item>
                     </List>
                     <WhiteSpace size="lg" />
                     <WhiteSpace size="lg" />

@@ -15,6 +15,18 @@ class EasyServiceController {
         }
     }
 
+
+    async getAvailablePersonnel({ params, response }) {
+        let { id } = params
+        try {
+            let d = await Freelancer.query().where('freelance_service_id', id).with('user.profile.picture').with('category').with('ratings').fetch()
+
+            response.send({ data: d })
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
     async getPersonData({ params, response }) {
         let { id } = params
         try {

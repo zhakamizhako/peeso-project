@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -12,30 +12,42 @@ import {
   DatePicker,
   InputItem,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
+import { View, Text, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 // import {logout, checkMe} from '../stores/modules/auth';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
-import {now} from 'moment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { now } from 'moment';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 // import Input from '@ant-design/react-native/lib/input-item/Input';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
 
-const SampleData = {firstname: 'Juanito', lastname: 'Almera', userId: 1};
+const SampleData = { firstname: 'Juanito', lastname: 'Almera', userId: 1 };
 
 class Book extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {firstname: '', lastname: ''},
+      data: { firstname: '', lastname: '' },
+      isLoading: false,
     };
   }
 
   componentDidMount() {
-    this.setState({data: SampleData});
+    if (this.props.route.params && this.props.route.params.user) {
+      console.log(this.props.route.params);
+      this.setState((state) => {
+        let { data } = state;
+        let { user } = this.props.route.params.user;
+        data.firstname = user.profile.first_name;
+        data.lastname = user.profile.last_name;
+        data.id = user.id;
+        return { data };
+      });
+    }
+    // this.setState({data: SampleData});
   }
 
   onConfirm() {
@@ -52,9 +64,21 @@ class Book extends Component {
   }
 
   renderBook(data, index) {
+    console.log(data);
     return (
       <List>
-        <List.Item multipleLine={false}>
+        <List.Item
+          multipleLine={false}
+          extra={
+            <Text
+              onPress={() =>
+                this.props.navigation.navigate('freelanceprofile', {
+                  id: data.id,
+                })
+              }>
+              View Profile
+            </Text>
+          }>
           Name of Freelancer: {data.firstname + ' ' + data.lastname}
         </List.Item>
         <DatePicker>

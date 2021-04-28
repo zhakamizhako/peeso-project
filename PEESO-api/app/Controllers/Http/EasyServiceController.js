@@ -2,6 +2,7 @@
 const User = use('App/Models/User')
 const Service = use('App/Models/FreelanceService')
 const Freelancer = use('App/Models/Freelancer')
+const Booking = use('App/Models/FreelanceBooking')
 const { HttpException } = use("node-exceptions");
 class EasyServiceController {
 
@@ -93,9 +94,9 @@ class EasyServiceController {
     }
 
     async book({ request, auth, response }) {
-
-
+        let { location, name, contact_no, details, freelancer_id, employer_id } = request.all()
         try {
+            let x = new Booking()
 
         } catch (e) {
             throw new HttpException(e.message, e.status)

@@ -30,8 +30,11 @@ class EasyServiceController {
 
     async getPersonData({ params, response }) {
         let { id } = params
+
+        console.log(id)
         try {
-            let d = await Freelancer.query().where('id', id).with('user.profile.picture').with('category').with('ratings').fetch()
+            let d = await Freelancer.query().where('user_id', id).with('user.profile.picture').with('category').with('ratings').fetch()
+            console.log(d)
 
             response.send({ data: d })
         } catch (e) {
@@ -94,9 +97,33 @@ class EasyServiceController {
     }
 
     async book({ request, auth, response }) {
-        let { location, name, contact_no, details, freelancer_id, employer_id } = request.all()
+        let { location, contact_person, contact_no, details, freelancer_id, employer_id, time_from, time_to, date, } = request.all()
         try {
+            console.log("BOOOOOK")
+            let b = await User.find(employer_id)
+            let y = await b.freelanceEmploy().fetch()
+
+            console.log(y)
+
+            console.log(b)
+            if(!y){
+                throw new HttpException("Invalid Request", 400)
+            }
             let x = new Booking()
+
+            x.location = location
+            x.contact_person = contact_person
+            x.details = details
+            x.booked_by = y.id
+            x.freelancer_id = freelancer_id
+            x.booking_date = date
+            x.work_from = time_from
+            x.work_to = time_to
+            x.contact_no = contact_no
+
+            await x.save()
+
+            response.send({data: "OK!"})
 
         } catch (e) {
             throw new HttpException(e.message, e.status)

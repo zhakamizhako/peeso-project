@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   WhiteSpace,
   WingBlank,
@@ -8,15 +8,15 @@ import {
   Icon,
   List,
 } from '@ant-design/react-native';
-import { View, Text, ScrollView, Image } from 'react-native';
-import { logout } from '../../stores/modules/auth';
-import { connect } from 'react-redux';
+import {View, Text, ScrollView, Image} from 'react-native';
+import {logout} from '../../stores/modules/auth';
+import {connect} from 'react-redux';
 import imageLogo from '../../logo.png';
-import { Avatar } from 'react-native-elements';
+import {Avatar} from 'react-native-elements';
 import FilePickerManager from 'react-native-file-picker';
-import { updateProfilePic } from '../../stores/modules/user';
+import {updateProfilePic} from '../../stores/modules/user';
 import RNFetchBlob from 'rn-fetch-blob';
-import { API_HOST } from '@env';
+import {API_HOST} from '@env';
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -53,22 +53,22 @@ class ProfileScreen extends Component {
   }
 
   componentWillReceiveProps(props) {
-    let { auth } = props;
+    let {auth} = props;
 
     if (auth.logoutSuccess) {
       this.props.navigation.replace('login');
     }
   }
 
-  uploadProfilePic(data) { }
+  uploadProfilePic(data) {}
 
   render() {
     // let { first_name, middle_name, last_name } = this.state
     return (
-      <View style={{ height: '100%' }}>
+      <View style={{height: '100%'}}>
         <WhiteSpace size="lg" />
         <WingBlank>
-          <View style={{ alignSelf: 'center' }}>
+          <View style={{alignSelf: 'center'}}>
             <Avatar
               onPress={() => {
                 FilePickerManager.showFilePicker(null, async (response) => {
@@ -105,8 +105,8 @@ class ProfileScreen extends Component {
               source={{
                 uri:
                   this.props.auth.loginData &&
-                    this.props.auth.loginData.profile &&
-                    this.props.auth.loginData.profile.picture
+                  this.props.auth.loginData.profile &&
+                  this.props.auth.loginData.profile.picture
                     ? `${API_HOST}/${this.props.auth.loginData.profile.picture.path}`
                     : 'https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png',
               }}
@@ -200,15 +200,20 @@ class ProfileScreen extends Component {
                   }>
                   My Freelancing Profile
                 </List.Item>
-                <List.Item>Application History</List.Item>
+                <List.Item
+                  onPress={() =>
+                    this.props.navigation.navigate('myapplications')
+                  }>
+                  Application History
+                </List.Item>
                 <List.Item>Freelancing Booking</List.Item>
                 {/* <List.Item>View Applicant Profile</List.Item>
                 <List.Item>Edit Applicant Profile</List.Item> */}
               </List>
             )}
           <List.Item>Settings</List.Item>
-          <List.Item style={{ backgroundColor: 'red' }}>
-            <Text style={{ color: 'white' }} onPress={() => this.props.logout()}>
+          <List.Item style={{backgroundColor: 'red'}}>
+            <Text style={{color: 'white'}} onPress={() => this.props.logout()}>
               Logout
             </Text>
           </List.Item>
@@ -217,7 +222,7 @@ class ProfileScreen extends Component {
 
           <Image
             source={imageLogo}
-            style={{ height: 80, width: '100%', alignSelf: 'center' }}
+            style={{height: 80, width: '100%', alignSelf: 'center'}}
             resizeMode="center"
           />
         </WingBlank>

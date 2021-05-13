@@ -25,9 +25,11 @@ Route.get('/', () => {
 // }).prefix('v1/login')
 Route.group(() => {
   Route.get('/types', 'EasyServiceController.getTypes').middleware(['auth:api'])
+  Route.post('/book', 'EasyServiceController.book').middleware(['auth:api'])
   Route.get('/getPersonData/:id', 'EasyServiceController.getPersonData').middleware(['auth:api'])
   Route.post('/updateProfile', 'EasyServiceController.updateProfile').middleware(['auth:api'])
   Route.get('/getAvailablePersonnel/:id', 'EasyServiceController.getAvailablePersonnel').middleware(['auth:api'])
+
 }).prefix('v1/easyservice')
 
 Route.group(() => {
@@ -47,13 +49,15 @@ Route.group(() => {
   Route.post('/unsave/:id', 'JobController.unsaveJob').middleware(['auth:api'])
   Route.get('/getsaved/', 'JobController.getSavedJobs').middleware(['auth:api'])
   Route.get('/getBenefits/', 'JobController.getBenefits').middleware(['auth:api'])
-  Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
   Route.post('/new', 'JobController.newJob').middleware(['auth:api'])
   Route.post('/update', 'JobController.update').middleware(['auth:api'])
   Route.post('/close', 'JobController.close').middleware(['auth:api'])
   Route.post('/apply', 'JobController.applyJob').middleware(['auth:api'])
   Route.get('/getInfo/:id', 'JobController.getJobQuestions').middleware(['auth:api'])
   Route.post('/cancelapply', 'JobController.cancelapply').middleware(['auth:api'])
+  Route.get('/myApplications', 'JobController.myApplications').middleware(['auth:api'])
+  Route.get('/category/:id', 'JobController.getJobsByCategoryId').middleware(['auth:api'])
+  Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
 }).prefix('v1/jobs')
 
 Route.group(() => {

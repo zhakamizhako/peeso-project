@@ -218,9 +218,13 @@ class Search extends Component {
             <WhiteSpace />
             <List>
               {this.state.categories &&
-                this.state.categories.map((entry) => (
+                this.state.categories.map((entry, index) => (
                   <List.Item
-                    onPress={() => this.props.navigation.navigate('trabaho')}>
+                    onPress={() =>
+                      this.props.navigation.navigate('trabaho', {
+                        category_id: index,
+                      })
+                    }>
                     {entry.categoryName}
                   </List.Item>
                 ))}

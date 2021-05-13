@@ -47,6 +47,14 @@ export const GET_BENEFITS_SUCCESS = 'jobs/GET_BENEFITS_SUCCESS';
 export const GET_BENEFITS_ERROR = 'jobs/GET_BENEFITS_ERROR';
 export const GET_BENEFITS_FAIL = 'jobs/GET_BENEFITS_FAIL';
 
+export const GET_MY_CURRENT_APPLICATIONS_SUCCESS = 'jobs/GET_MY_CURRENT_APPLICATIONS_SUCCESS';
+export const GET_MY_CURRENT_APPLICATIONS_ERROR = 'jobs/GET_MY_CURRENT_APPLICATIONS_ERROR';
+export const GET_MY_CURRENT_APPLICATIONS_FAIL = 'jobs/GET_MY_CURRENT_APPLICATIONS_FAIL';
+
+export const GET_BY_CATEGORY_ID_SUCCESS = 'jobs/GET_BY_CATEGORY_ID_SUCCESS';
+export const GET_BY_CATEGORY_ID_ERROR = 'jobs/GET_BY_CATEGORY_ID_ERROR';
+export const GET_BY_CATEGORY_ID_FAIL = 'jobs/GET_BY_CATEGORY_ID_FAIL';
+
 // export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
 export const CLEAR_DATA = 'jobs/CLEAR_DATA';
@@ -440,6 +448,74 @@ export function getSavedJobs() {
             });
     };
 }
+
+export function getByCategoryId(data) {
+    console.log('::getSavedJobs:::');
+    // console.log(data);
+    return (dispatch, getState) => {
+        let { accessToken } = getState().auth;
+        let hostname = API_HOST;
+        axios
+            .get(`${hostname}/v1/jobs/category/${data}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((resuults) => {
+                console.log('status good');
+                console.log(resuults);
+                dispatch({
+                    type: GET_BY_CATEGORY_ID_SUCCESS,
+                    payload: resuults.data,
+                });
+            })
+            .catch((error) => {
+                console.log('error');
+                console.log(error.response);
+                console.log(error.message);
+                dispatch({
+                    type: GET_BY_CATEGORY_ID_FAIL,
+                    payload: error.response ? error.response.data : error,
+                });
+            });
+    };
+}
+
+
+export function getMyApplications() {
+    // console.log('::getSavedJobs:::');
+    // console.log(data);
+return (dispatch, getState) => {
+        let { accessToken } = getState().auth;
+        let hostname = API_HOST;
+        axios
+            .get(`${hostname}/v1/jobs/myApplications`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((resuults) => {
+                console.log('status good');
+                console.log(resuults);
+                dispatch({
+                    type: GET_MY_CURRENT_APPLICATIONS_SUCCESS,
+                    payload: resuults.data,
+                });
+            })
+            .catch((error) => {
+                console.log('error');
+                console.log(error.response);
+                console.log(error.message);
+                dispatch({
+                    type: GET_MY_CURRENT_APPLICATIONS_FAIL,
+                    payload: error.response ? error.response.data : error,
+                });
+            });
+    };
+}
+
 export function clearData() {
     return async (dispatch) => {
         await dispatch({
@@ -622,6 +698,27 @@ actionHandlers[SAVE_JOB_FAIL] = (state, action) => {
     return newState;
 };
 
+actionHandlers[GET_BY_CATEGORY_ID_SUCCESS] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.jobData = action.payload.data;
+    newState.getJobError = null;
+    newState.getJobSuccess = true;
+    return newState;
+};
+
+actionHandlers[GET_BY_CATEGORY_ID_FAIL] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.jobData = false;
+    newState.getJobSuccess = false;
+    newState.getJobsError = action.payload.error
+        ? action.payload.error.message
+        : action.payload.message;
+    return newState;
+};
+
 actionHandlers[APPLY_JOB_SUCCESS] = (state, action) => {
     let newState;
     newState = objectAssign({}, state);
@@ -655,6 +752,48 @@ actionHandlers[GET_BENEFITS_FAIL] = (state, action) => {
     newState = objectAssign({}, state);
     newState.getBenefits = false;
     newState.getBenefitsError = action.payload.error
+        ? action.payload.error.message
+        : action.payload.message;
+    return newState;
+};
+
+actionHandlers[GET_MY_CURRENT_APPLICATIONS_SUCCESS] = (state, action) => {
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getMyApplicationsSuccess = true;
+    newState.getMyApplicationsError = false;
+    newState.myApplicationsData = action.payload.data;
+    return newState;
+};
+
+actionHandlers[GET_MY_CURRENT_APPLICATIONS_FAIL] = (state, action) => {
+    console.log('getMyApplications Error');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getMyApplications = false;
+    newState.getMyApplicationsError = action.payload.error
+        ? action.payload.error.message
+        : action.payload.message;
+    return newState;
+};
+
+
+actionHandlers[GET_SAVED_JOBS_SUCCESS] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getSavedJobs = true;
+    newState.getSavedJobsError = false;
+    newState.getSavedJobsData = action.payload.data;
+    return newState;
+};
+
+actionHandlers[GET_SAVED_JOBS_FAIL] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.getSavedJobs = false;
+    newState.getSavedJobsError = action.payload.error
         ? action.payload.error.message
         : action.payload.message;
     return newState;

@@ -58,6 +58,8 @@ class ProfileScreen extends Component {
                 });
             } else {
                 let props = this.props.auth.loginData.freelancer;
+                console.log('-----------');
+                console.log(props);
                 this.setState({
                     email: props.email,
                     contact_no: props.contact_no,
@@ -127,7 +129,7 @@ class ProfileScreen extends Component {
                     text: 'OK', onPress: () => {
                         this.props.clearDataApplication();
                         this.props.navigation.goBack();
-                    }
+                    },
                 }]);
             }
             if (this.props.easyservices.updateProfileError) {

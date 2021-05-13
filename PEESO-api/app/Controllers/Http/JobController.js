@@ -33,6 +33,32 @@ class JobController {
         }
     }
 
+    async getJobsByCategoryId({params, response}){
+        let {id } = params
+        try{
+            let b = await Job.query().where('category_id', id).orderBy('created_at', 'ASC').fetch()
+
+            response.send({data: b.toJSON()})
+        }catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async search({request, response}){
+        try{//wtf
+        }catch(e){
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async searchItem({request, response}){
+        try{
+
+        }catch(e){
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
     async applyJob({ request, auth, response }) {
         let {
             id,
@@ -168,7 +194,9 @@ class JobController {
             let user = await User.find(id)
             let b = await user.applicant().fetch()
             
-            let x = await Application.query().where('applicant_id', user.id).with('job.company')
+            let x = await Application.query().where('applicant_id', b.id).with('job.company').fetch()
+
+            response.send({data: x.toJSON()})
         } catch(e){
             throw new HttpException(e.message, e.status)
         }

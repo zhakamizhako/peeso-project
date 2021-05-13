@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class JobApplication extends Model {
+    job(){
+        return this.belongsTo('App/Models/Job')
+    }
 }
 
 module.exports = JobApplication

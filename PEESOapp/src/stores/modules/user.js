@@ -23,6 +23,10 @@ export const CREATE_COMPANY_SUCCESS = 'signup/CREATE_COMPANY_SUCCESS';
 export const CREATE_COMPANY_ERROR = 'signup/CREATE_COMPANY_ERROR';
 export const CREATE_COMPANY_FAIL = 'signup/CREATE_COMPANY_FAIL';
 
+export const GET_APPLICANT_SUCCESS = 'signup/GET_APPLICANT_SUCCESS';
+export const GET_APPLICANT_ERROR = 'signup/GET_APPLICANT_ERROR';
+export const GET_APPLICANT_FAIL = 'signup/GET_APPLICANT_FAIL';
+
 export const VERIFY_OTP_SUCCESS = 'signup/VERIFY_OTP_SUCCESS';
 export const VERIFY_OTP_ERROR = 'signup/VERIFY_OTP_ERROR';
 export const VERIFY_OTP_FAIL = 'signup/VERIFY_OTP_FAIL';
@@ -257,6 +261,37 @@ export function newOTP(data) {
   };
 }
 
+
+export function getApplicant(data) {
+  console.log('::wtf:::');
+  console.log(data);
+  return (dispatch, getState) => {
+    let hostname = API_HOST;
+    axios
+      .get(`${hostname}/v1/user/getApplicant/${data}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((resuults) => {
+        console.log('status good');
+        console.log(resuults);
+        dispatch({
+          type: GET_APPLICANT_SUCCESS,
+          payload: resuults.data,
+        });
+      })
+      .catch((error) => {
+        console.log('error');
+        console.log(error.response);
+        dispatch({
+          type: GET_APPLICANT_FAIL,
+          payload: error.response ? error.response.data : error,
+        });
+      });
+  };
+}
+
 // export function logout() {
 //   return async dispatch => {
 //     await dispatch({
@@ -470,6 +505,27 @@ actionHandlers[UPDATE_PROFILE_PIC_FAIL] = (state, action, test1, test2) => {
   return newState;
 };
 
+actionHandlers[GET_APPLICANT_SUCCESS] = (state, action) => {
+  // console.log('User token check');
+  let newState;
+  newState = objectAssign({}, state);
+  newState.getApplicantSuccess = true;
+  newState.getApplicantError = false;
+  newState.getApplicantData = action.payload.data
+  return newState;
+};
+
+actionHandlers[GET_APPLICANT_FAIL] = (state, action, test1, test2) => {
+  // console.log('Token check fail');
+  let newState;
+  newState = objectAssign({}, state);
+  newState.getApplicantSuccess = false;
+  newState.getApplicantError = action.payload.error
+    ? action.payload.error.message
+    : action.payload.message;
+  return newState;
+};
+
 actionHandlers[CHECK_ME_ERROR] = (state, action) => {
   console.log('Token check error.');
   let newState;
@@ -504,20 +560,29 @@ const initialState = {
   createAccountError: false,
   createAccountSuccess: false,
   createAccountData: null,
+
   accessToken: null,
   tokenSuccess: false,
   connectionError: false,
+
   OTPSuccess: false,
   OTPError: false,
+
   createApplicantError: false,
   createApplicantSuccess: false,
   createApplicantData: null,
+
   createCompanyError: false,
   createCompanySuccess: false,
   createCompanyData: null,
+
   createFreelanceEmployerSuccess: false,
   createFreelanceEmployerError: null,
   createFreelanceEmployerData: null,
+
+  getApplicantSuccess: false,
+  getApplicantError: null,
+  getApplicantData: null,
   data: null,
   tempPassword: null,
 };

@@ -49,6 +49,9 @@ class User extends Model {
   freelancer() {
     return this.hasOne('App/Models/Freelancer')
   }
+  uploaded() {
+    return this.hasMany('App/Models/FileUpload', 'uploaded_by')
+  }
 
 }
 

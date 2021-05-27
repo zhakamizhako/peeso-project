@@ -10,6 +10,7 @@ class ApplicantsSchema extends Schema {
       table.timestamps()
       table.integer("user_id").unsigned().references('id').inTable('users')
       table.text('opening_statement', 'longtext')
+      table.string('title')
       table.string("first_name")
       table.string("middle_name")
       table.string("last_name")

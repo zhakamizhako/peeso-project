@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -10,14 +10,14 @@ import {
   Toast,
   ActivityIndicator,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
-import {getMyApplications, unsavejob} from '../../stores/modules/jobs';
+import { View, Text, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { getMyApplications, unsavejob } from '../../stores/modules/jobs';
 // import {logout, checkMe} from '../stores/modules/auth';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
-import {now} from 'moment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { now } from 'moment';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -45,26 +45,26 @@ class MyApplications extends Component {
   }
 
   componentDidMount() {
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     this.props.getMyApplications();
   }
 
   componentDidUpdate(prevProps) {
-    let {jobs} = this.props;
+    let { jobs } = this.props;
 
     if (jobs != prevProps.jobs) {
       if (jobs.myApplicationsData != prevProps.jobs.myApplicationsData) {
-        this.setState({data: jobs.myApplicationsData, isLoading: false});
+        this.setState({ data: jobs.myApplicationsData, isLoading: false });
       }
       if (jobs.getMyApplicationsError) {
-        this.setState({error: jobs.getMyApplicationsError});
+        this.setState({ error: jobs.getMyApplicationsError });
       }
     }
   }
 
   renderJobData(data, index, entrySaved) {
     return (
-      <Card key={index} style={{marginTop: 5}}>
+      <Card key={index} style={{ marginTop: 5 }}>
         <Card.Header
           title={
             <>
@@ -72,21 +72,21 @@ class MyApplications extends Component {
               <Text>{data.job.company.name}</Text>
             </>
           }
-          extra={
-            <TouchableOpacity onPress={() => this.removeJob(data)}>
-              <Icon
-                style={{alignSelf: 'flex-end'}}
-                size={30}
-                color="black"
-                name="book"
-              />
-            </TouchableOpacity>
-          }
+        // extra={
+        //   <TouchableOpacity onPress={() => this.removeJob(data)}>
+        //     <Icon
+        //       style={{ alignSelf: 'flex-end' }}
+        //       size={30}
+        //       color="black"
+        //       name="book"
+        //     />
+        //   </TouchableOpacity>
+        // }
         />
-        <Card.Body style={{marginLeft: 10}}>
+        <Card.Body style={{ marginLeft: 10 }}>
           <TouchableOpacity
             onPress={() =>
-              this.props.navigation.navigate('viewtrabaho', {id: data.job.id})
+              this.props.navigation.navigate('viewtrabaho', { id: data.job.id })
             }>
             <Text>Location: {data.job.location}</Text>
             <Text>Salary: {data.job.salary}</Text>
@@ -94,8 +94,8 @@ class MyApplications extends Component {
               Highlights:{' '}
               {data.job.highlight != null
                 ? data.job.highlight.map((entry) => (
-                    <Text>{'\n-' + entry.description}</Text>
-                  ))
+                  <Text>{'\n-' + entry.description}</Text>
+                ))
                 : null}
             </Text>
             <Text>
@@ -103,7 +103,7 @@ class MyApplications extends Component {
             </Text>
             <Text>Status: {data.job.status}</Text>
             <Text>Category: {data.job.category}</Text>
-            <Text>Saved on: {moment(entrySaved).format('MMMM DD, yyyy')}</Text>
+            <Text>Applied on: {moment(entrySaved).format('MMMM DD, yyyy')}</Text>
           </TouchableOpacity>
         </Card.Body>
       </Card>
@@ -132,13 +132,13 @@ class MyApplications extends Component {
                 marginVertical: '50%',
               }}>
               <Text
-                style={{alignSelf: 'center', fontWeight: 'bold', fontSize: 25}}>
+                style={{ alignSelf: 'center', fontWeight: 'bold', fontSize: 25 }}>
                 No Data :(
               </Text>
-              <Text style={{alignSelf: 'center', fontSize: 18, marginTop: 15}}>
+              <Text style={{ alignSelf: 'center', fontSize: 18, marginTop: 15 }}>
                 Why don't you apply{' '}
                 <Text
-                  style={{color: 'blue'}}
+                  style={{ color: 'blue' }}
                   onPress={() => this.props.navigation.replace('trabaho')}>
                   some
                 </Text>

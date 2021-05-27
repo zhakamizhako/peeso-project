@@ -33,28 +33,28 @@ class JobController {
         }
     }
 
-    async getJobsByCategoryId({params, response}){
-        let {id } = params
-        try{
+    async getJobsByCategoryId({ params, response }) {
+        let { id } = params
+        try {
             let b = await Job.query().where('category_id', id).orderBy('created_at', 'ASC').fetch()
 
-            response.send({data: b.toJSON()})
-        }catch (e) {
+            response.send({ data: b.toJSON() })
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }
 
-    async search({request, response}){
-        try{//wtf
-        }catch(e){
+    async search({ request, response }) {
+        try {//wtf
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }
 
-    async searchItem({request, response}){
-        try{
+    async searchItem({ request, response }) {
+        try {
 
-        }catch(e){
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }
@@ -161,6 +161,20 @@ class JobController {
         }
     }
 
+    async searchJob({ request, response }) {
+        let { query } = request.all()
+
+        try {
+            // let data = await Job.query().where('name', 'LIKE', `%${query}%`).orWhere('job_description', 'LIKE', query).where('is_approved', true).fetch()
+            let data = await Job.query().whereRaw(
+                `to_tsvector(name) || to_tsvector(job_description)  || @@ to_tsquery(?)`, query).fetch();
+
+            response.send({ data: data.toJSON() })
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
     async approveJob({ request, response }) {
 
     }
@@ -173,31 +187,31 @@ class JobController {
 
     }
 
-    async checkForApplication({request, auth, response}){
+    async checkForApplication({ request, auth, response }) {
         let { id } = auth.user
         let { job_id } = request.all()
 
-        try{
+        try {
             let x = await User.find(id)
             let y = await User.applicant().fetch()
 
             let b = await Application.query().where('applicant_id', y.id)
-        } catch (e){
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }
 
-    async myApplications({auth, response}){
-        let {id} = auth.user
+    async myApplications({ auth, response }) {
+        let { id } = auth.user
 
-        try{
+        try {
             let user = await User.find(id)
             let b = await user.applicant().fetch()
-            
+
             let x = await Application.query().where('applicant_id', b.id).with('job.company').fetch()
 
-            response.send({data: x.toJSON()})
-        } catch(e){
+            response.send({ data: x.toJSON() })
+        } catch (e) {
             throw new HttpException(e.message, e.status)
         }
     }

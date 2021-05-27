@@ -243,6 +243,7 @@ class UserController {
             last_name,
             address,
             contact_no,
+            title,
             expected_salary, key_skills, educational_backgrounds, job_experiences, profile } = request.all()
 
         console.log(key_skills)
@@ -269,6 +270,7 @@ class UserController {
             d.contact_no = contact_no
             d.email = email
             d.expected_salary = expected_salary
+            d.title = title
             await d.save()
 
             try {
@@ -304,7 +306,7 @@ class UserController {
                     let s_b = new ApplicantSkill()
                     s_b.applicant_id = d.id
                     s_b.key_skill_id = s_a.id
-                    s_b.rating = entry.rating
+                    s_b.rating = entry.rate
                     await s_b.save()
                 })
             } catch (e) {
@@ -470,6 +472,22 @@ class UserController {
             await d.save()
 
             response.send({ freelanceEmployer: d })
+        } catch (e) {
+            console.log(e)
+            throw new HttpException(e.message, e.status)
+        }
+    }
+
+    async getApplicant({ params, response }) {
+        let { id } = params
+        try {
+            let bb = (await Applicant.query().where('id', id).with('user').with('keySkills.name').with('experiences').with('educationalBackground').with('user.profile.picture').with('user.uploaded').fetch()).toJSON()
+
+            if (!bb || bb.length < 1 || bb == []) {
+                response.send({ message: 'Invalid request.' })
+            }
+
+            response.send({ data: bb[0] })
         } catch (e) {
             console.log(e)
             throw new HttpException(e.message, e.status)

@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class ApplicantKeySkill extends Model {
+    name() {
+        return this.belongsTo('App/Models/KeySkill')
+    }
 }
 
 module.exports = ApplicantKeySkill

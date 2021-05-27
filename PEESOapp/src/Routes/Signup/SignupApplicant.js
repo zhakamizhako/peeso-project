@@ -43,6 +43,7 @@ class SignupApplicant extends Component {
       isSubmitting: false,
       isLoggingIn: false,
       error: null,
+      title: null,
     };
   }
 
@@ -123,9 +124,9 @@ class SignupApplicant extends Component {
       auth.loginData &&
       auth.accessToken
     ) {
-      if (auth.loginData.type == 'signup') {
-        this.props.navigation.replace('homepage');
-      }
+      // if (auth.loginData.type == 'signup') {
+      this.props.navigation.replace('homepage');
+      // }
     }
 
     if (auth.loginError) {
@@ -201,7 +202,8 @@ class SignupApplicant extends Component {
       expected_salary: this.state.expectedSalary,
       key_skills: this.state.keySkills,
       educational_backgrounds: this.state.educationalBackground,
-      job_experiences: this.state.educationalBackground,
+      job_experiences: this.state.job_experiences,
+      title: this.state.title,
     };
     this.setState({ isSubmitting: true });
     this.props.createApplicant(data);
@@ -324,6 +326,22 @@ class SignupApplicant extends Component {
                 }
               />
             </List.Item>
+
+            <List.Item>
+              <Text>Title</Text>
+              <InputItem
+                placeholder="Government Employee, etc."
+                value={this.state.title}
+                onChange={(val) =>
+                  this.setState((state) => {
+                    let { title } = state;
+                    title = val;
+                    return { title };
+                  })
+                }
+              />
+            </List.Item>
+
             <WhiteSpace size="lg" />
           </List>
           <WhiteSpace size="lg" />
@@ -396,7 +414,7 @@ class SignupApplicant extends Component {
                   this.setState((state) => {
                     let { educationalBackground } = state;
                     educationalBackground.push({
-                      name: 'University',
+                      name: null,
                       startDate: new Date(),
                       endDate: new Date(),
                       degree: '',

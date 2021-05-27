@@ -74,16 +74,16 @@ class Trabaho extends Component {
                             <Text>{data.location}</Text>
                         </>
                     }
-                    extra={
-                        <TouchableOpacity onPress={() => this.removeJob(index)}>
-                            <Icon
-                                style={{ alignSelf: 'flex-end' }}
-                                size={30}
-                                color="black"
-                                name="book"
-                            />
-                        </TouchableOpacity>
-                    }
+                // extra={
+                //     // <TouchableOpacity onPress={() => this.removeJob(index)}>
+                //     //     <Icon
+                //     //         style={{ alignSelf: 'flex-end' }}
+                //     //         size={30}
+                //     //         color="black"
+                //     //         name="book"
+                //     //     />
+                //     // </TouchableOpacity>
+                // }
                 />
                 <Card.Body style={{ marginLeft: 10 }}>
                     <TouchableOpacity
@@ -111,8 +111,8 @@ class Trabaho extends Component {
                         {/* <Text>Tap here to view Applicants</Text> */}
                     </TouchableOpacity>
 
-                    <WhiteSpace size="lg"/>
-                    <Button disabled={!data.is_approved}>{!data.is_approved && ('This Job is awaiting admin approval.')}{data.status != 'Pending' && ('View Applicants')}</Button>
+                    <WhiteSpace size="lg" />
+                    <Button disabled={!data.is_approved}>{!data.is_approved && ('This Job is awaiting admin approval.')}{data.is_approved && ('View Applicants')}</Button>
                 </Card.Body>
             </Card>
         );

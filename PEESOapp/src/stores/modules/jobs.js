@@ -55,6 +55,10 @@ export const GET_BY_CATEGORY_ID_SUCCESS = 'jobs/GET_BY_CATEGORY_ID_SUCCESS';
 export const GET_BY_CATEGORY_ID_ERROR = 'jobs/GET_BY_CATEGORY_ID_ERROR';
 export const GET_BY_CATEGORY_ID_FAIL = 'jobs/GET_BY_CATEGORY_ID_FAIL';
 
+export const SEARCH_JOB_SUCCESS = 'jobs/SEARCH_JOB_SUCCESS';
+export const SEARCH_JOB_ERROR = 'jobs/SEARCH_JOB_ERROR';
+export const SEARCH_JOB_FAIL = 'jobs/SEARCH_JOB_FAIL';
+
 // export const LOGOUT_SUCCESS = 'auth/LOGOUT_SUCCESS';
 
 export const CLEAR_DATA = 'jobs/CLEAR_DATA';
@@ -153,6 +157,37 @@ export function getApplications(data) {
                 console.log(error.message);
                 dispatch({
                     type: GET_APPLICATIONS_FAIL,
+                    payload: error.response ? error.response.data : error,
+                });
+            });
+    };
+}
+
+export function searchJob(data) {
+    return (dispatch, getState) => {
+        let { accessToken } = getState().auth;
+        let hostname = API_HOST;
+        axios
+            .put(`${hostname}/v1/jobs/search`, { query: data }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+            .then((resuults) => {
+                console.log('status good');
+                console.log(resuults);
+                dispatch({
+                    type: SEARCH_JOB_SUCCESS,
+                    payload: resuults.data,
+                });
+            })
+            .catch((error) => {
+                console.log('error');
+                console.log(error.response);
+                console.log(error.message);
+                dispatch({
+                    type: SEARCH_JOB_FAIL,
                     payload: error.response ? error.response.data : error,
                 });
             });
@@ -486,7 +521,7 @@ export function getByCategoryId(data) {
 export function getMyApplications() {
     // console.log('::getSavedJobs:::');
     // console.log(data);
-return (dispatch, getState) => {
+    return (dispatch, getState) => {
         let { accessToken } = getState().auth;
         let hostname = API_HOST;
         axios
@@ -841,6 +876,27 @@ actionHandlers[GET_COMPANY_JOBS_FAIL] = (state, action) => {
     return newState;
 };
 
+actionHandlers[SEARCH_JOB_SUCCESS] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    // newState.searchJobData = true;
+    newState.searchJobDataError = false;
+    newState.searchJobData = action.payload.data;
+    return newState;
+};
+
+actionHandlers[SEARCH_JOB_FAIL] = (state, action) => {
+    // console.log('User token check');
+    let newState;
+    newState = objectAssign({}, state);
+    newState.searchJobData = false;
+    newState.searchJobDataError = action.payload.error
+        ? action.payload.error.message
+        : action.payload.message;
+    return newState;
+};
+
 actionHandlers[NEW_JOB_ERROR] = (state, action) => {
     // console.log('Token check error.');
     let newState;
@@ -898,6 +954,8 @@ const initialState = {
     getCompanyJobsError: null,
     getCompanyJobsData: [],
 
+    searchJobData: [],
+    searchJobDataError: null,
 };
 
 export default function reducer(state = initialState, action) {

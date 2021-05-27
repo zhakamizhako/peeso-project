@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -11,13 +11,14 @@ import {
   InputItem,
   List,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView} from 'react-native';
-import {connect} from 'react-redux';
-// import {logout, checkMe} from '../stores/modules/auth';
+import { View, Text, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { searchJob, getBenefits } from '../../stores/modules/jobs';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
-import {now} from 'moment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { now } from 'moment';
+
+import { TouchableOpacity } from 'react-native-gesture-handler';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -30,7 +31,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -41,7 +42,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -52,7 +53,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -63,7 +64,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -74,7 +75,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -85,7 +86,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -96,7 +97,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -107,7 +108,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -118,7 +119,7 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
@@ -129,26 +130,26 @@ const SampleData = [
     lat: 125.0,
     lng: 5.0,
     salary: 5000,
-    Highlight: [{name: 'highlight1'}, {name: 'highlight2'}],
+    Highlight: [{ name: 'highlight1' }, { name: 'highlight2' }],
     deadline: now(),
     status: 'Verified and hired applicants through P App',
   },
 ];
 
 const SampleCategory = [
-  {categoryName: 'Accouting and Finance', id: 1},
-  {categoryName: 'Administrative / Human Resources', id: 2},
-  {categoryName: 'Arts/Media/Communications', id: 3},
-  {categoryName: 'Building/Construction', id: 4},
-  {categoryName: 'Computer/Information Technology', id: 5},
-  {categoryName: 'Education/Training', id: 6},
-  {categoryName: 'Engineering', id: 7},
-  {categoryName: 'Healthcare', id: 8},
-  {categoryName: 'Hotel/Restaurant', id: 9},
-  {categoryName: 'Manufacturing', id: 10},
-  {categoryName: 'Sales/Marketing', id: 11},
-  {categoryName: 'Sciences', id: 12},
-  {categoryName: 'Services', id: 13},
+  { categoryName: 'Accouting and Finance', id: 1 },
+  { categoryName: 'Administrative / Human Resources', id: 2 },
+  { categoryName: 'Arts/Media/Communications', id: 3 },
+  { categoryName: 'Building/Construction', id: 4 },
+  { categoryName: 'Computer/Information Technology', id: 5 },
+  { categoryName: 'Education/Training', id: 6 },
+  { categoryName: 'Engineering', id: 7 },
+  { categoryName: 'Healthcare', id: 8 },
+  { categoryName: 'Hotel/Restaurant', id: 9 },
+  { categoryName: 'Manufacturing', id: 10 },
+  { categoryName: 'Sales/Marketing', id: 11 },
+  { categoryName: 'Sciences', id: 12 },
+  { categoryName: 'Services', id: 13 },
 ];
 
 class Search extends Component {
@@ -156,15 +157,34 @@ class Search extends Component {
     super(props);
     this.state = {
       categories: [],
+      error: null,
+      data: [],
+      searchInput: null,
     };
   }
 
   componentDidMount() {
-    this.setState({categories: SampleCategory});
+    this.props.getBenefits();
+    // this.setState({categories: SampleCategory});
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.jobs != this.props.jobs) {
+      if (this.props.jobs.searchJobData != prevProps.jobs.searchJobData) {
+        this.setState({ data: this.props.searchjobData })
+      }
+      if (this.props.jobs.searchJobError) {
+        this.setState({ error: this.props.jobs.searchJobError })
+      }
+    }
   }
 
   saveJob() {
     Toast.success('Job Saved');
+  }
+
+  searchItem() {
+    this.props.searchJob(this.state.searchInput)
   }
 
   // renderJobData(data, index) {
@@ -196,6 +216,13 @@ class Search extends Component {
             <WhiteSpace size="lg" />
             <InputItem
               type="text"
+              onChange={input => {
+                this.setState(state => {
+                  let { searchInput } = state
+                  searchInput = input
+                  return { searchInput }
+                })
+              }}
               // onChange={this.onChange}
               style={{
                 borderWidth: 2,
@@ -207,13 +234,14 @@ class Search extends Component {
               placeholder="      Job Title, Keywords, Company"
               extra={
                 <Icon
-                  style={{color: '#000', paddingLeft: 3}}
+                  style={{ color: '#000', paddingLeft: 3 }}
                   onVirtualKeyboardConfirm={() => this.search()}
                   name="search"
+                  onPress={() => this.searchItem()}
                 />
               }
             />
-            <Text style={{alignSelf: 'center'}}>--Or--</Text>
+            <Text style={{ alignSelf: 'center' }}>--Or--</Text>
             <Text>Select your Category</Text>
             <WhiteSpace />
             <List>
@@ -235,4 +263,16 @@ class Search extends Component {
     );
   }
 }
-export default Search;
+
+const mapStateToProps = (state) => ({
+  jobs: state.jobs,
+});
+
+const mapActionCreators = {
+  searchJob,
+  getBenefits
+};
+
+export default connect(mapStateToProps, mapActionCreators)(Search);
+
+Search.propTypes = {};

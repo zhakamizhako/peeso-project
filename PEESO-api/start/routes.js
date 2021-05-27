@@ -39,6 +39,7 @@ Route.group(() => {
   Route.post('/createUser', 'UserController.createUser')
   Route.post('/newOTP', 'UserController.sendNewToken')
   Route.post('/verifyOTP', 'UserController.verifyToken')
+  Route.get('/getApplicant/:id', 'UserController.getApplicant')
   Route.post('updateprofilepic', 'UserController.uploadProfilePic').middleware(['auth:api'])
 }).prefix('v1/user')
 
@@ -58,6 +59,7 @@ Route.group(() => {
   Route.get('/myApplications', 'JobController.myApplications').middleware(['auth:api'])
   Route.get('/category/:id', 'JobController.getJobsByCategoryId').middleware(['auth:api'])
   Route.get('/:id', 'JobController.getJob').middleware(['auth:api'])
+  Route.put('/search', 'JobController.searchJob')
 }).prefix('v1/jobs')
 
 Route.group(() => {

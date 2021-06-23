@@ -44,6 +44,7 @@ class SignupCompany extends Component {
       isLoggingIn: false,
       error: null,
       profile_id: null,
+      overseas: false,
     };
   }
 
@@ -186,6 +187,7 @@ class SignupCompany extends Component {
       contact_no: this.state.contact_no,
       profile: this.state.profile_id,
       description: this.state.description,
+      overseas: this.state.overseas
     };
     this.setState({ isSubmitting: true });
     this.props.createCompany(data);
@@ -288,7 +290,20 @@ class SignupCompany extends Component {
                   })
                 }
               />
+              <Checkbox
+                value={this.state.overseas}
+                onChange={(val) =>
+                  this.setState((state) => {
+                    let { overseas } = state;
+                    overseas = val.target.checked;
+                    console.log(val)
+                    return { overseas };
+                  })
+                }>
+                Overseas?
+              </Checkbox>
             </List.Item>
+
 
             <List.Item>
               <Text>Contact Number</Text>

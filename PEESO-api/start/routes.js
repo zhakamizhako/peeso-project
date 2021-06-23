@@ -41,6 +41,9 @@ Route.group(() => {
   Route.post('/verifyOTP', 'UserController.verifyToken')
   Route.get('/getApplicant/:id', 'UserController.getApplicant')
   Route.post('updateprofilepic', 'UserController.uploadProfilePic').middleware(['auth:api'])
+  Route.get('/notifications', 'UserController.getNotifications').middleware(['auth:api'])
+  Route.post('/upload', 'UserController.uploadFile').middleware(['auth:api'])
+  Route.get('/files', 'UserController.getFiles').middleware(['auth:api'])
 }).prefix('v1/user')
 
 Route.group(() => {
@@ -72,3 +75,9 @@ Route.group(() => {
   Route.post('/login', 'UserController.authenticate')
   Route.get('/me', 'UserController.me').middleware(['auth:api'])
 }).prefix('v1/auth')
+
+
+Route.group(() => {
+  Route.get('/news', 'FrontpageController.news').middleware(['auth:api'])
+}).prefix('v1/frontpage')
+

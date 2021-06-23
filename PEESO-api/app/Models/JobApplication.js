@@ -4,8 +4,11 @@
 const Model = use('Model')
 
 class JobApplication extends Model {
-    job(){
+    job() {
         return this.belongsTo('App/Models/Job')
+    }
+    applicant() {
+        return this.belongsTo('App/Models/Applicant')
     }
 }
 

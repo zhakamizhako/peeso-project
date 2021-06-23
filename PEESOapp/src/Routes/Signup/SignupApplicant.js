@@ -675,6 +675,9 @@ class SignupApplicant extends Component {
             <ActivityIndicator text="Logging In..."> </ActivityIndicator>
           </Modal>
         </WingBlank>
+        <WhiteSpace size='lg' />
+        <WhiteSpace size='lg' />
+        <WhiteSpace size='lg' />
       </ScrollView>
     );
   }

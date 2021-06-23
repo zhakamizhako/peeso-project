@@ -24,113 +24,10 @@ import { getCompanies } from '../../stores/modules/company';
 import moment from 'moment';
 import { now } from 'moment';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { HomeStyles } from '../homeStyles'
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
-
-const SampleData = [
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-  {
-    company: 'ABCD Co. Ltd.',
-    location: 'ABC street, Mapa, Western Dabaw, Isla Probinsya, Pinas',
-    category: 'Private',
-    rating: 5,
-    review_count: 20,
-    employees_min: 50,
-    employees_max: 100,
-    shortdesc: 'A Company with super class standings',
-  },
-];
-
 class Company extends Component {
   constructor(props) {
     super(props);
@@ -162,7 +59,7 @@ class Company extends Component {
 
   renderCompanyData(data, index) {
     return (
-      <Card key={index} style={{ marginTop: 5 }}>
+      <Card key={index} style={HomeStyles.entryCards}>
         <Card.Header
           title={
             <>
@@ -219,7 +116,7 @@ class Company extends Component {
 
   render() {
     return (
-      <>
+      <View style={HomeStyles.ScrollViewLimit}>
         <WingBlank>
           <RefreshControl
             refreshing={this.state.isLoading}
@@ -234,7 +131,7 @@ class Company extends Component {
             </ScrollView>
           </RefreshControl>
         </WingBlank>
-      </>
+      </View>
     );
   }
 }

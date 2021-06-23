@@ -1,7 +1,8 @@
-import {RSAA} from 'redux-api-middleware-native';
+import { RSAA } from 'redux-api-middleware-native';
 import objectAssign from 'object-assign';
-import {API_HOST} from '@env';
+import { API_HOST } from '@env';
 import axios from 'axios';
+import ToastNice from 'react-native-toast-message';
 
 export const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'auth/LOGIN_ERROR';
@@ -80,7 +81,7 @@ export function login(data) {
 export function checkMe() {
   console.log('::checkMe:::');
   return (dispatch, getState) => {
-    let {accessToken} = getState().auth;
+    let { accessToken } = getState().auth;
     let hostname = API_HOST;
     console.log(accessToken);
     axios
@@ -174,6 +175,10 @@ actionHandlers[LOGIN_ERROR] = (state, action) => {
 
 actionHandlers[CHECK_ME_SUCCESS] = (state, action) => {
   console.log('User token check');
+  ToastNice.show({
+    text1: 'Welcome back, ' + action.payload.user.profile.first_name,
+    text2: 'You have logged back in!',
+  });
   let newState;
   newState = objectAssign({}, state);
   newState.tokenCheck = true;

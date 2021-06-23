@@ -16,6 +16,7 @@ import imageLogo from './../logo.png';
 import ToastNice from 'react-native-toast-message';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment, { now } from 'moment';
+import { HomeStyles } from './homeStyles'
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -48,88 +49,55 @@ class HomePage extends Component {
           { text: 'OK', onPress: () => this.props.logout() },
         ]);
       }
-    }
-    if (
-      this.props.auth.tokenCheck &&
-      this.props.auth.loginData &&
-      this.props.auth.loginData.profile
-    ) {
-      console.log('A?');
-      ToastNice.show({
-        text1: 'Welcome back, ' + this.props.auth.loginData.profile.first_name,
-        text2: 'test!',
-      });
-      // Toast.success(
-      //   'Welcome back, ' + this.props.auth.loginData.profile.first_name,
-      //   Toast.SHORT,
-      // );
+      if (
+        this.props.auth.tokenCheck &&
+        this.props.auth.loginData &&
+        this.props.auth.loginData.profile
+      ) {
+        console.log('A?');
+      }
     }
   }
 
   render() {
-    const menuItems = [
-      {
-        text: 'Trabaho',
-        type: 'trabaho',
-        icon: <Icon size={60} name="laptop" />,
-      },
-      {
-        text: 'Companies',
-        type: 'companies',
-        icon: <Icon size={60} name="bank" />,
-      },
-      {
-        text: 'Saved Jobs',
-        type: 'savedjobs',
-        icon: <Icon size={60} name="book" />,
-      },
-      {
-        text: 'Search Jobs',
-        type: 'search',
-        icon: <Icon size={60} name="search" />,
-      },
-      {
-        text: 'Easy Services',
-        type: 'easyservices',
-        icon: <Icon size={60} name="smile" />,
-      },
-      {
-        text:
-          this.props.auth.loginData &&
-            this.props.auth.loginData.profile &&
-            this.props.auth.loginData.profile.is_company
-            ? 'Manage Company'
-            : 'My Profile',
-        type: 'profile',
-        icon: <Icon name="solution" size={60} />,
-      },
-    ];
 
     return (
       <View style={{ height: '100%' }}>
         <ScrollView>
-          <WhiteSpace />
-          {/* {this.state.networkError && (<Text>Warning: Connection Error</Text>)} */}
-          {/* <View style={{ alignSelf: 'center', marginBottom: 50, marginTop: 50 }}> */}
-          <Image
-            source={imageLogo}
-            style={{ height: 150, width: '100%', alignSelf: 'center' }}
-            resizeMode="center"
-          />
-          {/* </View> */}
+          <WingBlank>
+            <WhiteSpace size='lg' />
+            <View style={{ alignSelf: 'center' }}><Text style={{ fontSize: 25, fontWeight: 'bold' }}>Dashboard</Text></View>
 
-          <WhiteSpace size="lg" />
-          <Grid
-            data={menuItems}
-            columnNum={2}
-            isCarousel
-            onPress={(data) => {
-              if (data.type != null && this.props.navigation != null) {
-                this.props.navigation.navigate(data.type);
-              }
-            }}
-            carouselMaxRow={3}
-          />
+            <Card style={HomeStyles.homeCards}>
+              <Card.Header title="Announcements and upcoming Events" />
+              <WingBlank>
+                <Text style={{ fontSize: 30, fontWeight: 'bold' }}>PESLA SEMINAR</Text>
+              </WingBlank>
+            </Card>
+
+            <Card style={HomeStyles.homeCards}>
+              <Card.Header title="Limited Time Event" />
+              <WingBlank>
+                <Text style={{ fontSize: 30, fontWeight: 'bold', alignContent: 'flex-start' }}>
+                  JOBSTART{'\n'}
+                  PHILIPPINES{'\n'}
+                  PROGRAM{'\n'}
+                </Text>
+              </WingBlank>
+            </Card>
+
+
+            <Card style={HomeStyles.homeCards}>
+              <Card.Header title="Try Something new" />
+              <WingBlank>
+                <Text style={{ fontSize: 30, fontWeight: 'bold', alignContent: 'flex-start' }}>
+                  TRENDING{'\n'}
+                  SERVICES{'\n'}
+                </Text>
+              </WingBlank>
+            </Card>
+          </WingBlank>
+
         </ScrollView>
       </View>
     );

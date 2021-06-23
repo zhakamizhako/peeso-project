@@ -19,6 +19,7 @@ import { getCompanyJobs } from '../../stores/modules/jobs';
 import moment from 'moment';
 import { now } from 'moment';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { HomeStyles } from '../homeStyles';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -66,7 +67,7 @@ class Trabaho extends Component {
         console.log('render');
         console.log(data);
         return (
-            <Card key={index} style={{ marginTop: 5 }}>
+            <Card key={index} style={HomeStyles.entryCards}>
                 <Card.Header
                     title={
                         <>
@@ -106,15 +107,17 @@ class Trabaho extends Component {
                         <Text>Status: {data.status}</Text>
                         <Text>Category: {data.category}</Text>
                         <Text>Saved on: {moment(entrySaved).format('MMMM DD, yyyy')}</Text>
-                        <Text>Applications: ??</Text>
+                        <Text>Applications: {data.applicants.length}</Text>
 
                         {/* <Text>Tap here to view Applicants</Text> */}
                     </TouchableOpacity>
 
                     <WhiteSpace size="lg" />
-                    <Button disabled={!data.is_approved}>{!data.is_approved && ('This Job is awaiting admin approval.')}{data.is_approved && ('View Applicants')}</Button>
+                    <Button onPress={() => {
+                        this.props.navigation.navigate('viewapplicants', { id: data.id, applicants: data.applicants })
+                    }} disabled={!data.is_approved || data.applicants.length == 0}>{data.applicants.length == 0 && "No Applicants"}{!data.is_approved && ('This Job is awaiting admin approval.')}{data.is_approved && ('View Applicants')}</Button>
                 </Card.Body>
-            </Card>
+            </Card >
         );
     }
 
@@ -172,6 +175,7 @@ const mapStateToProps = (state) => ({
     jobs: state.jobs,
     auth: state.auth,
 });
+
 
 const mapActionCreators = {
     getCompanyJobs,

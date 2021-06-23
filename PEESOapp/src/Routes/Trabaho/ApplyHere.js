@@ -26,6 +26,7 @@ import moment from 'moment';
 import { now } from 'moment';
 import Input from '@ant-design/react-native/lib/input-item/Input';
 import RNFetchBlob from 'rn-fetch-blob';
+import { HomeStyles } from '../homeStyles';
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -404,7 +405,7 @@ class ApplyHere extends Component {
   render() {
     return (
       <>
-        <WingBlank>
+        <WingBlank style={HomeStyles.ScrollViewLimit}>
           <ScrollView>
             {this.state.jobData && (
               <>

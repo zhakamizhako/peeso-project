@@ -33,6 +33,7 @@
     "react-native-elements": "^3.1.0",
     "react-native-file-picker": "0.0.20",
     "react-native-gesture-handler": "^1.9.0",
+    "react-native-material-menu": "^1.2.0",
     "react-native-pdf": "^6.3.0",
     "react-native-requests-logger": "^1.1.5",
     "react-native-safe-area-context": "^3.1.9",

@@ -165,9 +165,9 @@ class JobController {
         let { query } = request.all()
 
         try {
-            // let data = await Job.query().where('name', 'LIKE', `%${query}%`).orWhere('job_description', 'LIKE', query).where('is_approved', true).fetch()
-            let data = await Job.query().whereRaw(
-                `to_tsvector(name) || to_tsvector(job_description)  || @@ to_tsquery(?)`, query).fetch();
+            let data = await Job.query().where('name', 'LIKE', `%${query}%`).orWhere('job_description', 'LIKE', query).where('is_approved', true).fetch()
+            // let data = await Job.query().whereRaw(
+            //     `to_tsvector(name) || to_tsvector(job_description)  || @@ to_tsquery(?)`, query).fetch();
 
             response.send({ data: data.toJSON() })
         } catch (e) {
@@ -336,10 +336,12 @@ class JobController {
     async getJobByCompany({ params, response }) {
         let { id } = params
         try {
-            let jobs = await Job.query().where('company_id', id).with('benefits').with('highlight').fetch()
+            let jobs = await Job.query().where('company_id', id).with('benefits').with('highlight').with('applicants').fetch()
+            // let applicantsCount = await jobs.applicant.count();
+            // console.log(applicantsCount)
 
-            if (!jobs || jobs.toJSON().length == 0) {
-                throw new HttpException("Invalid Job", HttpException.STATUS_BAD_REQUEST);
+            if (!jobs) {
+                throw new HttpException("Invalid request", HttpException.STATUS_BAD_REQUEST);
             }
 
             response.send({ data: jobs.toJSON() })
@@ -349,7 +351,15 @@ class JobController {
     }
 
     async getApplicants({ params, auth, response }) {
+        let { job_id } = params
 
+        try {
+            let b = await Job.query().where('id', job_id).with('applications').with('applicant').count().fetch()
+
+            response.send({ data: b.toJSON() })
+        } catch (e) {
+            throw new HttpException(e.message, e.status)
+        }
     }
 
     async getApplication({ params, response }) {

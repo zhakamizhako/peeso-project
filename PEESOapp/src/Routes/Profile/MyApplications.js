@@ -18,6 +18,7 @@ import { getMyApplications, unsavejob } from '../../stores/modules/jobs';
 import moment from 'moment';
 import { now } from 'moment';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { HomeStyles, homeStyles } from '../homeStyles'
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -64,7 +65,7 @@ class MyApplications extends Component {
 
   renderJobData(data, index, entrySaved) {
     return (
-      <Card key={index} style={{ marginTop: 5 }}>
+      <Card key={index} style={HomeStyles.entryCards}>
         <Card.Header
           title={
             <>
@@ -101,9 +102,9 @@ class MyApplications extends Component {
             <Text>
               Deadline: {moment(data.job.deadline).format('MMMM DD, yyyy')}
             </Text>
-            <Text>Status: {data.job.status}</Text>
+            <Text>Status: {data.status}</Text>
             <Text>Category: {data.job.category}</Text>
-            <Text>Applied on: {moment(entrySaved).format('MMMM DD, yyyy')}</Text>
+            <Text>Applied on: {moment(entrySaved).format('MMMM DD, yyyy')} at {moment(entrySaved).format('HH:MM A')}</Text>
           </TouchableOpacity>
         </Card.Body>
       </Card>

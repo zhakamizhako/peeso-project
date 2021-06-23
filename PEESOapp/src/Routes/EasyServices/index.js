@@ -22,13 +22,13 @@ let ws = {};
 let wsInstance = {};
 var intervalObject = null;
 
-const SampleData = [
-  { freelanceJob: 'Aircon Cleaner', min: 800, max: 1200 },
-  { freelanceJob: 'Barber', min: 800, max: 1200 },
-  { freelanceJob: 'Beautician', min: 800, max: 1200 },
-  { freelanceJob: 'Carpenter', min: 800, max: 1200 },
-  { freelanceJob: 'Technician', min: 800, max: 1200 },
-];
+// const SampleData = [
+//   { freelanceJob: 'Aircon Cleaner', min: 800, max: 1200 },
+//   { freelanceJob: 'Barber', min: 800, max: 1200 },
+//   { freelanceJob: 'Beautician', min: 800, max: 1200 },
+//   { freelanceJob: 'Carpenter', min: 800, max: 1200 },
+//   { freelanceJob: 'Technician', min: 800, max: 1200 },
+// ];
 
 class EasyServices extends Component {
   constructor(props) {
@@ -61,7 +61,7 @@ class EasyServices extends Component {
   renderJobData(data, index) {
     return (
       <List.Item
-        extra={'PHP ' + data.min + '-' + data.max}
+        extra={'PHP ' + (data.min ? data.min : '0') + '-' + (data.max ? data.max : '0')}
         onPress={() =>
           this.props.navigation.navigate('easyservicesfreelancers', {
             id: data.id,

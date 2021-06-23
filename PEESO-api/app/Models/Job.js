@@ -19,6 +19,9 @@ class Job extends Model {
     questions() {
         return this.hasMany('App/Models/JobApplicationQuestion')
     }
+    applicants() {
+        return this.hasMany('App/Models/JobApplication')
+    }
 
 
 }

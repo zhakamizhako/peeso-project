@@ -25,6 +25,7 @@ class CompanySchema extends Schema {
       table.double('lat')
       table.double('lng')
       table.string('salary')
+      table.bool('is_overseas')
       // alter table
     })
   }

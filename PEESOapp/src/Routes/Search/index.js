@@ -171,10 +171,15 @@ class Search extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.jobs != this.props.jobs) {
       if (this.props.jobs.searchJobData != prevProps.jobs.searchJobData) {
-        this.setState({ data: this.props.searchjobData })
+        console.log(this.props.jobs.searchJobData)
+        this.setState({ data: this.props.searchJobData })
       }
       if (this.props.jobs.searchJobError) {
         this.setState({ error: this.props.jobs.searchJobError })
+      }
+
+      if (this.props.jobs.benefitsData && this.props.jobs.benefitsData.categories) {
+        this.setState({ categories: this.props.jobs.benefitsData.categories })
       }
     }
   }
@@ -187,26 +192,54 @@ class Search extends Component {
     this.props.searchJob(this.state.searchInput)
   }
 
-  // renderJobData(data, index) {
-  //     return (<Card key={index} style={{ marginTop: 5 }}>
-  //         <Card.Header title={(<>
-  //             <Text>{data.JobTitle}</Text>
-  //             <Text>{data.company}</Text>
-  //         </>
-  //         )} extra={<TouchableOpacity onPress={() => this.saveJob()}><Icon style={{ alignSelf: "flex-end" }} size={30} color="black" name="book"></Icon></TouchableOpacity>} />
-  //         <Card.Body style={{ marginLeft: 10 }}>
-  //             <TouchableOpacity onPress={() => this.props.navigation.navigate("viewtrabaho")}>
-  //                 <Text>Location: {data.location}</Text>
-  //                 <Text>Salary: {data.salary}</Text>
-  //                 <Text>
-  //                     Highlights: {data.Highlight != null ? data.Highlight.map(entry => (<Text>{`\n-` + entry.name}</Text>)) : null}
-  //                 </Text>
-  //                 <Text>Deadline: {moment(data.deadline).format("MMMM DD, yyyy")}</Text>
-  //                 <Text>Status: {data.status}</Text>
-  //             </TouchableOpacity>
-  //         </Card.Body>
-  //     </Card>)
-  // }
+  renderJobData(data, index) {
+    console.log(data);
+    return (
+      <Card key={index} style={HomeStyles.entryCards}>
+        <Card.Header
+          title={
+            <>
+              <Text style={{ fontWeight: 'bold' }}>{data.name}</Text>
+              <Text style={{ fontStyle: 'italic' }}>{data.company.name}</Text>
+            </>
+          }
+          extra={
+            <TouchableOpacity onPress={() => this.save(data.id)}>
+              <Icon
+                style={{ alignSelf: 'flex-end' }}
+                size={30}
+                color="black"
+                name="book"
+              />
+            </TouchableOpacity>
+          }
+        />
+        <Card.Body style={{ marginLeft: 10 }}>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('viewtrabaho', { id: data.id })
+            }>
+            <Text>Location: {data.location}</Text>
+            <Text>Salary: {data.salary}</Text>
+            <Text>
+              Highlights:{' '}
+              {data.highlight != null
+                ? data.highlight.map((entry) => (
+                  <Text>{'\n-' + entry.description}</Text>
+                ))
+                : null}
+            </Text>
+
+            <Text>
+              Deadline: {moment(data.deadline).format('MMMM DD, yyyy')}
+            </Text>
+            <Text>Status: {data.status}</Text>
+            <Text>Category: {data.category.name}</Text>
+          </TouchableOpacity>
+        </Card.Body>
+      </Card>
+    );
+  }
 
   render() {
     return (
@@ -241,22 +274,30 @@ class Search extends Component {
                 />
               }
             />
-            <Text style={{ alignSelf: 'center' }}>--Or--</Text>
-            <Text>Select your Category</Text>
-            <WhiteSpace />
-            <List>
-              {this.state.categories &&
-                this.state.categories.map((entry, index) => (
-                  <List.Item
-                    onPress={() =>
-                      this.props.navigation.navigate('trabaho', {
-                        category_id: index,
-                      })
-                    }>
-                    {entry.categoryName}
-                  </List.Item>
-                ))}
-            </List>
+            {(this.state.searchInput != null || this.state.searchInput != '') && (<>
+              {this.state.data == null && (<Text>No Results</Text>)}
+              {this.state.data != null && this.state.data.map(entry => this.renderJobData(entry))}
+            </>)}
+            {(this.state.searchInput == null || this.state.searchInput == '') && (
+              <>
+                <Text style={{ alignSelf: 'center' }}>--Or--</Text>
+                <Text>Select your Category</Text>
+                <WhiteSpace />
+                <List>
+                  {this.state.categories &&
+                    this.state.categories.map((entry, index) => (
+                      <List.Item
+                        onPress={() =>
+                          this.props.navigation.navigate('trabaho', {
+                            category_id: index,
+                          })
+                        }>
+                        {entry.name}
+                      </List.Item>
+                    ))}
+                </List>
+              </>
+            )}
           </ScrollView>
         </WingBlank>
       </>

@@ -1,8 +1,8 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 // import Switch from '@react-navigation/switch';
 import LoginScreen from './LoginScreen';
 
@@ -37,15 +37,33 @@ import ViewProfile from './Routes/Profile/viewprofile';
 import EditFreelancer from './Routes/Profile/EditFreelancer';
 import FreelanceProfile from './Routes/Profile/FreelanceProfile';
 
+import Uploads from './Routes/Uploads'
+
+import NotificationsScreen from './Routes/Settings/Notifications';
+
 import Search from './Routes/Search/index';
 
 import Drawer from './Routes/Settings/Drawer';
 
-import {connect} from 'react-redux';
-import {View} from 'react-native';
-import {TabBar, Icon} from '@ant-design/react-native';
-import {useNavigationState} from '@react-navigation/native';
-import TabBarItem from '@ant-design/react-native/lib/tab-bar/TabBarItem';
+import { connect } from 'react-redux';
+import { View, Text, Image } from 'react-native';
+import { TabBar, Icon } from '@ant-design/react-native';
+import { Badge } from 'react-native-elements'
+import { useNavigationState } from '@react-navigation/native';
+
+//Icons
+import tabbar_home from './icons/tabbar/home.png'
+import tabbar_companies from './icons/tabbar/companies.png'
+import tabbar_jobs from './icons/tabbar/jobs.png'
+import tabbar_profile from './icons/tabbar/profile.png'
+import tabbar_savedjobs from './icons/tabbar/savedjobs.png'
+import tabbar_search from './icons/tabbar/search.png'
+import tabbar_telework from './icons/tabbar/telework.png'
+
+import Toast from 'react-native-toast-message';
+import logo from './icons/logo.png'
+import ViewApplicants from './Routes/CompanyDashboard/ViewApplicants';
+
 
 const Stack = createStackNavigator();
 
@@ -57,6 +75,7 @@ class Navigator extends React.Component {
       mounted: false,
       naviListener: null,
       drawerOpen: false,
+      currentRoute: null,
     };
     this.setDrawerClosed = this.setDrawerClosed.bind(this);
   }
@@ -68,15 +87,83 @@ class Navigator extends React.Component {
   }
 
   setDrawerClosed() {
-    this.setState({drawerOpen: false});
+    this.setState({ drawerOpen: false });
+  }
+
+  updateNavigation() {
+    this.setState({ currentRoute: this.NavigationContainerRef.current.getCurrentRoute().name })
   }
 
   render() {
+    const bar1 = (<TabBar>
+      <TabBar.Item title="Home" icon={tabbar_home} selected={this.NavigationContainerRef.current && this.NavigationContainerRef.current.getCurrentRoute().name == "homepage"} onPress={() => {
+        console.log(this.NavigationContainerRef)
+        this.NavigationContainerRef.current.navigate("homepage")
+        this.updateNavigation();
+        // console.log(this.NavigationContainerRef.current.getCurrentRoute())
+        // this.NavigationContainerRef.current
+      }} />
+      <TabBar.Item title="Jobs" iconStyle={{ marginBottom: 3 }} icon={tabbar_jobs} selected={this.state.currentRoute == "trabaho"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("trabaho")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item title="Companies" iconStyle={{ marginBottom: 3 }} icon={tabbar_companies} selected={this.state.currentRoute == "companies"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("companies")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item title="Saved Jobs" iconStyle={{ marginBottom: 3 }} icon={tabbar_savedjobs} selected={this.state.currentRoute == "savedjobs"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("savedjobs")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item title="Search" iconStyle={{ marginBottom: 3 }} icon={tabbar_search} selected={this.state.currentRoute == "search"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("search")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item title="TeleWork" iconStyle={{ marginBottom: 3 }} icon={tabbar_telework} selected={this.state.currentRoute == "easyservices"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("easyservices")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item title="Account" iconStyle={{ marginBottom: 3 }} icon={tabbar_profile} selected={this.state.currentRoute == "profile"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("profile")
+        this.updateNavigation();
+      }} />
+    </TabBar>)
+
+    const bar2 = <TabBar >
+      <TabBar.Item iconStyle={{ marginBottom: 3 }} title="Home" icon={tabbar_home} selected={this.NavigationContainerRef.current && this.NavigationContainerRef.current.getCurrentRoute().name == "homepage"} onPress={() => {
+        console.log(this.NavigationContainerRef)
+        this.NavigationContainerRef.current.navigate("homepage")
+        this.updateNavigation();
+        // console.log(this.NavigationContainerRef.current.getCurrentRoute())
+        // this.NavigationContainerRef.current
+      }} />
+      <TabBar.Item iconStyle={{ marginBottom: 3 }} title="Jobs" icon={tabbar_jobs} selected={this.state.currentRoute == "trabaho"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("trabaho")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item iconStyle={{ marginBottom: 3 }} title="Companies" icon={tabbar_companies} selected={this.state.currentRoute == "companies"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("companies")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item iconStyle={{ marginBottom: 3 }} title="Search" icon={tabbar_search} selected={this.state.currentRoute == "search"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("search")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item iconStyle={{ marginBottom: 3 }} title="TeleWork" icon={tabbar_telework} selected={this.state.currentRoute == "easyservices"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("easyservices")
+        this.updateNavigation();
+      }} />
+      <TabBar.Item iconStyle={{ marginBottom: 3 }} title="Account" icon={tabbar_profile} selected={this.state.currentRoute == "profile"} onPress={() => {
+        this.NavigationContainerRef.current.navigate("profile")
+        this.updateNavigation();
+      }} />
+    </TabBar>
     // const routes = useNavigationState(state => state.routes)
 
     return (
       <>
-        <View style={{flex: 1}}>
+        <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 1 }} />
+        <View style={{ flex: 1 }}>
           {/* <Drawer drawerOpen={this.state.drawerOpen} navigatorProps={this.NavigationContainerRef} setDrawerClosed={this.setDrawerClosed}> */}
 
           <NavigationContainer ref={this.NavigationContainerRef}>
@@ -86,78 +173,89 @@ class Navigator extends React.Component {
                   <Stack.Screen
                     name="homepage"
                     component={HomePage}
-                    options={{title: 'Overview', headerShown: false}}
+                    options={{
+                      title: 'Overview', headerShown: true, headerTitle: props => <View style={{ flexDirection: 'row', width: '100%' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                          <Image source={logo} style={{ height: 40, width: 40 }}></Image>
+                          <Text style={{ fontWeight: 'bold', color: '#061e69', fontSize: 25, paddingLeft: 10, textAlignVertical: 'center' }}>JOB HUB</Text>
+                        </View>
+                        <View style={{ alignSelf: 'center', marginLeft: '50%', flexDirection: 'row' }}>
+                          <Icon name="bell" size='lg' onPress={() => this.NavigationContainerRef.current.navigate('notifications')}></Icon>
+                          <Badge value="99" />
+                        </View>
+                      </View>
+                    }}
                   />
                   <Stack.Screen
                     name="trabaho"
                     component={Trabaho}
-                    options={{title: 'Trabaho Corner', headerShown: true}}
+                    options={{ title: 'Trabaho Corner', headerShown: true }}
                   />
                   <Stack.Screen
                     name="viewtrabaho"
                     component={ViewTrabaho}
-                    options={{title: 'View Trabaho', headerShown: true}}
+                    options={{ title: 'View Trabaho', headerShown: true }}
                   />
                   <Stack.Screen
                     name="apply"
                     component={ApplyHere}
-                    options={{title: 'Apply to Trabaho', headerShown: true}}
+                    options={{ title: 'Apply to Trabaho', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="companies"
                     component={Company}
-                    options={{title: 'Companies', headerShown: true}}
+                    options={{ title: 'Companies', headerShown: true }}
                   />
                   <Stack.Screen
                     name="viewCompany"
                     component={ViewCompany}
-                    options={{title: 'View Company', headerShown: true}}
+                    options={{ title: 'View Company', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="savedjobs"
                     component={SavedJobs}
-                    options={{title: 'Saved Jobs', headerShown: true}}
+                    options={{ title: 'Saved Jobs', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="easyservices"
                     component={EasyServices}
-                    options={{title: 'Easy Services', headerShown: true}}
+                    options={{ title: 'Easy Services', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="easyservicesfreelancers"
                     component={EasyServicesFreelancers}
-                    options={{title: 'Freelancers', headerShown: true}}
+                    options={{ title: 'Freelancers', headerShown: true }}
                   />
                   <Stack.Screen
                     name="book"
                     component={Book}
-                    options={{title: 'Freelancers', headerShown: true}}
+                    options={{ title: 'Freelancers', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="search"
                     component={Search}
-                    options={{title: 'Search', headerShown: true}}
+                    options={{ title: 'Search', headerShown: true }}
                   />
 
                   <Stack.Screen
                     name="profile"
                     component={Profile}
-                    options={{title: 'Profile', headerShown: true}}
+                    options={{ title: 'Profile', headerShown: true }}
                   />
                   <Stack.Screen
                     name="viewprofile"
                     component={ViewProfile}
-                    options={{title: 'View Profile', headerShown: true}}
+                    options={{ title: 'View Profile', headerShown: true }}
                   />
                   <Stack.Screen
                     name="freelanceprofile"
                     component={FreelanceProfile}
-                    options={{title: "Freelancer's Profile", headerShown: true}}
+                    options={{ title: "Freelancer's Profile", headerShown: true }}
                   />
                   <Stack.Screen
                     name="myapplications"
@@ -168,10 +266,26 @@ class Navigator extends React.Component {
                     }}
                   />
                   <Stack.Screen
+                    name="notifications"
+                    component={NotificationsScreen}
+                    options={{
+                      title: 'Notifications',
+                      headerShown: true,
+                    }}
+                  />
+                  <Stack.Screen
                     name="editfreelance"
                     component={EditFreelancer}
                     options={{
                       title: 'Edit your Freelancer Profile',
+                      headerShown: true,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="uploads"
+                    component={Uploads}
+                    options={{
+                      title: 'Uploaded Files',
                       headerShown: true,
                     }}
                   />
@@ -184,7 +298,7 @@ class Navigator extends React.Component {
                     <Stack.Screen
                       name="createjob"
                       component={CreateJob}
-                      options={{title: 'Create a Job Post', headerShown: true}}
+                      options={{ title: 'Create a Job Post', headerShown: true }}
                     />
                     <Stack.Screen
                       name="myjobs"
@@ -202,6 +316,14 @@ class Navigator extends React.Component {
                         headerShown: true,
                       }}
                     />
+                    <Stack.Screen
+                      name="viewapplicants"
+                      component={ViewApplicants}
+                      options={{
+                        title: 'View Applicants',
+                        headerShown: true
+                      }}
+                    />
                   </>
                 )}
               {!this.props.auth.loginData && (
@@ -210,13 +332,13 @@ class Navigator extends React.Component {
                     {...this.props}
                     name="login"
                     component={LoginScreen}
-                    options={{title: 'Login Screen', headerShown: false}}
+                    options={{ title: 'Login Screen', headerShown: false }}
                   />
                   <Stack.Screen
                     {...this.props}
                     name="signupemail"
                     component={SignupEmail}
-                    options={{title: 'Sign Up Email', headerShown: false}}
+                    options={{ title: 'Sign Up Email', headerShown: false }}
                   />
                 </>
               )}
@@ -228,17 +350,17 @@ class Navigator extends React.Component {
                 {...this.props}
                 name="signup"
                 component={Signup}
-                options={{title: 'Sign Up', headerShown: false}}
+                options={{ title: 'Sign Up', headerShown: false }}
               />
               <Stack.Screen
                 name="signupapplicant"
                 component={SignupApplicant}
-                options={{title: 'Sign Up Applicant', headerShown: false}}
+                options={{ title: 'Sign Up Applicant', headerShown: false }}
               />
               <Stack.Screen
                 name="signupcompany"
                 component={SignupCompany}
-                options={{title: 'Sign Up Company', headerShown: false}}
+                options={{ title: 'Sign Up Company', headerShown: false }}
               />
               <Stack.Screen
                 {...this.props}
@@ -252,26 +374,26 @@ class Navigator extends React.Component {
               <Stack.Screen
                 name="verificationotp"
                 component={VerificationScreen}
-                options={{title: 'OTP', headerShown: false}}
+                options={{ title: 'OTP', headerShown: false }}
               />
             </Stack.Navigator>
             {console.log(this)}
             {/* {this.NavigationContainerRef != null && this.NavigationContainerRef.current != null && this.NavigationContainerRef.current.getCurrentRoute().name != "login" && ( */}
 
-            <View style={{positon: 'absolute'}} />
+            <View style={{ positon: 'absolute' }} />
 
             {/* )} */}
           </NavigationContainer>
           {/* </Drawer> */}
         </View>
-        {/* <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
-          <TabBar >
-            <TabBar.Item title="Menu" icon={(<Icon name="menu" > </Icon>)} onPress={() => {
-              this.setState({ drawerOpen: !this.state.drawerOpen })
-            }}></TabBar.Item>
-            <TabBar.Item title="This Tab bar will only appear while logged in. Or should we remove it?" selected={this.state.wtf}></TabBar.Item>
-          </TabBar>
-        </View> */}
+        <View style={{ position: 'absolute', width: '100%', bottom: 1, zIndex: 2, height: 49 }}>
+          {this.props.auth.loginData && this.props.auth.loginData.profile && this.NavigationContainerRef.current != null && (
+            <>
+              {this.props.auth.loginData.profile.is_company ? (bar2) : (bar1)}
+            </>
+          )}
+
+        </View>
       </>
     );
   }

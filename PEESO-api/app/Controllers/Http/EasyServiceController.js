@@ -1,16 +1,32 @@
 'use strict'
+
+const FreelanceService = require("../../Models/FreelanceService")
+
 const User = use('App/Models/User')
 const Service = use('App/Models/FreelanceService')
 const Freelancer = use('App/Models/Freelancer')
 const Booking = use('App/Models/FreelanceBooking')
 const { HttpException } = use("node-exceptions");
+const Database = use('Database')
+const _ = require('lodash')
 class EasyServiceController {
 
     async getTypes({ response }) {
         try {
-            let d = await Service.query().fetch()
+            let g = await Service.query().with('freelancer').fetch()
+            g = await g.toJSON()
+            let temp = []
+            g.map((entry, index) => {
+                let min = _.minBy(entry.freelancer, (o) => { return o.price_min })
+                let max = _.maxBy(entry.freelancer, (o) => { return o.price_max })
+                let temp1 = entry
+                temp1.min = min ? min.price_min : null
+                temp1.max = max ? max.price_max : null
+                temp1.freelancer = undefined
+                temp.push(temp1)
+            })
 
-            response.send({ data: d })
+            response.send({ data: temp })
         } catch (e) {
             throw new HttpException(e.message, e.status)
         }
@@ -106,7 +122,7 @@ class EasyServiceController {
             console.log(y)
 
             console.log(b)
-            if(!y){
+            if (!y) {
                 throw new HttpException("Invalid Request", 400)
             }
             let x = new Booking()
@@ -123,7 +139,7 @@ class EasyServiceController {
 
             await x.save()
 
-            response.send({data: "OK!"})
+            response.send({ data: "OK!" })
 
         } catch (e) {
             throw new HttpException(e.message, e.status)

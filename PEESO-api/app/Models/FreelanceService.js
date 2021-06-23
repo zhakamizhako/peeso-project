@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class FreelanceService extends Model {
+    freelancer() {
+        return this.hasMany('App/Models/Freelancer');
+    }
+
 }
 
 module.exports = FreelanceService

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   WhiteSpace,
@@ -10,8 +10,8 @@ import {
   Toast,
   ActivityIndicator,
 } from '@ant-design/react-native';
-import {View, Text, ScrollView, RefreshControl} from 'react-native';
-import {connect} from 'react-redux';
+import { View, Text, ScrollView, RefreshControl } from 'react-native';
+import { connect } from 'react-redux';
 import {
   getJobs,
   saveJob,
@@ -20,8 +20,9 @@ import {
 } from '../../stores/modules/jobs';
 // import Ws from '../Tools/@adonisjs/websocket-client';
 import moment from 'moment';
-import {now} from 'moment';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { now } from 'moment';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { HomeStyles } from '../homeStyles'
 let ws = {};
 let wsInstance = {};
 var intervalObject = null;
@@ -48,7 +49,7 @@ class Trabaho extends Component {
       this.props.getJobs();
     }
 
-    this.setState({is_fetching: true});
+    this.setState({ is_fetching: true });
     console.log('geting jobs?');
   }
 
@@ -84,18 +85,18 @@ class Trabaho extends Component {
   renderJobData(data, index) {
     console.log(data);
     return (
-      <Card key={index} style={{marginTop: 5}}>
+      <Card key={index} style={HomeStyles.entryCards}>
         <Card.Header
           title={
             <>
-              <Text style={{fontWeight: 'bold'}}>{data.name}</Text>
-              <Text style={{fontStyle: 'italic'}}>{data.company.name}</Text>
+              <Text style={{ fontWeight: 'bold' }}>{data.name}</Text>
+              <Text style={{ fontStyle: 'italic' }}>{data.company.name}</Text>
             </>
           }
           extra={
             <TouchableOpacity onPress={() => this.save(data.id)}>
               <Icon
-                style={{alignSelf: 'flex-end'}}
+                style={{ alignSelf: 'flex-end' }}
                 size={30}
                 color="black"
                 name="book"
@@ -103,10 +104,10 @@ class Trabaho extends Component {
             </TouchableOpacity>
           }
         />
-        <Card.Body style={{marginLeft: 10}}>
+        <Card.Body style={{ marginLeft: 10 }}>
           <TouchableOpacity
             onPress={() =>
-              this.props.navigation.navigate('viewtrabaho', {id: data.id})
+              this.props.navigation.navigate('viewtrabaho', { id: data.id })
             }>
             <Text>Location: {data.location}</Text>
             <Text>Salary: {data.salary}</Text>
@@ -114,8 +115,8 @@ class Trabaho extends Component {
               Highlights:{' '}
               {data.highlight != null
                 ? data.highlight.map((entry) => (
-                    <Text>{'\n-' + entry.description}</Text>
-                  ))
+                  <Text>{'\n-' + entry.description}</Text>
+                ))
                 : null}
             </Text>
 
@@ -136,7 +137,9 @@ class Trabaho extends Component {
         <WingBlank>
           <RefreshControl
             refreshing={this.state.is_fetching}
-            onRefresh={() => this.props.getJobs()}>
+            onRefresh={() => this.props.getJobs()}
+            style={HomeStyles.ScrollViewLimit}
+          >
             <ScrollView>
               {this.state.has_fetched &&
                 this.state.jobsData &&
@@ -166,7 +169,7 @@ class Trabaho extends Component {
                 </View>
               )}
               {this.state.has_fetched && this.state.error && (
-                <View style={{alignSelf: 'center', alignContent: 'center'}}>
+                <View style={{ alignSelf: 'center', alignContent: 'center' }}>
                   <Text
                     style={{
                       alignSelf: 'center',

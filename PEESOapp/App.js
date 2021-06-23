@@ -22,7 +22,6 @@ import Navigator from './src/Navigator.js';
 import enUS from '@ant-design/react-native/lib/locale-provider/en_US';
 import SplashScreen from 'react-native-splash-screen';
 import { StatusBar, View } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 export default class App extends Component {
   constructor(props) {
@@ -42,7 +41,7 @@ export default class App extends Component {
       <Provider store={this.store}>
         <PersistGate loading={null} persistor={this.persistor}>
           <StatusBar />
-          <Toast ref={(ref) => Toast.setRef(ref)} />
+
           <AntProvider locale={enUS}>
             <Navigator {...this.props} />
           </AntProvider>

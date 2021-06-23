@@ -14,6 +14,7 @@ const EducationalBackground = use('App/Models/ApplicantEducationalBackground')
 const JobExperience = use('App/Models/ApplicantJobExperience')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 const Upload = use('App/Models/FileUpload')
+const MyFile = use('App/Models/MyFile')
 const fs = use('fs')
 const { v4: uuidv4 } = require('uuid');
 
@@ -110,6 +111,12 @@ class UserController {
         let name = uuidv4()
         let status = null
         try {
+            let dir = `public/${type}`
+            if (!fs.existsSync(dir)) {
+                {
+                    fs.mkdirSync(dir)
+                }
+            }
             status = await fs.writeFileSync(`public/${type}/${name}.${filetype}`, base64Data, { encoding: 'base64' })
         } catch (e) {
             console.log(e)
@@ -124,6 +131,8 @@ class UserController {
             await b.save()
             return { name: name, tmpPath: `${type}/${name}.${filetype}`, id: b.id }
             // imageData.push({ name: name, tmpPath: `${type}/${name}.${filetype}` })
+        } else {
+            return false
         }
 
     }
@@ -369,6 +378,7 @@ class UserController {
             middle_name,
             last_name,
             contact_no,
+            overseas,
             profile } = request.all()
 
         try {
@@ -390,6 +400,7 @@ class UserController {
             d.address = address
             d.contact_no = contact_no
             d.email = email
+            d.is_overseas = overseas
             // d.expected_salary = expected_salary
             d.user_id = user_id
             await d.save()
@@ -507,6 +518,46 @@ class UserController {
     }
 
     async updateApplicantAdmin({ request, auth, response }) {//reserved for admin management
+
+    }
+
+    async uploadFile({ request, auth, response }) {
+        let { file, fileType, type } = request.all()
+        try {
+            let u = await User.find(auth.user.id)
+
+            let upload = await this.processBase64File(file, type, fileType, u.id)
+            if (!upload) {
+                throw new HttpException("File save failed", 500)
+            }
+            let myfile = new MyFile()
+            myfile.file_id = upload.id
+            myfile.user_id = u.id
+            myfile.type = type
+            myfile.status = "Pending"
+            myfile.is_approved = false
+            myfile.is_rejected = false
+
+            await myfile.save()
+
+            response.send({ data: myfile, file: upload })
+        } catch (e) {
+            console.log(e)
+            throw new HttpException(e.message, e.status)
+        }
+
+    }
+
+    async getFiles({ request, auth, response }) {
+        let u = await User.find(auth.user.id)
+        try {
+            let myfile = await MyFile.query().where('user_id', u.id).orderBy('updated_at', 'ASC').fetch()
+
+            response.send({ data: myfile })
+        } catch (e) {
+            console.log(e)
+            throw new HttpException(e.message, e.status)
+        }
 
     }
 }

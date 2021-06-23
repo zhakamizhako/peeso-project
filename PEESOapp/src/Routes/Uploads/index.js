@@ -92,7 +92,7 @@ class MyUploads extends Component {
                     state.isUploading = false
                     state[`${up.type}`].error = false
                     state[`${up.type}`].uploading = false
-
+                    state[`${up.type}`].error = false
                     return state
                 })
             }

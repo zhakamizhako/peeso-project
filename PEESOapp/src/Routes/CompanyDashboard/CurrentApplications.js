@@ -114,9 +114,10 @@ class Trabaho extends Component {
 
                     <WhiteSpace size="lg" />
                     <Button onPress={() => {
-                        this.props.navigation.navigate('viewapplicants', { id: data.id, applicants: data.applicants })
-                    }} disabled={!data.is_approved || data.applicants.length == 0}>{data.applicants.length == 0 && "No Applicants"}{!data.is_approved && ('This Job is awaiting admin approval.')}{data.is_approved && ('View Applicants')}</Button>
+                        this.props.navigation.navigate('viewapplicants', { id: data.id, applicants: data.applicants });
+                    }} disabled={!data.is_approved || data.applicants.length == 0}>{data.applicants.length == 0 && data.is_approved && 'No Applicants'}{!data.is_approved && ('This Job is awaiting admin approval.')}{data.is_approved  && data.applicants.length > 0 && ('View Applicants')}</Button>
                 </Card.Body>
+                '
             </Card >
         );
     }

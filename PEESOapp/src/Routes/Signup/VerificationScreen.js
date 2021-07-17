@@ -80,6 +80,7 @@ class VerificationScreen extends Component {
                 this.setState((state) => {
                   let {verification_code} = state;
                   var str = val;
+                  str = str.toUpperCase();
                   // str.toUpperCase();
                   verification_code = str;
                   // verification_code.toUpperCase()

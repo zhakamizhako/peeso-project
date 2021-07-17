@@ -25,6 +25,7 @@ import TextAreaItem from '@ant-design/react-native/lib/textarea-item';
 import { TextInput } from 'react-native-gesture-handler';
 import Input from '@ant-design/react-native/lib/input-item/Input';
 import { now } from 'moment';
+import { HomeStyles } from '../homeStyles';
 
 class SignupFreelanceEmployer extends Component {
     constructor(props) {
@@ -198,7 +199,7 @@ class SignupFreelanceEmployer extends Component {
 
     render() {
         return (
-            <ScrollView style={{ height: '100%' }}>
+            <ScrollView style={[HomeStyles.ScrollViewLimit, { height: '100%' }]}>
                 <WhiteSpace size="lg" />
                 <WingBlank>
                     <Text style={{ fontSize: 25 }}>Tell us about you and your place.</Text>
